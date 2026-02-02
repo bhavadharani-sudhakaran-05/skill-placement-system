@@ -381,8 +381,45 @@ router.post('/save-result', protect, async (req, res) => {
       const totalScore = completedAssessments.reduce((sum, a) => sum + (a.score || 0), 0);
       const avgScore = completedAssessments.length > 0 ? totalScore / completedAssessments.length : 0;
       
-      // Update user's skill readiness
-      user.skillReadinessScore = Math.round(avgScore);
+      // Initialize metrics if not exists
+      if (!user.metrics) {
+        user.metrics = {};
+      }
+      
+      // Update user's skill readiness score in metrics
+      user.metrics.skillReadinessScore = Math.round(avgScore);
+      user.metrics.assessmentsTaken = completedAssessments.length;
+      
+      // Add badge to user skills if earned
+      if (badge && score >= 70) {
+        // Initialize badges array if not exists
+        if (!user.badges) {
+          user.badges = [];
+        }
+        
+        // Check if badge already exists
+        const existingBadge = user.badges.find(b => b.name === badge);
+        if (!existingBadge) {
+          user.badges.push({
+            name: badge,
+            earnedFor: title,
+            earnedAt: new Date(),
+            score: score
+          });
+        }
+        
+        // Also update corresponding skill if exists
+        const skillName = title.split(' ')[0]; // Get first word as skill hint
+        const userSkill = user.skills?.find(s => 
+          s.name?.toLowerCase().includes(skillName.toLowerCase()) ||
+          title.toLowerCase().includes(s.name?.toLowerCase())
+        );
+        if (userSkill) {
+          userSkill.level = Math.max(userSkill.level || 0, score);
+          userSkill.verified = score >= 70;
+          userSkill.verifiedAt = new Date();
+        }
+      }
     }
     
     await user.save();

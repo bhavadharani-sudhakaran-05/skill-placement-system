@@ -130,6 +130,32 @@ const userSchema = new mongoose.Schema({
     jobsApplied: { type: Number, default: 0 }
   },
   
+  // Assessment history
+  assessmentHistory: [{
+    title: String,
+    score: { type: Number, default: 0 },
+    correctAnswers: { type: Number, default: 0 },
+    totalQuestions: { type: Number, default: 0 },
+    timeTaken: String,
+    badge: String,
+    status: {
+      type: String,
+      enum: ['completed', 'terminated', 'in-progress'],
+      default: 'completed'
+    },
+    terminationReason: String,
+    takenAt: { type: Date, default: Date.now },
+    skillsAssessed: [String]
+  }],
+  
+  // Badges earned from assessments
+  badges: [{
+    name: String,
+    earnedFor: String,
+    earnedAt: { type: Date, default: Date.now },
+    score: Number
+  }],
+  
   savedJobs: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Job'
