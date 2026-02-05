@@ -7,6 +7,7 @@ import {
   CreditCard, Smartphone, ArrowRight, Award, Zap, Target, ExternalLink,
   Circle, ChevronRight, Github, Eye, PlayCircle, ArrowLeft
 } from 'lucide-react';
+import useCourseStore from '../store/courseStore';
 
 const Courses = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,10 +16,19 @@ const Courses = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [enrolledCourses, setEnrolledCourses] = useState([1, 2]);
   const [playingVideo, setPlayingVideo] = useState(null);
   const [showProjectModal, setShowProjectModal] = useState(null);
-  const [watchedVideos, setWatchedVideos] = useState({ 1: [1, 2, 3], 2: [1, 2] });
+
+  // Use course store for progress tracking
+  const { 
+    courseProgress, 
+    markVideoWatched: storeMarkVideoWatched, 
+    enrollCourse,
+    getCourseProgress,
+    getEnrolledCourseIds 
+  } = useCourseStore();
+  
+  const enrolledCourses = getEnrolledCourseIds().length > 0 ? getEnrolledCourseIds() : [1, 2]; // Default enrolled for demo
 
   const categories = ['All', 'Web Development', 'Data Science', 'Cloud', 'Programming', 'AI/ML'];
 
@@ -225,25 +235,25 @@ const Courses = () => {
 
   const isVideoUnlocked = (courseId, videoId) => {
     if (videoId === 1) return true;
-    const watched = watchedVideos[courseId] || [];
+    const progress = getCourseProgress(courseId);
+    const watched = progress.videosWatched || [];
     return watched.includes(videoId - 1);
   };
 
   const isVideoWatched = (courseId, videoId) => {
-    const watched = watchedVideos[courseId] || [];
+    const progress = getCourseProgress(courseId);
+    const watched = progress.videosWatched || [];
     return watched.includes(videoId);
   };
 
-  const markVideoWatched = (courseId, videoId) => {
-    setWatchedVideos(prev => ({
-      ...prev,
-      [courseId]: [...(prev[courseId] || []), videoId].filter((v, i, a) => a.indexOf(v) === i)
-    }));
+  const markVideoWatched = (courseId, videoId, course) => {
+    const totalVideos = course?.videos?.length || 6;
+    storeMarkVideoWatched(courseId, videoId, totalVideos);
   };
 
   const handleEnroll = (course) => {
     if (course.price === 0) {
-      setEnrolledCourses([...enrolledCourses, course.id]);
+      enrollCourse(course.id, course.title);
       setSelectedCourse({ ...course, justEnrolled: true });
       setActiveTab('videos');
     } else {
@@ -254,7 +264,7 @@ const Courses = () => {
   const handlePaymentSuccess = () => {
     setPaymentSuccess(true);
     setTimeout(() => {
-      setEnrolledCourses([...enrolledCourses, selectedCourse.id]);
+      enrollCourse(selectedCourse.id, selectedCourse.title);
       setShowPaymentModal(false);
       setPaymentSuccess(false);
       setActiveTab('videos');
@@ -540,14 +550,14 @@ const Courses = () => {
                 <span style={styles.metaItem}><Users size={14} /> {(course.enrolled / 1000).toFixed(0)}K enrolled</span>
               </div>
 
-              {isEnrolled(course.id) && course.progress > 0 && (
+              {isEnrolled(course.id) && (getCourseProgress(course.id).progress > 0 || course.progress > 0) && (
                 <div style={styles.progressSection}>
                   <div style={styles.progressLabel}>
                     <span>Progress</span>
-                    <span style={{ color: course.color, fontWeight: 600 }}>{course.progress}%</span>
+                    <span style={{ color: course.color, fontWeight: 600 }}>{getCourseProgress(course.id).progress || course.progress}%</span>
                   </div>
                   <div style={styles.progressBar}>
-                    <div style={styles.progressFill(course.progress, course.color)} />
+                    <div style={styles.progressFill(getCourseProgress(course.id).progress || course.progress, course.color)} />
                   </div>
                 </div>
               )}
@@ -581,7 +591,7 @@ const Courses = () => {
             exit={{ opacity: 0 }}
           >
             <div style={styles.videoHeader}>
-              <button style={styles.videoBackBtn} onClick={() => { markVideoWatched(selectedCourse.id, playingVideo.id); setPlayingVideo(null); }}>
+              <button style={styles.videoBackBtn} onClick={() => { markVideoWatched(selectedCourse.id, playingVideo.id, selectedCourse); setPlayingVideo(null); }}>
                 <ArrowLeft size={18} /> Back to Course
               </button>
               <span style={styles.videoTitleBar}>{playingVideo.title}</span>
