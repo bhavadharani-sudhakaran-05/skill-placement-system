@@ -74,27 +74,27 @@ const Layout = () => {
     },
     main: { flex: 1, marginLeft: sidebarOpen ? '260px' : '80px', transition: 'margin-left 0.3s ease', minHeight: '100vh', background: 'linear-gradient(135deg, #faf5ff 0%, #f5f3ff 50%, #ede9fe 100%)' },
     header: {
-      background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       borderBottom: '1px solid rgba(139, 92, 246, 0.1)', position: 'sticky', top: 0, zIndex: 30
     },
-    searchWrapper: { position: 'relative', width: '300px' },
-    searchIcon: { position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8b5cf6' },
+    searchWrapper: { position: 'relative', width: '220px' },
+    searchIcon: { position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8b5cf6' },
     searchInput: {
-      width: '100%', padding: '0.75rem 1rem 0.75rem 2.75rem', borderRadius: '12px',
-      border: '2px solid #ede9fe', fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box', background: 'white'
+      width: '100%', padding: '0.5rem 0.75rem 0.5rem 2.25rem', borderRadius: '10px',
+      border: '2px solid #ede9fe', fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box', background: 'white'
     },
-    headerRight: { display: 'flex', alignItems: 'center', gap: '1rem' },
+    headerRight: { display: 'flex', alignItems: 'center', gap: '0.75rem' },
     userButton: {
-      display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem 1rem',
-      borderRadius: '12px', background: 'white', border: '1px solid #ede9fe', cursor: 'pointer', boxShadow: '0 2px 10px rgba(139, 92, 246, 0.1)'
+      display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.35rem 0.6rem',
+      borderRadius: '10px', background: 'white', border: '1px solid #ede9fe', cursor: 'pointer', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.1)'
     },
     avatar: {
-      width: '36px', height: '36px', borderRadius: '50%',
+      width: '30px', height: '30px', borderRadius: '50%',
       background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 600, fontSize: '0.875rem'
+      display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 600, fontSize: '0.75rem'
     },
-    userName: { fontWeight: 500, color: '#374151' },
-    userRole: { fontSize: '0.75rem', color: '#8b5cf6' },
+    userName: { fontWeight: 500, color: '#374151', fontSize: '0.8rem' },
+    userRole: { fontSize: '0.65rem', color: '#8b5cf6' },
     profileDropdown: {
       position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem',
       background: 'white', borderRadius: '12px', boxShadow: '0 10px 40px rgba(139, 92, 246, 0.2)',
