@@ -31,28 +31,28 @@ const ResumeAnalyzer = () => {
   };
 
   const styles = {
-    container: { padding: '2rem', maxWidth: '1200px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
-    header: { marginBottom: '2rem' },
-    title: { fontSize: '2rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.5rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
-    subtitle: { color: '#6b7280', fontSize: '1rem' },
-    uploadSection: { marginBottom: '2rem' },
+    container: { padding: '1.5rem', maxWidth: '1100px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
+    header: { marginBottom: '1.5rem' },
+    title: { fontSize: '1.75rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.5rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
+    subtitle: { color: '#6b7280', fontSize: '0.95rem' },
+    uploadSection: { marginBottom: '1.5rem' },
     dropzone: (isDragActive) => ({
-      border: `3px dashed ${isDragActive ? '#7c3aed' : '#ede9fe'}`, borderRadius: '20px', padding: '4rem 2rem',
+      border: `3px dashed ${isDragActive ? '#7c3aed' : '#ede9fe'}`, borderRadius: '18px', padding: '2.5rem 2rem',
       textAlign: 'center', cursor: 'pointer', transition: 'all 0.3s',
       background: isDragActive ? 'rgba(139,92,246,0.05)' : '#faf5ff'
     }),
-    uploadIcon: { width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'white', boxShadow: '0 8px 25px rgba(139,92,246,0.35)' },
-    uploadTitle: { fontSize: '1.5rem', fontWeight: 600, color: '#1f2937', marginBottom: '0.5rem' },
-    uploadSubtitle: { color: '#6b7280', marginBottom: '1.5rem' },
-    uploadButton: { padding: '0.875rem 2rem', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', boxShadow: '0 4px 15px rgba(139,92,246,0.3)' },
-    fileInfo: { display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#f5f3ff', borderRadius: '12px', marginTop: '1.5rem', border: '1px solid #ede9fe' },
+    uploadIcon: { width: '64px', height: '64px', borderRadius: '50%', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', color: 'white', boxShadow: '0 8px 25px rgba(139,92,246,0.35)' },
+    uploadTitle: { fontSize: '1.3rem', fontWeight: 600, color: '#1f2937', marginBottom: '0.5rem' },
+    uploadSubtitle: { color: '#6b7280', marginBottom: '1rem' },
+    uploadButton: { padding: '0.75rem 1.5rem', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', boxShadow: '0 4px 15px rgba(139,92,246,0.3)', fontSize: '0.95rem' },
+    fileInfo: { display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.875rem', background: '#f5f3ff', borderRadius: '12px', marginTop: '1rem', border: '1px solid #ede9fe' },
     fileIcon: { width: '48px', height: '48px', borderRadius: '12px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', boxShadow: '0 2px 8px rgba(139,92,246,0.15)' },
     fileName: { fontWeight: 600, color: '#1f2937' },
     fileSize: { fontSize: '0.875rem', color: '#6b7280' },
     analyzingState: { textAlign: 'center', padding: '3rem' },
     spinner: { width: '60px', height: '60px', border: '4px solid #ede9fe', borderTop: '4px solid #7c3aed', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1.5rem' },
-    resultsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' },
-    scoreCard: { background: 'white', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(139,92,246,0.08)', textAlign: 'center', border: '1px solid #ede9fe' },
+    resultsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginBottom: '1.5rem' },
+    scoreCard: { background: 'white', borderRadius: '18px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(139,92,246,0.08)', textAlign: 'center', border: '1px solid #ede9fe' },
     scoreCircle: (score) => ({
       width: '100px', height: '100px', borderRadius: '50%', margin: '0 auto 1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       background: score >= 80 ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : score >= 60 ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white',
@@ -62,8 +62,8 @@ const ResumeAnalyzer = () => {
     scoreLabel: { fontSize: '0.7rem', opacity: 0.9 },
     cardTitle: { fontWeight: 600, color: '#1f2937', marginBottom: '0.25rem' },
     cardSubtitle: { fontSize: '0.875rem', color: '#6b7280' },
-    section: { background: 'white', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(139,92,246,0.08)', marginBottom: '1.5rem', border: '1px solid #ede9fe' },
-    sectionTitle: { fontSize: '1.25rem', fontWeight: 700, color: '#1f2937', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' },
+    section: { background: 'white', borderRadius: '18px', padding: '1.25rem', boxShadow: '0 4px 20px rgba(139,92,246,0.08)', marginBottom: '1.25rem', border: '1px solid #ede9fe' },
+    sectionTitle: { fontSize: '1.1rem', fontWeight: 700, color: '#1f2937', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' },
     skillsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' },
     skillsColumn: {},
     skillsLabel: { fontWeight: 600, color: '#1f2937', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' },
@@ -86,10 +86,10 @@ const ResumeAnalyzer = () => {
     suggestionDesc: { fontSize: '0.875rem', color: '#6b7280' },
     actionsRow: { display: 'flex', gap: '1rem', justifyContent: 'center' },
     actionButton: (primary) => ({
-      padding: '0.875rem 1.5rem', borderRadius: '12px', border: primary ? 'none' : '2px solid #ede9fe',
+      padding: '0.75rem 1.25rem', borderRadius: '12px', border: primary ? 'none' : '2px solid #ede9fe',
       background: primary ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : 'white',
       color: primary ? 'white' : '#374151', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem',
-      boxShadow: primary ? '0 4px 15px rgba(139,92,246,0.3)' : 'none'
+      boxShadow: primary ? '0 4px 15px rgba(139,92,246,0.3)' : 'none', fontSize: '0.9rem'
     })
   };
 

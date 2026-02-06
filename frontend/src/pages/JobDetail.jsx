@@ -74,11 +74,13 @@ As a senior member of the engineering team, you'll have the opportunity to mento
   };
 
   const handleApply = () => {
-    setIsApplying(true);
-    setTimeout(() => {
-      setIsApplying(false);
-      alert('Application submitted successfully!');
-    }, 1500);
+    if (job.applyUrl) {
+      setIsApplying(true);
+      setTimeout(() => {
+        window.open(job.applyUrl, '_blank');
+        setIsApplying(false);
+      }, 800);
+    }
   };
 
   const styles = {
