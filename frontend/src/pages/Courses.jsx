@@ -691,44 +691,44 @@ const Courses = () => {
   };
 
   const styles = {
-    container: { padding: '1.5rem', maxWidth: '1200px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
-    header: { marginBottom: '1.5rem' },
-    title: { fontSize: '1.75rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' },
-    subtitle: { color: '#6b7280', fontSize: '0.95rem', marginBottom: '1.25rem' },
-    stats: { display: 'flex', gap: '1.25rem', marginBottom: '1.25rem', flexWrap: 'wrap' },
-    stat: { display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#4b5563' },
+    container: { padding: '1rem', maxWidth: '1100px', margin: '0 auto', fontFamily: "'Inter', sans-serif", fontSize: '0.875rem' },
+    header: { marginBottom: '1rem' },
+    title: { fontSize: '1.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.25rem' },
+    subtitle: { color: '#6b7280', fontSize: '0.8rem', marginBottom: '0.75rem' },
+    stats: { display: 'flex', gap: '0.85rem', marginBottom: '0.85rem', flexWrap: 'wrap' },
+    stat: { display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#4b5563', fontSize: '0.8rem' },
     statIcon: { color: '#7c3aed' },
-    searchRow: { display: 'flex', gap: '1rem', marginBottom: '1.25rem', flexWrap: 'wrap' },
-    searchBox: { flex: 1, minWidth: '260px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'white', borderRadius: '12px', border: '2px solid #ede9fe' },
-    searchInput: { flex: 1, border: 'none', outline: 'none', fontSize: '0.95rem', color: '#374151', background: 'transparent' },
-    filterBtn: { display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.25rem', background: 'white', borderRadius: '12px', border: '2px solid #ede9fe', cursor: 'pointer', fontWeight: 500, color: '#7c3aed' },
-    categories: { display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' },
-    categoryChip: (active) => ({ padding: '0.5rem 1rem', borderRadius: '20px', border: 'none', background: active ? 'linear-gradient(135deg, #7c3aed, #8b5cf6)' : '#f5f3ff', color: active ? 'white' : '#7c3aed', fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s' }),
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' },
-    card: { background: 'white', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', border: '1px solid #ede9fe' },
-    cardHeader: (color) => ({ background: `linear-gradient(135deg, ${color}20, ${color}40)`, padding: '1.25rem', position: 'relative' }),
-    cardBadge: { position: 'absolute', top: '1rem', right: '1rem', padding: '0.35rem 0.75rem', background: 'white', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 600, color: '#7c3aed' },
-    recommendedBadge: { position: 'absolute', top: '1rem', left: '1rem', padding: '0.35rem 0.75rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 600, color: 'white', display: 'flex', alignItems: 'center', gap: '0.25rem' },
-    cardIcon: { fontSize: '2.5rem', marginBottom: '0.5rem' },
-    cardBody: { padding: '1.25rem' },
-    cardTitle: { fontSize: '1.05rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.5rem' },
-    cardInstructor: { display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6b7280', fontSize: '0.9rem', marginBottom: '0.75rem' },
-    cardRating: { display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' },
+    searchRow: { display: 'flex', gap: '0.75rem', marginBottom: '0.85rem', flexWrap: 'wrap' },
+    searchBox: { flex: 1, minWidth: '220px', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem', background: 'white', borderRadius: '10px', border: '1.5px solid #ede9fe' },
+    searchInput: { flex: 1, border: 'none', outline: 'none', fontSize: '0.8rem', color: '#374151', background: 'transparent' },
+    filterBtn: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 0.85rem', background: 'white', borderRadius: '10px', border: '1.5px solid #ede9fe', cursor: 'pointer', fontWeight: 500, color: '#7c3aed', fontSize: '0.8rem' },
+    categories: { display: 'flex', gap: '0.35rem', marginBottom: '1rem', flexWrap: 'wrap' },
+    categoryChip: (active) => ({ padding: '0.35rem 0.75rem', borderRadius: '15px', border: 'none', background: active ? 'linear-gradient(135deg, #7c3aed, #8b5cf6)' : '#f5f3ff', color: active ? 'white' : '#7c3aed', fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.75rem' }),
+    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.85rem' },
+    card: { background: 'white', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(139, 92, 246, 0.06)', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', border: '1px solid #ede9fe' },
+    cardHeader: (color) => ({ background: `linear-gradient(135deg, ${color}20, ${color}40)`, padding: '0.85rem', position: 'relative' }),
+    cardBadge: { position: 'absolute', top: '0.65rem', right: '0.65rem', padding: '0.25rem 0.5rem', background: 'white', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 600, color: '#7c3aed' },
+    recommendedBadge: { position: 'absolute', top: '0.65rem', left: '0.65rem', padding: '0.25rem 0.5rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 600, color: 'white', display: 'flex', alignItems: 'center', gap: '0.2rem' },
+    cardIcon: { fontSize: '1.75rem', marginBottom: '0.25rem' },
+    cardBody: { padding: '0.85rem' },
+    cardTitle: { fontSize: '0.9rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.3rem' },
+    cardInstructor: { display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#6b7280', fontSize: '0.75rem', marginBottom: '0.5rem' },
+    cardRating: { display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.65rem' },
     starIcon: { color: '#f59e0b' },
-    ratingText: { fontWeight: 600, color: '#1f2937' },
-    reviewCount: { color: '#6b7280', fontSize: '0.85rem' },
-    cardTags: { display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' },
-    tag: (color) => ({ padding: '0.35rem 0.75rem', background: '#f5f3ff', color: '#7c3aed', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 500 }),
-    cardMeta: { display: 'flex', gap: '1rem', color: '#6b7280', fontSize: '0.8rem', marginBottom: '1rem' },
-    metaItem: { display: 'flex', alignItems: 'center', gap: '0.35rem' },
-    progressSection: { marginBottom: '1rem' },
-    progressLabel: { display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.5rem' },
-    progressBar: { height: '8px', background: '#ede9fe', borderRadius: '4px', overflow: 'hidden' },
-    progressFill: (percent, color) => ({ height: '100%', width: `${percent}%`, background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', borderRadius: '4px' }),
+    ratingText: { fontWeight: 600, color: '#1f2937', fontSize: '0.8rem' },
+    reviewCount: { color: '#6b7280', fontSize: '0.7rem' },
+    cardTags: { display: 'flex', gap: '0.3rem', flexWrap: 'wrap', marginBottom: '0.65rem' },
+    tag: (color) => ({ padding: '0.2rem 0.5rem', background: '#f5f3ff', color: '#7c3aed', borderRadius: '5px', fontSize: '0.68rem', fontWeight: 500 }),
+    cardMeta: { display: 'flex', gap: '0.65rem', color: '#6b7280', fontSize: '0.7rem', marginBottom: '0.65rem' },
+    metaItem: { display: 'flex', alignItems: 'center', gap: '0.25rem' },
+    progressSection: { marginBottom: '0.65rem' },
+    progressLabel: { display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', marginBottom: '0.3rem' },
+    progressBar: { height: '6px', background: '#ede9fe', borderRadius: '3px', overflow: 'hidden' },
+    progressFill: (percent, color) => ({ height: '100%', width: `${percent}%`, background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', borderRadius: '3px' }),
     cardFooter: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    price: (free) => ({ fontSize: '1.25rem', fontWeight: 700, color: free ? '#7c3aed' : '#1f2937' }),
-    continueBtn: { display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', background: 'white', border: '2px solid #7c3aed', color: '#7c3aed', borderRadius: '10px', fontWeight: 600, cursor: 'pointer' },
-    enrollBtn: { display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', border: 'none', color: 'white', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)' },
+    price: (free) => ({ fontSize: '1rem', fontWeight: 700, color: free ? '#7c3aed' : '#1f2937' }),
+    continueBtn: { display: 'flex', alignItems: 'center', gap: '0.3rem', padding: '0.45rem 0.75rem', background: 'white', border: '1.5px solid #7c3aed', color: '#7c3aed', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.72rem' },
+    enrollBtn: { display: 'flex', alignItems: 'center', gap: '0.3rem', padding: '0.45rem 0.75rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', border: 'none', color: 'white', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', boxShadow: '0 3px 10px rgba(139, 92, 246, 0.25)', fontSize: '0.72rem' },
     modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' },
     // Full Page Course View
     courseFullPage: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%)', zIndex: 1000, overflowY: 'auto' },
@@ -816,14 +816,14 @@ const Courses = () => {
         <p style={styles.subtitle}>Personalized learning paths to bridge your skill gaps</p>
         
         <div style={styles.stats}>
-          <div style={styles.stat}><BookOpen size={20} style={styles.statIcon} /> <strong>3</strong> In Progress</div>
-          <div style={styles.stat}><CheckCircle size={20} style={styles.statIcon} /> <strong>12</strong> Completed</div>
-          <div style={styles.stat}><Award size={20} style={styles.statIcon} /> <strong>8</strong> Certificates</div>
+          <div style={styles.stat}><BookOpen size={14} style={styles.statIcon} /> <strong>3</strong> In Progress</div>
+          <div style={styles.stat}><CheckCircle size={14} style={styles.statIcon} /> <strong>12</strong> Completed</div>
+          <div style={styles.stat}><Award size={14} style={styles.statIcon} /> <strong>8</strong> Certificates</div>
         </div>
 
         <div style={styles.searchRow}>
           <div style={styles.searchBox}>
-            <Search size={20} color="#9ca3af" />
+            <Search size={16} color="#9ca3af" />
             <input
               style={styles.searchInput}
               placeholder="Search courses, skills, or topics..."
@@ -832,7 +832,7 @@ const Courses = () => {
             />
           </div>
           <button style={styles.filterBtn}>
-            <Filter size={18} /> Filters <ChevronDown size={16} />
+            <Filter size={14} /> Filters <ChevronDown size={12} />
           </button>
         </div>
 
@@ -857,13 +857,13 @@ const Courses = () => {
             style={styles.card}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            whileHover={{ y: -5, boxShadow: '0 12px 30px rgba(0,0,0,0.12)' }}
+            transition={{ delay: index * 0.05 }}
+            whileHover={{ y: -3, boxShadow: '0 8px 25px rgba(0,0,0,0.1)' }}
             onClick={() => { setSelectedCourse(course); setActiveTab(isEnrolled(course.id) ? 'videos' : 'overview'); }}
           >
             <div style={styles.cardHeader(course.color)}>
               {course.recommended && (
-                <div style={styles.recommendedBadge}><Zap size={12} /> Recommended</div>
+                <div style={styles.recommendedBadge}><Zap size={10} /> Recommended</div>
               )}
               <div style={styles.cardBadge}>{course.provider}</div>
               <div style={styles.cardIcon}>{course.image}</div>
@@ -872,24 +872,24 @@ const Courses = () => {
             <div style={styles.cardBody}>
               <h3 style={styles.cardTitle}>{course.title}</h3>
               <div style={styles.cardInstructor}>
-                <Users size={14} /> {course.instructor} • {course.level}
+                <Users size={12} /> {course.instructor} • {course.level}
               </div>
               
               <div style={styles.cardRating}>
-                <Star size={16} fill="#f59e0b" style={styles.starIcon} />
+                <Star size={12} fill="#f59e0b" style={styles.starIcon} />
                 <span style={styles.ratingText}>{course.rating}</span>
-                <span style={styles.reviewCount}>({course.reviews.toLocaleString()} reviews)</span>
+                <span style={styles.reviewCount}>({course.reviews.toLocaleString()})</span>
               </div>
 
               <div style={styles.cardTags}>
-                {course.tags.map(tag => (
+                {course.tags.slice(0, 3).map(tag => (
                   <span key={tag} style={styles.tag(course.color)}>{tag}</span>
                 ))}
               </div>
 
               <div style={styles.cardMeta}>
-                <span style={styles.metaItem}><Clock size={14} /> {course.duration} hours</span>
-                <span style={styles.metaItem}><Users size={14} /> {(course.enrolled / 1000).toFixed(0)}K enrolled</span>
+                <span style={styles.metaItem}><Clock size={12} /> {course.duration}h</span>
+                <span style={styles.metaItem}><Users size={12} /> {(course.enrolled / 1000).toFixed(0)}K</span>
               </div>
 
               {isEnrolled(course.id) && (getCourseProgress(course.id).progress > 0 || course.progress > 0) && (
@@ -910,11 +910,11 @@ const Courses = () => {
                 </span>
                 {isEnrolled(course.id) ? (
                   <button style={styles.continueBtn} onClick={(e) => { e.stopPropagation(); setSelectedCourse(course); setActiveTab('videos'); }}>
-                    <Play size={16} /> Continue
+                    <Play size={12} /> Continue
                   </button>
                 ) : (
                   <button style={styles.enrollBtn} onClick={(e) => { e.stopPropagation(); setSelectedCourse(course); handleEnroll(course); }}>
-                    Enroll Now <ArrowRight size={16} />
+                    Enroll <ArrowRight size={12} />
                   </button>
                 )}
               </div>
