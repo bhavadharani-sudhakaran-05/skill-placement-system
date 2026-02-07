@@ -171,7 +171,7 @@ const Assessments = () => {
   const stats = [
     { icon: Trophy, label: 'Assessments Completed', value: storeStats.completedCount.toString(), color: '#f59e0b' },
     { icon: Star, label: 'Average Score', value: `${storeStats.averageScore}%`, color: '#10b981' },
-    { icon: Award, label: 'Badges Earned', value: storeStats.badgesCount.toString(), color: '#7c3aed' },
+    { icon: Award, label: 'Badges Earned', value: storeStats.badgesCount.toString(), color: '#2E073F' },
     { icon: TrendingUp, label: 'Total Attempts', value: storeStats.totalAttempts.toString(), color: '#ec4899' }
   ];
 
@@ -602,7 +602,7 @@ const Assessments = () => {
   const styles = {
     container: { padding: '1rem', maxWidth: '1100px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
     header: { marginBottom: '1rem' },
-    title: { fontSize: '1.4rem', fontWeight: 700, background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.3rem' },
+    title: { fontSize: '1.4rem', fontWeight: 700, background: 'linear-gradient(135deg, #2E073F, #2E073F)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.3rem' },
     subtitle: { color: '#6b7280', fontSize: '0.75rem' },
     statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.75rem', marginBottom: '1rem' },
     statCard: { background: 'white', borderRadius: '12px', padding: '0.85rem', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.08)', display: 'flex', alignItems: 'center', gap: '0.75rem', border: '1px solid #ede9fe' },
@@ -610,12 +610,12 @@ const Assessments = () => {
     statValue: { fontSize: '1.1rem', fontWeight: 700, color: '#1f2937' },
     statLabel: { fontSize: '0.65rem', color: '#6b7280' },
     categoriesRow: { display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' },
-    categoryChip: (active) => ({ padding: '0.35rem 0.85rem', borderRadius: '20px', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: '0.72rem', transition: 'all 0.2s', background: active ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : '#f5f3ff', color: active ? 'white' : '#7c3aed', textTransform: 'capitalize' }),
+    categoryChip: (active) => ({ padding: '0.35rem 0.85rem', borderRadius: '20px', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: '0.72rem', transition: 'all 0.2s', background: active ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : '#f5f3ff', color: active ? 'white' : '#2E073F', textTransform: 'capitalize' }),
     assessmentsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' },
     assessmentCard: (status) => ({ background: status === 'locked' ? '#faf5ff' : 'white', borderRadius: '14px', padding: '1rem', boxShadow: '0 3px 15px rgba(139, 92, 246, 0.08)', border: '1px solid #ede9fe', transition: 'all 0.3s', opacity: status === 'locked' ? 0.7 : 1 }),
     cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' },
-    cardIcon: (status) => ({ width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: status === 'completed' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : status === 'in-progress' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : status === 'locked' ? '#ede9fe' : 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: status === 'locked' ? '#a78bfa' : 'white' }),
-    statusBadge: (status) => ({ padding: '0.25rem 0.6rem', borderRadius: '15px', fontSize: '0.6rem', fontWeight: 600, background: status === 'completed' ? '#d1fae5' : status === 'in-progress' ? '#fef3c7' : status === 'locked' ? '#f5f3ff' : '#ede9fe', color: status === 'completed' ? '#059669' : status === 'in-progress' ? '#d97706' : status === 'locked' ? '#a78bfa' : '#7c3aed' }),
+    cardIcon: (status) => ({ width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: status === 'completed' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : status === 'in-progress' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : status === 'locked' ? '#ede9fe' : 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: status === 'locked' ? '#a78bfa' : 'white' }),
+    statusBadge: (status) => ({ padding: '0.25rem 0.6rem', borderRadius: '15px', fontSize: '0.6rem', fontWeight: 600, background: status === 'completed' ? '#d1fae5' : status === 'in-progress' ? '#fef3c7' : status === 'locked' ? '#f5f3ff' : '#ede9fe', color: status === 'completed' ? '#059669' : status === 'in-progress' ? '#d97706' : status === 'locked' ? '#a78bfa' : '#2E073F' }),
     recommendedBadge: { padding: '0.15rem 0.45rem', borderRadius: '10px', fontSize: '0.6rem', fontWeight: 600, background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', color: '#78350f', marginLeft: '0.35rem' },
     cardTitle: { fontSize: '0.95rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.5rem' },
     metaRow: { display: 'flex', gap: '0.75rem', marginBottom: '0.75rem', flexWrap: 'wrap' },
@@ -628,12 +628,12 @@ const Assessments = () => {
     scoreSection: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: '#f0fdf4', borderRadius: '10px', marginBottom: '0.75rem' },
     scoreCircle: { width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: '0.85rem' },
     badgeInfo: { display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#059669', fontWeight: 600, fontSize: '0.72rem' },
-    lockMessage: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem', background: '#f5f3ff', borderRadius: '8px', fontSize: '0.65rem', color: '#7c3aed', marginBottom: '0.75rem' },
-    actionButton: (status) => ({ width: '100%', padding: '0.6rem', borderRadius: '10px', fontWeight: 600, cursor: status === 'locked' ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', background: status === 'completed' ? 'white' : status === 'in-progress' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : status === 'locked' ? '#ede9fe' : 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: status === 'completed' ? '#7c3aed' : status === 'locked' ? '#a78bfa' : 'white', border: status === 'completed' ? '2px solid #7c3aed' : 'none', boxShadow: status !== 'locked' && status !== 'completed' ? '0 3px 12px rgba(139, 92, 246, 0.3)' : 'none', fontSize: '0.75rem' }),
+    lockMessage: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem', background: '#f5f3ff', borderRadius: '8px', fontSize: '0.65rem', color: '#2E073F', marginBottom: '0.75rem' },
+    actionButton: (status) => ({ width: '100%', padding: '0.6rem', borderRadius: '10px', fontWeight: 600, cursor: status === 'locked' ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', background: status === 'completed' ? 'white' : status === 'in-progress' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : status === 'locked' ? '#ede9fe' : 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: status === 'completed' ? '#2E073F' : status === 'locked' ? '#a78bfa' : 'white', border: status === 'completed' ? '2px solid #2E073F' : 'none', boxShadow: status !== 'locked' && status !== 'completed' ? '0 3px 12px rgba(139, 92, 246, 0.3)' : 'none', fontSize: '0.75rem' }),
     modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' },
     setupModal: { background: 'white', borderRadius: '16px', padding: '1.25rem', width: '100%', maxWidth: '450px', textAlign: 'center', maxHeight: '90vh', overflowY: 'auto' },
     testModal: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%)', display: 'flex', flexDirection: 'column', zIndex: 1001, overflow: 'hidden' },
-    testHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.6rem 1rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', flexShrink: 0 },
+    testHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.6rem 1rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', flexShrink: 0 },
     testBody: { flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0, maxHeight: 'calc(100vh - 50px)' },
     questionPanel: { flex: 1, padding: '1rem', overflowY: 'auto', maxWidth: 'calc(100% - 220px)' },
     sidePanel: { width: '220px', background: 'white', padding: '0.75rem', borderLeft: '1px solid #ede9fe', display: 'flex', flexDirection: 'column', overflowY: 'auto', flexShrink: 0 },
@@ -643,9 +643,9 @@ const Assessments = () => {
     questionCard: { background: 'white', borderRadius: '12px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(139, 92, 246, 0.08)', marginBottom: '0.75rem', border: '1px solid #ede9fe' },
     questionText: { fontSize: '1rem', fontWeight: 600, color: '#1f2937', marginBottom: '0.75rem', lineHeight: 1.5 },
     optionsList: { display: 'flex', flexDirection: 'column', gap: '0.4rem' },
-    optionBtn: (selected) => ({ padding: '0.7rem 0.875rem', borderRadius: '8px', border: selected ? '2px solid #7c3aed' : '1px solid #ede9fe', background: selected ? '#f5f3ff' : 'white', textAlign: 'left', cursor: 'pointer', fontWeight: 500, color: '#374151', transition: 'all 0.2s', fontSize: '0.9rem' }),
+    optionBtn: (selected) => ({ padding: '0.7rem 0.875rem', borderRadius: '8px', border: selected ? '2px solid #2E073F' : '1px solid #ede9fe', background: selected ? '#f5f3ff' : 'white', textAlign: 'left', cursor: 'pointer', fontWeight: 500, color: '#374151', transition: 'all 0.2s', fontSize: '0.9rem' }),
     navButtons: { display: 'flex', gap: '0.75rem', marginTop: '0.75rem' },
-    navBtn: (primary) => ({ flex: 1, padding: '0.7rem', borderRadius: '8px', border: 'none', fontWeight: 600, cursor: 'pointer', background: primary ? 'linear-gradient(135deg, #7c3aed, #8b5cf6)' : '#ede9fe', color: primary ? 'white' : '#7c3aed', fontSize: '0.9rem' }),
+    navBtn: (primary) => ({ flex: 1, padding: '0.7rem', borderRadius: '8px', border: 'none', fontWeight: 600, cursor: 'pointer', background: primary ? 'linear-gradient(135deg, #2E073F, #2E073F)' : '#ede9fe', color: primary ? 'white' : '#2E073F', fontSize: '0.9rem' }),
     proctorCheck: { display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem', background: '#faf5ff', borderRadius: '8px', marginBottom: '0.4rem', fontSize: '0.85rem' },
     checkIcon: (ok) => ({ color: ok ? '#10b981' : '#dc2626' }),
     statItem: { display: 'flex', justifyContent: 'space-between', padding: '0.3rem 0', borderBottom: '1px solid #ede9fe', fontSize: '0.75rem' },
@@ -660,7 +660,7 @@ const Assessments = () => {
     resultsStat: { padding: '0.75rem', background: '#faf5ff', borderRadius: '10px' },
     resultsStatValue: { fontSize: '1.1rem', fontWeight: 700, color: '#1f2937' },
     resultsStatLabel: { fontSize: '0.7rem', color: '#6b7280' },
-    resultsBtn: { width: '100%', padding: '0.875rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', border: 'none', color: 'white', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem', boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)' },
+    resultsBtn: { width: '100%', padding: '0.875rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', border: 'none', color: 'white', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem', boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)' },
     detectionIndicator: (status) => ({
       display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.6rem', 
       borderRadius: '6px', fontSize: '0.7rem', fontWeight: 600,
@@ -768,7 +768,7 @@ const Assessments = () => {
         {showProctorSetup && activeAssessment && (
           <motion.div style={styles.modalOverlay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div style={styles.setupModal} initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}>
-              <ShieldAlert size={44} color="#7c3aed" style={{ marginBottom: '0.75rem' }} />
+              <ShieldAlert size={44} color="#2E073F" style={{ marginBottom: '0.75rem' }} />
               <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.25rem', color: '#1f2937' }}>AI Proctoring Setup</h2>
               <p style={{ color: '#6b7280', marginBottom: '1rem', fontSize: '0.85rem' }}>Advanced monitoring for {activeAssessment.title}</p>
 
@@ -828,13 +828,13 @@ const Assessments = () => {
                 <div style={styles.proctorCheck}>
                   <div style={styles.checkIcon(cameraEnabled)}>{cameraEnabled ? <CheckCircle size={18} /> : <X size={18} />}</div>
                   <span style={{ flex: 1 }}>Camera Access</span>
-                  <button onClick={cameraEnabled ? stopCamera : startCamera} style={{ padding: '0.3rem 0.6rem', background: cameraEnabled ? '#fee2e2' : '#f5f3ff', color: cameraEnabled ? '#dc2626' : '#7c3aed', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 500, fontSize: '0.8rem' }}>
+                  <button onClick={cameraEnabled ? stopCamera : startCamera} style={{ padding: '0.3rem 0.6rem', background: cameraEnabled ? '#fee2e2' : '#f5f3ff', color: cameraEnabled ? '#dc2626' : '#2E073F', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 500, fontSize: '0.8rem' }}>
                     {cameraEnabled ? 'Disable' : 'Enable'}
                   </button>
                 </div>
 
                 <div style={styles.proctorCheck}>
-                  <div style={styles.checkIcon(modelsLoaded)}>{modelsLoaded ? <CheckCircle size={18} /> : loadingModels ? <div style={{ width: 18, height: 18, border: '2px solid #7c3aed', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> : <X size={18} />}</div>
+                  <div style={styles.checkIcon(modelsLoaded)}>{modelsLoaded ? <CheckCircle size={18} /> : loadingModels ? <div style={{ width: 18, height: 18, border: '2px solid #2E073F', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> : <X size={18} />}</div>
                   <span style={{ flex: 1 }}>Face Detection AI</span>
                   <span style={{ color: modelsLoaded ? '#10b981' : '#d97706', fontWeight: 500, fontSize: '0.75rem' }}>
                     {modelsLoaded ? 'Ready' : loadingModels ? 'Loading...' : 'Pending'}
@@ -844,13 +844,13 @@ const Assessments = () => {
                 <div style={styles.proctorCheck}>
                   <div style={styles.checkIcon(modelsLoaded)}>{modelsLoaded ? <CheckCircle size={18} /> : <X size={18} />}</div>
                   <span style={{ flex: 1 }}>Multi-Person Detection</span>
-                  <Users size={16} color="#7c3aed" />
+                  <Users size={16} color="#2E073F" />
                 </div>
 
                 <div style={styles.proctorCheck}>
                   <div style={styles.checkIcon(modelsLoaded)}>{modelsLoaded ? <CheckCircle size={18} /> : <X size={18} />}</div>
                   <span style={{ flex: 1 }}>Mobile Phone Detection</span>
-                  <Smartphone size={16} color="#7c3aed" />
+                  <Smartphone size={16} color="#2E073F" />
                 </div>
 
                 <div style={styles.proctorCheck}>
@@ -875,8 +875,8 @@ const Assessments = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button onClick={closeTest} style={{ flex: 1, padding: '0.75rem', background: '#f5f3ff', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem', color: '#7c3aed' }}>Cancel</button>
-                <button onClick={beginTest} disabled={!cameraEnabled || !modelsLoaded} style={{ flex: 2, padding: '0.75rem', background: cameraEnabled && modelsLoaded ? 'linear-gradient(135deg, #7c3aed, #8b5cf6)' : '#ede9fe', color: cameraEnabled && modelsLoaded ? 'white' : '#a78bfa', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: cameraEnabled && modelsLoaded ? 'pointer' : 'not-allowed', fontSize: '0.9rem', boxShadow: cameraEnabled && modelsLoaded ? '0 4px 15px rgba(139, 92, 246, 0.3)' : 'none' }}>
+                <button onClick={closeTest} style={{ flex: 1, padding: '0.75rem', background: '#f5f3ff', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem', color: '#2E073F' }}>Cancel</button>
+                <button onClick={beginTest} disabled={!cameraEnabled || !modelsLoaded} style={{ flex: 2, padding: '0.75rem', background: cameraEnabled && modelsLoaded ? 'linear-gradient(135deg, #2E073F, #2E073F)' : '#ede9fe', color: cameraEnabled && modelsLoaded ? 'white' : '#a78bfa', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: cameraEnabled && modelsLoaded ? 'pointer' : 'not-allowed', fontSize: '0.9rem', boxShadow: cameraEnabled && modelsLoaded ? '0 4px 15px rgba(139, 92, 246, 0.3)' : 'none' }}>
                   {loadingModels ? 'Loading AI...' : 'Start Secure Test'}
                 </button>
               </div>
@@ -924,7 +924,7 @@ const Assessments = () => {
               <div style={styles.questionPanel}>
                 <div style={styles.questionCard}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6b7280', marginBottom: '0.75rem' }}>
-                    <span style={{ background: '#f5f3ff', color: '#7c3aed', padding: '0.2rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600 }}>Q{currentQuestion + 1}</span>
+                    <span style={{ background: '#f5f3ff', color: '#2E073F', padding: '0.2rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600 }}>Q{currentQuestion + 1}</span>
                   </div>
                   <div style={styles.questionText}>{sampleQuestions[currentQuestion].question}</div>
                   <div style={styles.optionsList}>
@@ -1002,7 +1002,7 @@ const Assessments = () => {
                 {/* Proctor Status */}
                 <div style={styles.proctorStatusBox}>
                   <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                    <ShieldAlert size={14} color="#7c3aed" /> AI Proctor Status
+                    <ShieldAlert size={14} color="#2E073F" /> AI Proctor Status
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem' }}>
@@ -1052,7 +1052,7 @@ const Assessments = () => {
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.75rem' }}>
                   {sampleQuestions.map((q, idx) => (
-                    <button key={q.id} onClick={() => setCurrentQuestion(idx)} style={{ width: '28px', height: '28px', borderRadius: '6px', border: currentQuestion === idx ? '2px solid #7c3aed' : 'none', background: selectedAnswers[q.id] !== undefined ? '#10b981' : '#e5e7eb', color: selectedAnswers[q.id] !== undefined ? 'white' : '#6b7280', fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem' }}>
+                    <button key={q.id} onClick={() => setCurrentQuestion(idx)} style={{ width: '28px', height: '28px', borderRadius: '6px', border: currentQuestion === idx ? '2px solid #2E073F' : 'none', background: selectedAnswers[q.id] !== undefined ? '#10b981' : '#e5e7eb', color: selectedAnswers[q.id] !== undefined ? 'white' : '#6b7280', fontWeight: 600, cursor: 'pointer', fontSize: '0.75rem' }}>
                       {idx + 1}
                     </button>
                   ))}

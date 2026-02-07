@@ -36,7 +36,7 @@ const LoginPage = () => {
   const styles = {
     container: { minHeight: '100vh', display: 'flex', fontFamily: "'Inter', sans-serif" },
     leftPanel: {
-      flex: 1, background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)',
+      flex: 1, background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: '3rem', color: 'white', position: 'relative', overflow: 'hidden'
     },
@@ -52,8 +52,8 @@ const LoginPage = () => {
     rightPanel: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%)' },
     formContainer: { width: '100%', maxWidth: '440px', background: 'white', padding: '3rem', borderRadius: '24px', boxShadow: '0 25px 50px rgba(139,92,246,0.15)', border: '1px solid #ede9fe' },
     logo: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '2rem', textDecoration: 'none' },
-    logoIcon: { width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(139,92,246,0.3)' },
-    logoText: { fontWeight: 700, fontSize: '1.5rem', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
+    logoIcon: { width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(139,92,246,0.3)' },
+    logoText: { fontWeight: 700, fontSize: '1.5rem', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
     title: { fontSize: '1.75rem', fontWeight: 700, color: '#1f2937', textAlign: 'center', marginBottom: '0.5rem' },
     subtitle: { color: '#6b7280', textAlign: 'center', marginBottom: '2rem' },
     inputGroup: { marginBottom: '1.25rem' },
@@ -65,10 +65,10 @@ const LoginPage = () => {
     },
     inputIcon: { position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#a78bfa' },
     eyeButton: { position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#a78bfa' },
-    forgotLink: { display: 'block', textAlign: 'right', color: '#7c3aed', fontSize: '0.875rem', textDecoration: 'none', marginBottom: '1.5rem', fontWeight: 500 },
+    forgotLink: { display: 'block', textAlign: 'right', color: '#2E073F', fontSize: '0.875rem', textDecoration: 'none', marginBottom: '1.5rem', fontWeight: 500 },
     submitButton: {
       width: '100%', padding: '1rem', borderRadius: '12px', border: 'none',
-      background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: 'white', fontWeight: 600,
+      background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: 'white', fontWeight: 600,
       cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '1rem',
       boxShadow: '0 4px 15px rgba(139, 92, 246, 0.4)'
     },
@@ -76,7 +76,7 @@ const LoginPage = () => {
     dividerLine: { flex: 1, height: '1px', background: '#ede9fe' },
     dividerText: { color: '#a78bfa', fontSize: '0.875rem' },
     signUpText: { textAlign: 'center', marginTop: '1.5rem', color: '#6b7280' },
-    signUpLink: { color: '#7c3aed', textDecoration: 'none', fontWeight: 600 }
+    signUpLink: { color: '#2E073F', textDecoration: 'none', fontWeight: 600 }
   };
 
   return (

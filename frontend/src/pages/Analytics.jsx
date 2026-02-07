@@ -283,7 +283,7 @@ const Analytics = () => {
 
   const stats = [
     { icon: TrendingUp, label: 'Skill Growth', value: `+${userData?.skillGrowth || 0}%`, change: userData?.skillGrowth > 0 ? `+${userData.skillGrowth}%` : '0%', positive: true, color: '#10b981' },
-    { icon: Target, label: 'Readiness Score', value: `${userData?.readinessScore || 0}%`, change: userData?.readinessScore > 50 ? 'Good' : 'Improve', positive: userData?.readinessScore > 50, color: '#7c3aed' },
+    { icon: Target, label: 'Readiness Score', value: `${userData?.readinessScore || 0}%`, change: userData?.readinessScore > 50 ? 'Good' : 'Improve', positive: userData?.readinessScore > 50, color: '#2E073F' },
     { icon: Award, label: 'Certificates', value: userData?.certificatesEarned || 0, change: `${userData?.assessmentsPassed || 0} passed`, positive: true, color: '#f59e0b' },
     { icon: Briefcase, label: 'Job Matches', value: jobMatchCount, change: 'Available', positive: true, color: '#ec4899' }
   ];
@@ -292,8 +292,8 @@ const Analytics = () => {
     labels: monthLabels,
     datasets: [{
       label: 'Skill Score', data: userData?.monthlyProgress || [0, 0, 0, 0, 0, 0], fill: true,
-      borderColor: '#7c3aed', backgroundColor: 'rgba(139, 92, 246, 0.1)',
-      tension: 0.4, pointBackgroundColor: '#7c3aed', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5
+      borderColor: '#2E073F', backgroundColor: 'rgba(139, 92, 246, 0.1)',
+      tension: 0.4, pointBackgroundColor: '#2E073F', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5
     }]
   };
 
@@ -301,7 +301,7 @@ const Analytics = () => {
     labels: userData?.skills?.map(s => s.name) || ['No Skills Yet'],
     datasets: [{
       label: 'Current Level', data: userData?.skills?.map(s => s.level) || [0],
-      backgroundColor: ['#7c3aed', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe']
+      backgroundColor: ['#2E073F', '#2E073F', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe']
     }]
   };
 
@@ -310,7 +310,7 @@ const Analytics = () => {
     datasets: [{
       label: 'Your Skills',
       data: userData ? [userData.softSkills.technical, userData.softSkills.problemSolving, userData.softSkills.communication, userData.softSkills.leadership, userData.softSkills.teamwork, userData.softSkills.creativity] : [0, 0, 0, 0, 0, 0],
-      backgroundColor: 'rgba(139, 92, 246, 0.2)', borderColor: '#7c3aed', pointBackgroundColor: '#7c3aed'
+      backgroundColor: 'rgba(139, 92, 246, 0.2)', borderColor: '#2E073F', pointBackgroundColor: '#2E073F'
     }, {
       label: 'Industry Average', data: [70, 72, 75, 70, 75, 68],
       backgroundColor: 'rgba(236, 72, 153, 0.2)', borderColor: '#ec4899', pointBackgroundColor: '#ec4899'
@@ -419,12 +419,12 @@ const Analytics = () => {
     container: { padding: '1rem', maxWidth: '1100px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' },
     headerLeft: {},
-    title: { fontSize: '1.4rem', fontWeight: 700, background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.3rem' },
+    title: { fontSize: '1.4rem', fontWeight: 700, background: 'linear-gradient(135deg, #2E073F, #2E073F)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.3rem' },
     subtitle: { color: '#6b7280', fontSize: '0.75rem' },
     headerRight: { display: 'flex', gap: '0.75rem' },
-    filterButton: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 0.85rem', borderRadius: '10px', border: '2px solid #ede9fe', background: 'white', cursor: 'pointer', fontWeight: 500, color: '#7c3aed', fontSize: '0.75rem' },
-    downloadButton: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 0.85rem', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', boxShadow: '0 3px 12px rgba(139, 92, 246, 0.3)', fontSize: '0.75rem' },
-    userCard: { background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', borderRadius: '14px', padding: '1rem', marginBottom: '1rem', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', boxShadow: '0 6px 20px rgba(139, 92, 246, 0.25)' },
+    filterButton: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 0.85rem', borderRadius: '10px', border: '2px solid #ede9fe', background: 'white', cursor: 'pointer', fontWeight: 500, color: '#2E073F', fontSize: '0.75rem' },
+    downloadButton: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 0.85rem', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', boxShadow: '0 3px 12px rgba(139, 92, 246, 0.3)', fontSize: '0.75rem' },
+    userCard: { background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', borderRadius: '14px', padding: '1rem', marginBottom: '1rem', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', boxShadow: '0 6px 20px rgba(139, 92, 246, 0.25)' },
     userInfo: { display: 'flex', alignItems: 'center', gap: '0.75rem' },
     avatar: { width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontWeight: 700 },
     userName: { fontSize: '1.1rem', fontWeight: 700 },
@@ -456,7 +456,7 @@ const Analytics = () => {
     activityIcon: (type) => ({
       width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
       background: type === 'course' ? '#f5f3ff' : type === 'assessment' ? '#d1fae5' : '#fce7f3',
-      color: type === 'course' ? '#7c3aed' : type === 'assessment' ? '#10b981' : '#ec4899'
+      color: type === 'course' ? '#2E073F' : type === 'assessment' ? '#10b981' : '#ec4899'
     }),
     activityInfo: { flex: 1 },
     activityName: { fontWeight: 600, color: '#1f2937', fontSize: '0.8rem' },
@@ -466,7 +466,7 @@ const Analytics = () => {
       background: status === 'completed' ? '#d1fae5' : status === 'passed' ? '#d1fae5' : status === 'applied' ? '#fce7f3' : '#fef3c7',
       color: status === 'completed' ? '#059669' : status === 'passed' ? '#059669' : status === 'applied' ? '#db2777' : '#d97706'
     }),
-    insightCard: { background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', borderRadius: '14px', padding: '1.25rem', color: 'white', marginTop: '1rem', boxShadow: '0 6px 20px rgba(139, 92, 246, 0.25)' },
+    insightCard: { background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', borderRadius: '14px', padding: '1.25rem', color: 'white', marginTop: '1rem', boxShadow: '0 6px 20px rgba(139, 92, 246, 0.25)' },
     insightTitle: { fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem' },
     insightText: { opacity: 0.95, marginBottom: '1rem', lineHeight: 1.5, fontSize: '0.8rem' },
     insightStats: { display: 'flex', gap: '1.25rem', flexWrap: 'wrap' },
@@ -560,7 +560,7 @@ const Analytics = () => {
       {/* Contribution Graph (GitHub-style) */}
       <motion.div style={styles.contributionCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
         <div style={styles.contributionHeader}>
-          <h3 style={styles.contributionTitle}><Calendar size={20} color="#7c3aed" /> Activity Contributions</h3>
+          <h3 style={styles.contributionTitle}><Calendar size={20} color="#2E073F" /> Activity Contributions</h3>
           <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>{userData.assessmentsTaken} activities in the last year</span>
         </div>
         <div style={styles.contributionGraph}>
@@ -619,7 +619,7 @@ const Analytics = () => {
       <div style={styles.chartsGrid}>
         <motion.div style={styles.chartCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
           <div style={styles.chartHeader}>
-            <h3 style={styles.chartTitle}><TrendingUp size={20} color="#7c3aed" /> Skill Progress Over Time</h3>
+            <h3 style={styles.chartTitle}><TrendingUp size={20} color="#2E073F" /> Skill Progress Over Time</h3>
           </div>
           <div style={styles.chartContainer}>
             <Line data={progressData} options={chartOptions} />
@@ -628,7 +628,7 @@ const Analytics = () => {
 
         <motion.div style={styles.chartCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
           <div style={styles.chartHeader}>
-            <h3 style={styles.chartTitle}><BarChart3 size={20} color="#7c3aed" /> Skills Breakdown</h3>
+            <h3 style={styles.chartTitle}><BarChart3 size={20} color="#2E073F" /> Skills Breakdown</h3>
           </div>
           <div style={styles.chartContainer}>
             <Bar data={skillsData} options={{ ...chartOptions, indexAxis: 'y' }} />
@@ -640,20 +640,20 @@ const Analytics = () => {
       <div style={styles.smallChartsGrid}>
         <motion.div style={styles.chartCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <div style={styles.chartHeader}>
-            <h3 style={styles.chartTitle}><Target size={20} color="#7c3aed" /> Skill Comparison</h3>
+            <h3 style={styles.chartTitle}><Target size={20} color="#2E073F" /> Skill Comparison</h3>
           </div>
           <div style={{ ...styles.chartContainer, height: '250px' }}>
             <Radar data={radarData} options={{ ...chartOptions, scales: { r: { beginAtZero: true, max: 100 } } }} />
           </div>
           <div style={styles.legendItems}>
-            <div style={styles.legendItem}><div style={styles.legendDot('#7c3aed')} /> Your Skills</div>
+            <div style={styles.legendItem}><div style={styles.legendDot('#2E073F')} /> Your Skills</div>
             <div style={styles.legendItem}><div style={styles.legendDot('#ec4899')} /> Industry Average</div>
           </div>
         </motion.div>
 
         <motion.div style={styles.chartCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
           <div style={styles.chartHeader}>
-            <h3 style={styles.chartTitle}><Award size={20} color="#7c3aed" /> Course Completion</h3>
+            <h3 style={styles.chartTitle}><Award size={20} color="#2E073F" /> Course Completion</h3>
           </div>
           <div style={{ ...styles.chartContainer, height: '250px', display: 'flex', justifyContent: 'center' }}>
             <div style={{ width: '200px' }}>
@@ -670,7 +670,7 @@ const Analytics = () => {
 
       {/* Recent Activity */}
       <motion.div style={styles.activityCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
-        <h3 style={styles.activityTitle}><Clock size={20} color="#7c3aed" /> Recent Activity</h3>
+        <h3 style={styles.activityTitle}><Clock size={20} color="#2E073F" /> Recent Activity</h3>
         <div style={styles.activityList}>
           {userData.recentActivity.map((activity, index) => (
             <div key={index} style={styles.activityItem}>

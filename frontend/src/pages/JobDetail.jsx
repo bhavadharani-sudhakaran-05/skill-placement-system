@@ -94,16 +94,16 @@ As a senior member of the engineering team, you'll have the opportunity to mento
     logo: { width: '80px', height: '80px', borderRadius: '16px', objectFit: 'cover', background: '#f5f3ff' },
     headerInfo: { flex: 1 },
     title: { fontSize: '1.75rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.5rem' },
-    company: { fontSize: '1.1rem', color: '#7c3aed', fontWeight: 600, marginBottom: '1rem' },
+    company: { fontSize: '1.1rem', color: '#2E073F', fontWeight: 600, marginBottom: '1rem' },
     metaGrid: { display: 'flex', flexWrap: 'wrap', gap: '1rem' },
     metaItem: { display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6b7280', fontSize: '0.9rem' },
     matchBadge: { padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white', borderRadius: '12px', fontWeight: 700, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' },
     headerActions: { display: 'flex', gap: '0.75rem' },
     iconBtn: { width: '48px', height: '48px', borderRadius: '12px', border: '2px solid #ede9fe', background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6b7280' },
-    iconBtnActive: { width: '48px', height: '48px', borderRadius: '12px', border: '2px solid #7c3aed', background: '#f5f3ff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' },
+    iconBtnActive: { width: '48px', height: '48px', borderRadius: '12px', border: '2px solid #2E073F', background: '#f5f3ff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2E073F' },
     tags: { display: 'flex', gap: '0.5rem', flexWrap: 'wrap' },
     tag: { padding: '0.5rem 1rem', background: '#f5f3ff', borderRadius: '8px', fontSize: '0.85rem', color: '#374151', fontWeight: 500 },
-    tagRemote: { padding: '0.5rem 1rem', background: '#ede9fe', borderRadius: '8px', fontSize: '0.85rem', color: '#7c3aed', fontWeight: 500 },
+    tagRemote: { padding: '0.5rem 1rem', background: '#ede9fe', borderRadius: '8px', fontSize: '0.85rem', color: '#2E073F', fontWeight: 500 },
     card: { background: 'white', borderRadius: '20px', padding: '1.75rem', boxShadow: '0 4px 20px rgba(139,92,246,0.08)', marginBottom: '1.5rem', border: '1px solid #ede9fe' },
     cardTitle: { fontSize: '1.15rem', fontWeight: 700, color: '#1f2937', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' },
     description: { color: '#4b5563', lineHeight: 1.8, whiteSpace: 'pre-line' },
@@ -112,10 +112,10 @@ As a senior member of the engineering team, you'll have the opportunity to mento
     listIcon: { marginTop: '4px', color: '#10b981', flexShrink: 0 },
     skillsGrid: { display: 'flex', flexWrap: 'wrap', gap: '0.75rem' },
     skillTag: (has, required) => ({ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 500, background: has ? '#d1fae5' : required ? '#fee2e2' : '#f5f3ff', color: has ? '#065f46' : required ? '#991b1b' : '#6b7280' }),
-    applyCard: { background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', borderRadius: '20px', padding: '1.75rem', color: 'white', marginBottom: '1.5rem', boxShadow: '0 8px 25px rgba(139,92,246,0.3)' },
+    applyCard: { background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', borderRadius: '20px', padding: '1.75rem', color: 'white', marginBottom: '1.5rem', boxShadow: '0 8px 25px rgba(139,92,246,0.3)' },
     applyTitle: { fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' },
     applySubtitle: { opacity: 0.9, marginBottom: '1.5rem', fontSize: '0.95rem' },
-    applyButton: { width: '100%', padding: '1rem', borderRadius: '12px', border: 'none', background: 'white', color: '#7c3aed', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', boxShadow: '0 4px 12px rgba(255,255,255,0.2)' },
+    applyButton: { width: '100%', padding: '1rem', borderRadius: '12px', border: 'none', background: 'white', color: '#2E073F', fontWeight: 700, fontSize: '1rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', boxShadow: '0 4px 12px rgba(255,255,255,0.2)' },
     applyStats: { display: 'flex', justifyContent: 'space-between', marginTop: '1rem' },
     applyStat: { textAlign: 'center' },
     applyStatValue: { fontSize: '1.25rem', fontWeight: 700 },
@@ -128,7 +128,7 @@ As a senior member of the engineering team, you'll have the opportunity to mento
     companyGrid: { display: 'grid', gap: '0.75rem' },
     companyItem: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: '#faf5ff', borderRadius: '10px', fontSize: '0.9rem', color: '#4b5563' },
     companyItemLabel: { flex: 1, fontWeight: 500, color: '#1f2937' },
-    viewCompany: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem', padding: '0.75rem', background: '#f5f3ff', borderRadius: '10px', color: '#7c3aed', fontWeight: 600, cursor: 'pointer' }
+    viewCompany: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '1rem', padding: '0.75rem', background: '#f5f3ff', borderRadius: '10px', color: '#2E073F', fontWeight: 600, cursor: 'pointer' }
   };
 
   return (
@@ -179,7 +179,7 @@ As a senior member of the engineering team, you'll have the opportunity to mento
 
           {/* Responsibilities */}
           <motion.div style={styles.card} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <h3 style={styles.cardTitle}><Briefcase size={20} color="#7c3aed" /> Responsibilities</h3>
+            <h3 style={styles.cardTitle}><Briefcase size={20} color="#2E073F" /> Responsibilities</h3>
             <ul style={styles.list}>
               {job.responsibilities.map((item, idx) => (
                 <li key={idx} style={styles.listItem}>
@@ -191,7 +191,7 @@ As a senior member of the engineering team, you'll have the opportunity to mento
 
           {/* Requirements */}
           <motion.div style={styles.card} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <h3 style={styles.cardTitle}><GraduationCap size={20} color="#7c3aed" /> Requirements</h3>
+            <h3 style={styles.cardTitle}><GraduationCap size={20} color="#2E073F" /> Requirements</h3>
             <ul style={styles.list}>
               {job.requirements.map((item, idx) => (
                 <li key={idx} style={styles.listItem}>
@@ -259,9 +259,9 @@ As a senior member of the engineering team, you'll have the opportunity to mento
               </div>
             </div>
             <div style={styles.companyGrid}>
-              <div style={styles.companyItem}><Building2 size={18} color="#7c3aed" /> <span style={styles.companyItemLabel}>Industry</span> {job.companyInfo.industry}</div>
-              <div style={styles.companyItem}><Users size={18} color="#7c3aed" /> <span style={styles.companyItemLabel}>Company Size</span> {job.companyInfo.size}</div>
-              <div style={styles.companyItem}><Calendar size={18} color="#7c3aed" /> <span style={styles.companyItemLabel}>Founded</span> {job.companyInfo.founded}</div>
+              <div style={styles.companyItem}><Building2 size={18} color="#2E073F" /> <span style={styles.companyItemLabel}>Industry</span> {job.companyInfo.industry}</div>
+              <div style={styles.companyItem}><Users size={18} color="#2E073F" /> <span style={styles.companyItemLabel}>Company Size</span> {job.companyInfo.size}</div>
+              <div style={styles.companyItem}><Calendar size={18} color="#2E073F" /> <span style={styles.companyItemLabel}>Founded</span> {job.companyInfo.founded}</div>
             </div>
             <div style={styles.viewCompany}><ExternalLink size={16} /> View Company Profile</div>
           </motion.div>

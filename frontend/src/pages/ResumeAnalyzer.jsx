@@ -33,29 +33,29 @@ const ResumeAnalyzer = () => {
   const styles = {
     container: { padding: '1rem', maxWidth: '1000px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
     header: { marginBottom: '1rem' },
-    title: { fontSize: '1.4rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.35rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
+    title: { fontSize: '1.4rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.35rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
     subtitle: { color: '#6b7280', fontSize: '0.75rem' },
     uploadSection: { marginBottom: '1rem' },
     dropzone: (isDragActive) => ({
-      border: `3px dashed ${isDragActive ? '#7c3aed' : '#ede9fe'}`, borderRadius: '14px', padding: '1.5rem 1.25rem',
+      border: `3px dashed ${isDragActive ? '#2E073F' : '#ede9fe'}`, borderRadius: '14px', padding: '1.5rem 1.25rem',
       textAlign: 'center', cursor: 'pointer', transition: 'all 0.3s',
       background: isDragActive ? 'rgba(139,92,246,0.05)' : '#faf5ff'
     }),
-    uploadIcon: { width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.75rem', color: 'white', boxShadow: '0 6px 20px rgba(139,92,246,0.35)' },
+    uploadIcon: { width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.75rem', color: 'white', boxShadow: '0 6px 20px rgba(139,92,246,0.35)' },
     uploadTitle: { fontSize: '1rem', fontWeight: 600, color: '#1f2937', marginBottom: '0.35rem' },
     uploadSubtitle: { color: '#6b7280', marginBottom: '0.75rem', fontSize: '0.75rem' },
-    uploadButton: { padding: '0.5rem 1rem', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', boxShadow: '0 3px 12px rgba(139,92,246,0.3)', fontSize: '0.8rem' },
+    uploadButton: { padding: '0.5rem 1rem', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', boxShadow: '0 3px 12px rgba(139,92,246,0.3)', fontSize: '0.8rem' },
     fileInfo: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: '#f5f3ff', borderRadius: '10px', marginTop: '0.75rem', border: '1px solid #ede9fe' },
-    fileIcon: { width: '36px', height: '36px', borderRadius: '10px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', boxShadow: '0 2px 6px rgba(139,92,246,0.15)' },
+    fileIcon: { width: '36px', height: '36px', borderRadius: '10px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2E073F', boxShadow: '0 2px 6px rgba(139,92,246,0.15)' },
     fileName: { fontWeight: 600, color: '#1f2937', fontSize: '0.85rem' },
     fileSize: { fontSize: '0.72rem', color: '#6b7280' },
     analyzingState: { textAlign: 'center', padding: '2rem' },
-    spinner: { width: '50px', height: '50px', border: '3px solid #ede9fe', borderTop: '3px solid #7c3aed', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' },
+    spinner: { width: '50px', height: '50px', border: '3px solid #ede9fe', borderTop: '3px solid #2E073F', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' },
     resultsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', marginBottom: '1rem' },
     scoreCard: { background: 'white', borderRadius: '14px', padding: '0.85rem', boxShadow: '0 3px 15px rgba(139,92,246,0.08)', textAlign: 'center', border: '1px solid #ede9fe' },
     scoreCircle: (score) => ({
       width: '80px', height: '80px', borderRadius: '50%', margin: '0 auto 0.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      background: score >= 80 ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : score >= 60 ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white',
+      background: score >= 80 ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : score >= 60 ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white',
       boxShadow: score >= 80 ? '0 6px 15px rgba(16,185,129,0.3)' : score >= 60 ? '0 6px 15px rgba(139,92,246,0.3)' : '0 6px 15px rgba(245,158,11,0.3)'
     }),
     scoreValue: { fontSize: '1.4rem', fontWeight: 700 },
@@ -80,14 +80,14 @@ const ResumeAnalyzer = () => {
     }),
     suggestionIcon: (type) => ({
       width: '28px', height: '28px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-      background: type === 'success' ? '#10b981' : type === 'warning' ? '#f59e0b' : 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white'
+      background: type === 'success' ? '#10b981' : type === 'warning' ? '#f59e0b' : 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white'
     }),
     suggestionTitle: { fontWeight: 600, color: '#1f2937', marginBottom: '0.15rem', fontSize: '0.8rem' },
     suggestionDesc: { fontSize: '0.72rem', color: '#6b7280' },
     actionsRow: { display: 'flex', gap: '0.75rem', justifyContent: 'center' },
     actionButton: (primary) => ({
       padding: '0.5rem 0.85rem', borderRadius: '10px', border: primary ? 'none' : '2px solid #ede9fe',
-      background: primary ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : 'white',
+      background: primary ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : 'white',
       color: primary ? 'white' : '#374151', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem',
       boxShadow: primary ? '0 3px 12px rgba(139,92,246,0.3)' : 'none', fontSize: '0.75rem'
     })
@@ -149,7 +149,7 @@ const ResumeAnalyzer = () => {
 
           {/* Skills Analysis */}
           <motion.div style={styles.section} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <h3 style={styles.sectionTitle}><Target size={22} color="#7c3aed" /> Skills Analysis</h3>
+            <h3 style={styles.sectionTitle}><Target size={22} color="#2E073F" /> Skills Analysis</h3>
             <div style={styles.skillsGrid}>
               <div style={styles.skillsColumn}>
                 <div style={styles.skillsLabel}><CheckCircle size={18} color="#10b981" /> Skills Found ({analysisResults.skills.found.length})</div>
@@ -168,7 +168,7 @@ const ResumeAnalyzer = () => {
 
           {/* Suggestions */}
           <motion.div style={styles.section} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-            <h3 style={styles.sectionTitle}><Zap size={22} color="#7c3aed" /> Improvement Suggestions</h3>
+            <h3 style={styles.sectionTitle}><Zap size={22} color="#2E073F" /> Improvement Suggestions</h3>
             <div style={styles.suggestionsList}>
               {analysisResults.suggestions.map((suggestion, index) => (
                 <div key={index} style={styles.suggestionItem(suggestion.type)}>

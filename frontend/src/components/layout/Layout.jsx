@@ -34,7 +34,7 @@ const Layout = () => {
     container: { display: 'flex', minHeight: '100vh', fontFamily: "'Inter', sans-serif" },
     sidebar: {
       width: sidebarOpen ? '260px' : '80px', minHeight: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, zIndex: 40,
-      background: 'linear-gradient(180deg, #5b21b6 0%, #4c1d95 100%)', color: 'white',
+      background: '#2E073F', color: 'white',
       display: 'flex', flexDirection: 'column', transition: 'width 0.3s ease', boxShadow: '4px 0 30px rgba(139, 92, 246, 0.3)'
     },
     logoSection: {
@@ -59,9 +59,9 @@ const Layout = () => {
       display: 'flex', alignItems: 'center', gap: '0.875rem',
       padding: sidebarOpen ? '0.875rem 1rem' : '0.875rem', borderRadius: '12px',
       textDecoration: 'none', transition: 'all 0.2s', justifyContent: sidebarOpen ? 'flex-start' : 'center',
-      background: isActive ? 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)' : 'transparent',
+      background: isActive ? '#9C27B0' : 'transparent',
       color: isActive ? 'white' : '#c4b5fd',
-      boxShadow: isActive ? '0 4px 15px rgba(139, 92, 246, 0.5)' : 'none'
+      boxShadow: isActive ? '0 4px 15px rgba(156, 39, 176, 0.5)' : 'none'
     }),
     navIcon: { flexShrink: 0 },
     navLabel: { fontWeight: 500, fontSize: '0.925rem', display: sidebarOpen ? 'block' : 'none', whiteSpace: 'nowrap' },
@@ -78,7 +78,7 @@ const Layout = () => {
       borderBottom: '1px solid rgba(139, 92, 246, 0.1)', position: 'sticky', top: 0, zIndex: 30
     },
     searchWrapper: { position: 'relative', width: '220px' },
-    searchIcon: { position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8b5cf6' },
+    searchIcon: { position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#2E073F' },
     searchInput: {
       width: '100%', padding: '0.5rem 0.75rem 0.5rem 2.25rem', borderRadius: '10px',
       border: '2px solid #ede9fe', fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box', background: 'white'
@@ -90,11 +90,11 @@ const Layout = () => {
     },
     avatar: {
       width: '30px', height: '30px', borderRadius: '50%',
-      background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)',
+      background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 600, fontSize: '0.75rem'
     },
     userName: { fontWeight: 500, color: '#374151', fontSize: '0.8rem' },
-    userRole: { fontSize: '0.65rem', color: '#8b5cf6' },
+    userRole: { fontSize: '0.65rem', color: '#2E073F' },
     profileDropdown: {
       position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem',
       background: 'white', borderRadius: '12px', boxShadow: '0 10px 40px rgba(139, 92, 246, 0.2)',

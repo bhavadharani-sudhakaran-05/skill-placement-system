@@ -25,7 +25,7 @@ const courses = [
     tags: ['DSA', 'Problem Solving', 'Coding'],
     category: 'Programming',
     image: '📊',
-    color: '#7c3aed',
+    color: '#2E073F',
     description: 'Master data structures and algorithms from scratch.',
     skills: ['Arrays', 'Linked Lists', 'Trees', 'Graphs', 'Dynamic Programming', 'Sorting'],
     videos: 6
@@ -42,7 +42,7 @@ const courses = [
     tags: ['ML', 'Python', 'TensorFlow'],
     category: 'AI/ML',
     image: '🤖',
-    color: '#8b5cf6',
+    color: '#2E073F',
     description: 'Complete machine learning course covering supervised and unsupervised learning.',
     skills: ['Linear Regression', 'Neural Networks', 'Deep Learning', 'Classification', 'Clustering'],
     videos: 5
@@ -212,7 +212,7 @@ const courses = [
     tags: ['MongoDB', 'Express', 'React', 'Node.js', 'JavaScript', 'Full Stack'],
     category: 'Web Development',
     image: '💻',
-    color: '#7c3aed',
+    color: '#2E073F',
     description: 'Become a complete MERN Stack Developer.',
     skills: ['MongoDB', 'Express.js', 'React', 'Node.js', 'JavaScript', 'REST APIs'],
     videos: 6
@@ -229,7 +229,7 @@ const courses = [
     tags: ['Python', 'Machine Learning', 'Deep Learning', 'TensorFlow', 'PyTorch', 'AI'],
     category: 'AI/ML',
     image: '🤖',
-    color: '#8b5cf6',
+    color: '#2E073F',
     description: 'Become an AI/ML Engineer.',
     skills: ['Python', 'TensorFlow', 'Deep Learning', 'NLP', 'Computer Vision', 'MLOps'],
     videos: 6
@@ -452,7 +452,7 @@ const LearningPath = () => {
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 40px; }
     .certificate { width: 800px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,0.3); }
-    .header { background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%); padding: 40px; text-align: center; color: white; }
+    .header { background: linear-gradient(135deg, #2E073F 0%, #2E073F 100%); padding: 40px; text-align: center; color: white; }
     .header h1 { font-size: 36px; letter-spacing: 3px; margin-bottom: 5px; }
     .body { padding: 50px; text-align: center; }
     .name { font-size: 42px; color: #111827; border-bottom: 3px solid #10b981; display: inline-block; padding-bottom: 10px; margin: 20px 0 30px; }
@@ -463,7 +463,7 @@ const LearningPath = () => {
     .footer { display: flex; justify-content: space-around; padding: 30px; background: #f9fafb; }
     .seal { width: 80px; height: 80px; border: 4px solid #f59e0b; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #fef3c7, #fde68a); }
     .seal-grade { font-size: 28px; color: #d97706; font-weight: 700; }
-    .print-btn { display: block; margin: 20px auto; padding: 15px 40px; background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; }
+    .print-btn { display: block; margin: 20px auto; padding: 15px 40px; background: linear-gradient(135deg, #2E073F, #2E073F); color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; }
     @media print { .print-btn { display: none; } }
   </style>
 </head>
@@ -512,12 +512,12 @@ const LearningPath = () => {
   const styles = {
     container: { padding: '1rem', maxWidth: '1100px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
     header: { marginBottom: '1rem' },
-    title: { fontSize: '1.4rem', fontWeight: 700, background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.35rem' },
+    title: { fontSize: '1.4rem', fontWeight: 700, background: 'linear-gradient(135deg, #2E073F, #2E073F)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '0.35rem' },
     subtitle: { color: '#6b7280', fontSize: '0.75rem' },
     grid: { display: 'grid', gridTemplateColumns: '260px 1fr', gap: '1rem' },
     sidebar: { display: 'flex', flexDirection: 'column', gap: '0.75rem' },
     pathCard: (selected) => ({
-      background: selected ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : 'white',
+      background: selected ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : 'white',
       borderRadius: '12px', padding: '0.75rem', cursor: 'pointer', transition: 'all 0.3s',
       border: selected ? 'none' : '1px solid #ede9fe', boxShadow: selected ? '0 6px 20px rgba(139,92,246,0.3)' : '0 2px 8px rgba(139,92,246,0.08)'
     }),
@@ -527,7 +527,7 @@ const LearningPath = () => {
     pathStats: (selected) => ({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: selected ? 'rgba(255,255,255,0.9)' : '#6b7280', fontSize: '0.7rem', marginBottom: '0.4rem' }),
     pathMeta: (selected) => ({ display: 'flex', gap: '0.5rem', fontSize: '0.65rem', color: selected ? 'rgba(255,255,255,0.8)' : '#9ca3af' }),
     progressMini: (selected) => ({ width: '50px', height: '5px', background: selected ? 'rgba(255,255,255,0.3)' : '#ede9fe', borderRadius: '3px', overflow: 'hidden' }),
-    progressMiniFill: (selected, progress) => ({ width: `${progress}%`, height: '100%', background: selected ? 'white' : '#7c3aed', borderRadius: '3px' }),
+    progressMiniFill: (selected, progress) => ({ width: `${progress}%`, height: '100%', background: selected ? 'white' : '#2E073F', borderRadius: '3px' }),
     skillGapCard: { background: 'white', borderRadius: '12px', padding: '0.75rem', marginTop: '0.5rem', boxShadow: '0 2px 8px rgba(139,92,246,0.08)', border: '1px solid #ede9fe' },
     skillGapTitle: { fontSize: '0.8rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' },
     skillGapItem: { marginBottom: '0.75rem' },
@@ -538,13 +538,13 @@ const LearningPath = () => {
     skillGapFill: (current) => ({ position: 'absolute', height: '100%', width: `${current}%`, background: 'linear-gradient(90deg, #f59e0b, #ef4444)', borderRadius: '3px' }),
     skillGapTarget: (required) => ({ position: 'absolute', height: '100%', width: '2px', left: `${required}%`, background: '#10b981' }),
     recsCard: { background: 'linear-gradient(135deg, #f5f3ff, #ede9fe)', borderRadius: '12px', padding: '0.75rem', marginTop: '0.5rem', border: '2px solid #c4b5fd' },
-    recsTitle: { fontSize: '0.8rem', fontWeight: 700, color: '#5b21b6', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' },
+    recsTitle: { fontSize: '0.8rem', fontWeight: 700, color: '#2E073F', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' },
     recItem: { display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.5rem', background: 'white', borderRadius: '8px', marginBottom: '0.3rem' },
     recIcon: { fontSize: '0.85rem' },
     recInfo: { flex: 1 },
     recTitle: { fontWeight: 600, fontSize: '0.7rem', color: '#1f2937' },
     recImpact: { fontSize: '0.6rem', color: '#10b981', fontWeight: 500 },
-    recBtn: { padding: '0.25rem 0.5rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.6rem', fontWeight: 600, cursor: 'pointer' },
+    recBtn: { padding: '0.25rem 0.5rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.6rem', fontWeight: 600, cursor: 'pointer' },
     mainContent: { display: 'flex', flexDirection: 'column', gap: '1rem' },
     progressCard: { background: 'white', borderRadius: '14px', padding: '1rem', boxShadow: '0 3px 15px rgba(139,92,246,0.08)', display: 'flex', gap: '1rem', alignItems: 'center', border: '1px solid #ede9fe' },
     progressCircle: { width: '90px', height: '90px', flexShrink: 0 },
@@ -556,21 +556,21 @@ const LearningPath = () => {
     statIcon: (color) => ({ width: '32px', height: '32px', borderRadius: '8px', background: `${color}15`, color: color, display: 'flex', alignItems: 'center', justifyContent: 'center' }),
     statValue: { fontWeight: 700, color: '#1f2937', fontSize: '1rem' },
     statLabel: { color: '#6b7280', fontSize: '0.65rem' },
-    certsBtn: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 0.75rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', marginTop: '0.5rem', boxShadow: '0 3px 12px rgba(139,92,246,0.3)', fontSize: '0.75rem' },
+    certsBtn: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 0.75rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', marginTop: '0.5rem', boxShadow: '0 3px 12px rgba(139,92,246,0.3)', fontSize: '0.75rem' },
     section: { background: 'white', borderRadius: '14px', padding: '1rem', boxShadow: '0 3px 15px rgba(139,92,246,0.08)', border: '1px solid #ede9fe' },
     sectionHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' },
     sectionTitle: { fontSize: '0.9rem', fontWeight: 700, color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.4rem' },
     timeline: { position: 'relative', paddingLeft: '1.5rem' },
-    timelineLine: { position: 'absolute', left: '9px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(180deg, #10b981, #7c3aed, #ede9fe)' },
+    timelineLine: { position: 'absolute', left: '9px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(180deg, #10b981, #2E073F, #ede9fe)' },
     milestone: { position: 'relative', marginBottom: '1rem' },
     milestoneIcon: (status) => ({
       position: 'absolute', left: '-1.5rem', width: '20px', height: '20px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: status === 'completed' ? '#10b981' : status === 'in-progress' ? '#7c3aed' : '#ede9fe',
+      background: status === 'completed' ? '#10b981' : status === 'in-progress' ? '#2E073F' : '#ede9fe',
       color: status === 'locked' || status === 'not-started' ? '#a78bfa' : 'white', zIndex: 1
     }),
     milestoneContent: (status) => ({
       background: status === 'in-progress' ? 'linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(167,139,250,0.08) 100%)' : status === 'completed' ? 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(5,150,105,0.08) 100%)' : '#faf5ff',
-      borderRadius: '10px', padding: '0.65rem', border: status === 'in-progress' ? '2px solid #7c3aed' : status === 'completed' ? '2px solid #10b981' : '1px solid #ede9fe', cursor: 'pointer', transition: 'all 0.2s'
+      borderRadius: '10px', padding: '0.65rem', border: status === 'in-progress' ? '2px solid #2E073F' : status === 'completed' ? '2px solid #10b981' : '1px solid #ede9fe', cursor: 'pointer', transition: 'all 0.2s'
     }),
     milestoneHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' },
     milestoneTitle: { fontWeight: 600, color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.85rem' },
@@ -578,41 +578,41 @@ const LearningPath = () => {
     milestoneBadge: (status) => ({
       padding: '0.15rem 0.5rem', borderRadius: '12px', fontSize: '0.6rem', fontWeight: 600,
       background: status === 'completed' ? '#d1fae5' : status === 'in-progress' ? '#f5f3ff' : '#faf5ff',
-      color: status === 'completed' ? '#059669' : status === 'in-progress' ? '#7c3aed' : '#a78bfa'
+      color: status === 'completed' ? '#059669' : status === 'in-progress' ? '#2E073F' : '#a78bfa'
     }),
     skillsList: { display: 'flex', gap: '0.35rem', flexWrap: 'wrap' },
     skillChip: (status) => ({
       padding: '0.15rem 0.45rem', borderRadius: '10px', fontSize: '0.65rem', fontWeight: 500,
       background: status === 'completed' ? '#d1fae5' : status === 'in-progress' ? '#f5f3ff' : '#faf5ff',
-      color: status === 'completed' ? '#059669' : status === 'in-progress' ? '#7c3aed' : '#a78bfa'
+      color: status === 'completed' ? '#059669' : status === 'in-progress' ? '#2E073F' : '#a78bfa'
     }),
     rewardText: { display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.7rem', color: '#f59e0b', fontWeight: 500, marginTop: '0.35rem' },
     coursesList: { display: 'flex', flexDirection: 'column', gap: '0.5rem' },
     courseItem: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: '#faf5ff', borderRadius: '10px', border: '1px solid #ede9fe' },
-    courseIcon: { width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1rem' },
+    courseIcon: { width: '32px', height: '32px', borderRadius: '8px', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1rem' },
     courseInfo: { flex: 1 },
     courseTitle: { fontWeight: 600, color: '#1f2937', marginBottom: '0.15rem', fontSize: '0.8rem' },
     courseMeta: { display: 'flex', gap: '0.75rem', fontSize: '0.65rem', color: '#6b7280' },
     courseProgress: { width: '80px' },
     progressBar: { height: '5px', background: '#ede9fe', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.15rem' },
-    progressFill: (progress) => ({ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #7c3aed 0%, #8b5cf6 100%)', borderRadius: '3px' }),
-    progressText: { fontSize: '0.65rem', color: '#7c3aed', fontWeight: 600, textAlign: 'right' },
-    continueBtn: { padding: '0.35rem 0.65rem', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.65rem', boxShadow: '0 3px 10px rgba(139,92,246,0.25)' },
+    progressFill: (progress) => ({ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #2E073F 0%, #2E073F 100%)', borderRadius: '3px' }),
+    progressText: { fontSize: '0.65rem', color: '#2E073F', fontWeight: 600, textAlign: 'right' },
+    continueBtn: { padding: '0.35rem 0.65rem', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: 'white', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.65rem', boxShadow: '0 3px 10px rgba(139,92,246,0.25)' },
     modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
     certModal: { background: 'white', borderRadius: '16px', padding: '1.25rem', width: '100%', maxWidth: '420px' },
     certModalHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' },
     certModalTitle: { fontSize: '1rem', fontWeight: 700, color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.4rem' },
-    closeBtn: { background: '#f5f3ff', border: 'none', padding: '0.35rem', borderRadius: '6px', cursor: 'pointer', color: '#7c3aed' },
+    closeBtn: { background: '#f5f3ff', border: 'none', padding: '0.35rem', borderRadius: '6px', cursor: 'pointer', color: '#2E073F' },
     certCard: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)', borderRadius: '10px', border: '2px solid #10b981', marginBottom: '0.75rem' },
     certIcon: { fontSize: '1.75rem' },
     certInfo: { flex: 1 },
     certName: { fontWeight: 700, color: '#1f2937', fontSize: '0.85rem' },
     certIssuer: { fontSize: '0.72rem', color: '#6b7280' },
     certDate: { fontSize: '0.65rem', color: '#9ca3af' },
-    downloadBtn: { padding: '0.35rem 0.75rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2rem', boxShadow: '0 3px 10px rgba(139,92,246,0.25)', fontSize: '0.72rem' },
+    downloadBtn: { padding: '0.35rem 0.75rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2rem', boxShadow: '0 3px 10px rgba(139,92,246,0.25)', fontSize: '0.72rem' },
     emptyState: { textAlign: 'center', padding: '1.5rem', color: '#6b7280' },
     emptyIcon: { fontSize: '2rem', marginBottom: '0.75rem' },
-    enrollBtn: { marginTop: '0.75rem', padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.8rem' }
+    enrollBtn: { marginTop: '0.75rem', padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.8rem' }
   };
 
   return (
@@ -656,7 +656,7 @@ const LearningPath = () => {
               </div>
               <button 
                 onClick={(e) => { e.stopPropagation(); navigate('/courses'); }} 
-                style={{ marginTop: '0.75rem', width: '100%', padding: '0.5rem', background: selectedPathId === path.id ? 'rgba(255,255,255,0.2)' : 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.8rem' }}
+                style={{ marginTop: '0.75rem', width: '100%', padding: '0.5rem', background: selectedPathId === path.id ? 'rgba(255,255,255,0.2)' : 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.8rem' }}
               >
                 {path.progress > 0 ? 'Continue Learning' : 'Start Learning'}
               </button>
@@ -712,7 +712,7 @@ const LearningPath = () => {
           <motion.div style={styles.progressCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div style={styles.progressCircle}>
               <CircularProgressbar value={overallProgress} text={`${overallProgress}%`}
-                styles={buildStyles({ textSize: '22px', pathColor: '#7c3aed', textColor: '#111827', trailColor: '#ede9fe' })} />
+                styles={buildStyles({ textSize: '22px', pathColor: '#2E073F', textColor: '#111827', trailColor: '#ede9fe' })} />
             </div>
             <div style={styles.progressInfo}>
               <h2 style={styles.progressTitle}>{selectedPath?.icon} {selectedPath?.title} Path</h2>
@@ -727,7 +727,7 @@ const LearningPath = () => {
                   <div><div style={styles.statValue}>{completedCourses.length}</div><div style={styles.statLabel}>Completed</div></div>
                 </div>
                 <div style={styles.statBox}>
-                  <div style={styles.statIcon('#7c3aed')}><Target size={20} /></div>
+                  <div style={styles.statIcon('#2E073F')}><Target size={20} /></div>
                   <div><div style={styles.statValue}>{inProgressCourses.length}</div><div style={styles.statLabel}>In Progress</div></div>
                 </div>
                 <div style={styles.statBox}>
@@ -746,7 +746,7 @@ const LearningPath = () => {
           {/* Milestones / Enrolled Courses */}
           <motion.div style={styles.section} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             <div style={styles.sectionHeader}>
-              <h3 style={styles.sectionTitle}><Route size={22} color="#7c3aed" /> {selectedPath?.title} - Required Courses</h3>
+              <h3 style={styles.sectionTitle}><Route size={22} color="#2E073F" /> {selectedPath?.title} - Required Courses</h3>
             </div>
             
             {/* Path Courses Grid */}
@@ -783,13 +783,13 @@ const LearningPath = () => {
                     <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.75rem' }}>
                       <span>⏱ {course.duration}h</span>
                       <span>🎬 {course.videos} videos</span>
-                      <span style={{ color: course.price === 0 ? '#10b981' : '#7c3aed', fontWeight: 600 }}>
+                      <span style={{ color: course.price === 0 ? '#10b981' : '#2E073F', fontWeight: 600 }}>
                         {course.price === 0 ? 'Free' : `₹${course.price}`}
                       </span>
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
                       {course.skills?.slice(0, 3).map(skill => (
-                        <span key={skill} style={{ background: '#ede9fe', color: '#7c3aed', padding: '0.2rem 0.5rem', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 500 }}>{skill}</span>
+                        <span key={skill} style={{ background: '#ede9fe', color: '#2E073F', padding: '0.2rem 0.5rem', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 500 }}>{skill}</span>
                       ))}
                     </div>
                     {isEnrolledInCourse ? (
@@ -802,7 +802,7 @@ const LearningPath = () => {
                     ) : (
                       <button 
                         onClick={(e) => { e.stopPropagation(); enrollCourse(course.id, course.title); }}
-                        style={{ width: '100%', padding: '0.6rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                        style={{ width: '100%', padding: '0.6rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                       >
                         <BookOpen size={16} /> Enroll Now {course.price === 0 ? '(Free)' : ''}
                       </button>
@@ -859,7 +859,7 @@ const LearningPath = () => {
           {displayCurrentCourses.length > 0 && (
             <motion.div style={styles.section} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
               <div style={styles.sectionHeader}>
-                <h3 style={styles.sectionTitle}><BookOpen size={22} color="#7c3aed" /> Continue Learning</h3>
+                <h3 style={styles.sectionTitle}><BookOpen size={22} color="#2E073F" /> Continue Learning</h3>
               </div>
               <div style={styles.coursesList}>
                 {displayCurrentCourses.map((course) => (

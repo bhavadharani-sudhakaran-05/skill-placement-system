@@ -51,31 +51,31 @@ const RegisterPage = () => {
     leftPanel: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%)' },
     formContainer: { width: '100%', maxWidth: '480px' },
     logo: { display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem', textDecoration: 'none' },
-    logoIcon: { width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(139,92,246,0.3)' },
-    logoText: { fontWeight: 700, fontSize: '1.5rem', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
+    logoIcon: { width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(139,92,246,0.3)' },
+    logoText: { fontWeight: 700, fontSize: '1.5rem', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' },
     progressContainer: { display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem' },
     progressStep: (active, completed) => ({
       width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontWeight: 600, fontSize: '0.875rem', transition: 'all 0.3s',
-      background: active || completed ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : '#ede9fe',
+      background: active || completed ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : '#ede9fe',
       color: active || completed ? 'white' : '#a78bfa', boxShadow: active || completed ? '0 4px 12px rgba(139,92,246,0.3)' : 'none'
     }),
-    progressLine: (completed) => ({ width: '40px', height: '4px', borderRadius: '2px', background: completed ? '#7c3aed' : '#ede9fe' }),
+    progressLine: (completed) => ({ width: '40px', height: '4px', borderRadius: '2px', background: completed ? '#2E073F' : '#ede9fe' }),
     title: { fontSize: '2rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.5rem' },
     subtitle: { color: '#6b7280', marginBottom: '2rem', fontSize: '1rem' },
     roleCard: (selected) => ({
-      width: '100%', padding: '1.25rem', borderRadius: '16px', border: `2px solid ${selected ? '#7c3aed' : '#ede9fe'}`,
+      width: '100%', padding: '1.25rem', borderRadius: '16px', border: `2px solid ${selected ? '#2E073F' : '#ede9fe'}`,
       background: selected ? 'rgba(139, 92, 246, 0.05)' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center',
       gap: '1rem', marginBottom: '1rem', transition: 'all 0.2s', textAlign: 'left', boxShadow: selected ? '0 4px 15px rgba(139,92,246,0.15)' : 'none'
     }),
     roleIcon: (selected) => ({
       width: '56px', height: '56px', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: selected ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : '#f5f3ff',
+      background: selected ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : '#f5f3ff',
       color: selected ? 'white' : '#a78bfa'
     }),
     roleTitle: { fontWeight: 600, color: '#1f2937', marginBottom: '0.25rem' },
     roleDesc: { fontSize: '0.875rem', color: '#6b7280' },
-    checkCircle: { width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    checkCircle: { width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg, #2E073F, #2E073F)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
     inputGroup: { marginBottom: '1.25rem' },
     label: { display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#374151', fontSize: '0.875rem' },
     inputWrapper: { position: 'relative' },
@@ -92,14 +92,14 @@ const RegisterPage = () => {
     },
     nextButton: {
       flex: 1, padding: '0.875rem', borderRadius: '12px', border: 'none',
-      background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', color: 'white', fontWeight: 600,
+      background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: 'white', fontWeight: 600,
       cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '1rem',
       boxShadow: '0 4px 15px rgba(139,92,246,0.3)'
     },
     signInText: { textAlign: 'center', marginTop: '2rem', color: '#6b7280' },
-    signInLink: { color: '#7c3aed', textDecoration: 'none', fontWeight: 600 },
+    signInLink: { color: '#2E073F', textDecoration: 'none', fontWeight: 600 },
     rightPanel: {
-      flex: 1, background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', flexDirection: 'column',
+      flex: 1, background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center', padding: '3rem', color: 'white', position: 'relative', overflow: 'hidden'
     },
     blob1: { position: 'absolute', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', top: '-100px', right: '-100px' },

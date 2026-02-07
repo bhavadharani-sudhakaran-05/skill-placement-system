@@ -53,7 +53,7 @@ const Profile = () => {
 
   const styles = {
     container: { padding: '1rem', maxWidth: '1000px', margin: '0 auto', fontFamily: "'Inter', sans-serif" },
-    header: { background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%)', borderRadius: '18px', padding: '1.25rem', marginBottom: '1rem', position: 'relative', overflow: 'hidden', boxShadow: '0 6px 25px rgba(139,92,246,0.25)' },
+    header: { background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 50%, #a78bfa 100%)', borderRadius: '18px', padding: '1.25rem', marginBottom: '1rem', position: 'relative', overflow: 'hidden', boxShadow: '0 6px 25px rgba(139,92,246,0.25)' },
     headerPattern: { position: 'absolute', top: 0, right: 0, width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', borderRadius: '50%', transform: 'translate(50%, -50%)' },
     headerContent: { display: 'flex', gap: '1.25rem', alignItems: 'center', position: 'relative', zIndex: 1, flexWrap: 'wrap' },
     avatarContainer: { position: 'relative' },
@@ -65,36 +65,36 @@ const Profile = () => {
     headerMeta: { display: 'flex', gap: '1rem', flexWrap: 'wrap' },
     metaItem: { display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', opacity: 0.9 },
     headerActions: { display: 'flex', gap: '0.5rem' },
-    editBtn: { padding: '0.5rem 1rem', background: 'white', color: '#7c3aed', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem', boxShadow: '0 3px 10px rgba(139,92,246,0.2)', fontSize: '0.8rem' },
+    editBtn: { padding: '0.5rem 1rem', background: 'white', color: '#2E073F', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem', boxShadow: '0 3px 10px rgba(139,92,246,0.2)', fontSize: '0.8rem' },
     socialLinks: { display: 'flex', gap: '0.5rem', marginTop: '0.65rem' },
     socialBtn: { width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', cursor: 'pointer', backdropFilter: 'blur(10px)' },
     tabs: { display: 'flex', gap: '0.35rem', marginBottom: '1rem', background: '#f5f3ff', padding: '0.35rem', borderRadius: '12px', width: 'fit-content' },
-    tab: (active) => ({ padding: '0.5rem 1rem', borderRadius: '10px', border: 'none', background: active ? 'white' : 'transparent', color: active ? '#7c3aed' : '#6b7280', fontWeight: 600, cursor: 'pointer', boxShadow: active ? '0 3px 10px rgba(139,92,246,0.15)' : 'none', textTransform: 'capitalize', fontSize: '0.75rem' }),
+    tab: (active) => ({ padding: '0.5rem 1rem', borderRadius: '10px', border: 'none', background: active ? 'white' : 'transparent', color: active ? '#2E073F' : '#6b7280', fontWeight: 600, cursor: 'pointer', boxShadow: active ? '0 3px 10px rgba(139,92,246,0.15)' : 'none', textTransform: 'capitalize', fontSize: '0.75rem' }),
     grid: { display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1rem' },
     mainContent: {},
     sidebar: {},
     card: { background: 'white', borderRadius: '14px', padding: '1rem', boxShadow: '0 3px 15px rgba(139,92,246,0.08)', marginBottom: '1rem', border: '1px solid #ede9fe' },
     cardTitle: { fontSize: '0.95rem', fontWeight: 700, color: '#1f2937', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
-    addBtn: { width: '26px', height: '26px', borderRadius: '6px', background: '#f5f3ff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' },
+    addBtn: { width: '26px', height: '26px', borderRadius: '6px', background: '#f5f3ff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2E073F' },
     bio: { color: '#4b5563', lineHeight: 1.6, fontSize: '0.8rem' },
     skillItem: { marginBottom: '0.75rem' },
     skillHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' },
     skillName: { display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 500, color: '#374151', fontSize: '0.8rem' },
     skillVerified: { color: '#10b981' },
-    skillLevel: { fontSize: '0.72rem', color: '#7c3aed', fontWeight: 600 },
+    skillLevel: { fontSize: '0.72rem', color: '#2E073F', fontWeight: 600 },
     skillBar: { height: '6px', background: '#f5f3ff', borderRadius: '3px', overflow: 'hidden' },
-    skillProgress: (level) => ({ height: '100%', width: `${level}%`, background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', borderRadius: '3px' }),
-    expItem: { borderLeft: '2px solid #7c3aed', paddingLeft: '1rem', marginBottom: '1rem', position: 'relative' },
-    expDot: { position: 'absolute', left: '-5px', top: '0', width: '10px', height: '10px', borderRadius: '50%', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)' },
+    skillProgress: (level) => ({ height: '100%', width: `${level}%`, background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', borderRadius: '3px' }),
+    expItem: { borderLeft: '2px solid #2E073F', paddingLeft: '1rem', marginBottom: '1rem', position: 'relative' },
+    expDot: { position: 'absolute', left: '-5px', top: '0', width: '10px', height: '10px', borderRadius: '50%', background: 'linear-gradient(135deg, #2E073F, #2E073F)' },
     expTitle: { fontSize: '0.85rem', fontWeight: 600, color: '#1f2937' },
-    expCompany: { color: '#7c3aed', fontWeight: 500, fontSize: '0.8rem' },
+    expCompany: { color: '#2E073F', fontWeight: 500, fontSize: '0.8rem' },
     expMeta: { fontSize: '0.7rem', color: '#6b7280', marginBottom: '0.35rem' },
     expDesc: { fontSize: '0.75rem', color: '#4b5563' },
     eduItem: { display: 'flex', gap: '0.75rem', alignItems: 'flex-start', padding: '0.75rem', background: '#faf5ff', borderRadius: '10px', border: '1px solid #ede9fe' },
-    eduIcon: { width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 3px 10px rgba(139,92,246,0.25)' },
+    eduIcon: { width: '38px', height: '38px', borderRadius: '10px', background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 3px 10px rgba(139,92,246,0.25)' },
     eduInfo: { flex: 1 },
     eduDegree: { fontWeight: 600, color: '#1f2937', fontSize: '0.85rem' },
-    eduSchool: { color: '#7c3aed', fontSize: '0.75rem' },
+    eduSchool: { color: '#2E073F', fontSize: '0.75rem' },
     eduMeta: { fontSize: '0.7rem', color: '#6b7280' },
     certItem: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: '#faf5ff', borderRadius: '10px', marginBottom: '0.5rem', border: '1px solid #ede9fe' },
     certBadge: { fontSize: '1.1rem' },
@@ -104,7 +104,7 @@ const Profile = () => {
     certDate: { fontSize: '0.65rem', color: '#a78bfa', fontWeight: 500 },
     statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.65rem' },
     statBox: { textAlign: 'center', padding: '0.65rem', background: 'linear-gradient(135deg, #faf5ff, #f5f3ff)', borderRadius: '10px', border: '1px solid #ede9fe' },
-    statValue: { fontSize: '1.1rem', fontWeight: 700, color: '#7c3aed' },
+    statValue: { fontSize: '1.1rem', fontWeight: 700, color: '#2E073F' },
     statLabel: { fontSize: '0.65rem', color: '#6b7280' }
   };
 
@@ -116,7 +116,7 @@ const Profile = () => {
         <div style={styles.headerContent}>
           <div style={styles.avatarContainer}>
             <img src={profile.avatar} alt={profile.name} style={styles.avatar} />
-            <div style={styles.avatarEdit}><Camera size={16} color="#7c3aed" /></div>
+            <div style={styles.avatarEdit}><Camera size={16} color="#2E073F" /></div>
           </div>
           <div style={styles.headerInfo}>
             <h1 style={styles.name}>{profile.name}</h1>

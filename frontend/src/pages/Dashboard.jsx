@@ -128,8 +128,8 @@ const Dashboard = () => {
   useEffect(() => { fetchUserData(); }, [fetchUserData]);
 
   const quickStats = [
-    { icon: Target, label: 'Skill Score', value: loading ? '...' : `${readinessScore}%`, trend: readinessScore > 0 ? 'Calculated' : 'Take tests', color: '#7c3aed' },
-    { icon: Briefcase, label: 'Job Matches', value: loading ? '...' : jobMatchCount.toString(), trend: 'Available', color: '#8b5cf6' },
+    { icon: Target, label: 'Skill Score', value: loading ? '...' : `${readinessScore}%`, trend: readinessScore > 0 ? 'Calculated' : 'Take tests', color: '#2E073F' },
+    { icon: Briefcase, label: 'Job Matches', value: loading ? '...' : jobMatchCount.toString(), trend: 'Available', color: '#2E073F' },
     { icon: BookOpen, label: 'Assessments', value: loading ? '...' : completedAssessments.toString(), trend: completedAssessments > 0 ? `${assessmentStats.averageScore}% avg` : 'Take tests', color: '#a78bfa' },
     { icon: Award, label: 'Badges', value: loading ? '...' : badgesEarned.toString(), trend: 'Earned', color: '#c4b5fd' }
   ];
@@ -196,7 +196,7 @@ const Dashboard = () => {
               <span style={styles.scoreTitle}><Target size={14} /> Skill Score</span>
               <div style={styles.scoreCircle}>
                 <CircularProgressbar value={readinessScore} text={`${readinessScore}%`}
-                  styles={buildStyles({ textSize: '22px', pathColor: '#7c3aed', textColor: '#1f2937', trailColor: '#ede9fe' })} />
+                  styles={buildStyles({ textSize: '22px', pathColor: '#2E073F', textColor: '#1f2937', trailColor: '#ede9fe' })} />
               </div>
               <span style={styles.scoreLabel}>{readinessScore >= 70 ? 'Excellent!' : readinessScore >= 40 ? 'Good Progress' : 'Keep Learning'}</span>
               <Link to="/assessments" style={styles.btn}><Zap size={12} /> Take Assessment</Link>
@@ -308,7 +308,7 @@ const Dashboard = () => {
               <span style={styles.cardTitle}><Calendar size={12} /> Upcoming</span>
               {upcomingEvents.map((e, i) => (
                 <div key={i} style={styles.eventItem}>
-                  <div style={{...styles.eventDot, background: e.type === 'assessment' ? '#7c3aed' : '#8b5cf6'}} />
+                  <div style={{...styles.eventDot, background: e.type === 'assessment' ? '#2E073F' : '#2E073F'}} />
                   <div>
                     <div style={styles.eventTitle}>{e.title}</div>
                     <div style={styles.eventDate}>{e.date}</div>
@@ -338,12 +338,12 @@ const styles = {
   container: { minHeight: '100vh', background: 'linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #faf5ff 100%)', fontFamily: "'Inter', sans-serif" },
   content: { padding: '1rem 1.5rem', maxWidth: '1200px', margin: '0 auto' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' },
-  greeting: { fontSize: '1.3rem', fontWeight: 700, color: '#7c3aed', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' },
+  greeting: { fontSize: '1.3rem', fontWeight: 700, color: '#2E073F', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' },
   subGreeting: { fontSize: '0.8rem', color: '#6b7280', margin: '0.25rem 0 0', display: 'flex', alignItems: 'center', gap: '0.3rem' },
   timeCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', background: 'white', padding: '0.5rem 0.75rem', borderRadius: '10px', boxShadow: '0 2px 10px rgba(139,92,246,0.1)', border: '1px solid #ede9fe' },
-  time: { fontSize: '0.95rem', fontWeight: 700, color: '#7c3aed' },
+  time: { fontSize: '0.95rem', fontWeight: 700, color: '#2E073F' },
   date: { fontSize: '0.65rem', color: '#9ca3af' },
-  ticker: { display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', borderRadius: '8px', padding: '0.4rem 0.75rem', marginBottom: '0.75rem', color: 'white', fontSize: '0.7rem', overflow: 'hidden' },
+  ticker: { display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'linear-gradient(135deg, #2E073F, #2E073F)', borderRadius: '8px', padding: '0.4rem 0.75rem', marginBottom: '0.75rem', color: 'white', fontSize: '0.7rem', overflow: 'hidden' },
   tickerScroll: { display: 'flex', gap: '2rem', whiteSpace: 'nowrap', overflow: 'hidden', flex: 1 },
   tickerItem: { display: 'flex', alignItems: 'center', gap: '0.3rem' },
   mainGrid: { display: 'grid', gridTemplateColumns: '160px 1fr 160px', gap: '0.75rem' },
@@ -353,14 +353,14 @@ const styles = {
   scoreCard: { background: 'white', borderRadius: '12px', padding: '0.75rem', boxShadow: '0 3px 12px rgba(139,92,246,0.1)', border: '1px solid #ede9fe', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' },
   scoreTitle: { fontSize: '0.7rem', fontWeight: 600, color: '#374151', display: 'flex', alignItems: 'center', gap: '0.25rem' },
   scoreCircle: { width: '70px', height: '70px' },
-  scoreLabel: { fontSize: '0.7rem', fontWeight: 600, color: '#7c3aed' },
+  scoreLabel: { fontSize: '0.7rem', fontWeight: 600, color: '#2E073F' },
   card: { background: 'white', borderRadius: '10px', padding: '0.65rem', boxShadow: '0 2px 10px rgba(139,92,246,0.08)', border: '1px solid #ede9fe', display: 'flex', flexDirection: 'column', gap: '0.35rem' },
   cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' },
   cardTitle: { fontSize: '0.75rem', fontWeight: 600, color: '#374151', display: 'flex', alignItems: 'center', gap: '0.3rem' },
-  link: { fontSize: '0.65rem', color: '#7c3aed', textDecoration: 'none', display: 'flex', alignItems: 'center', fontWeight: 500 },
-  btn: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', padding: '0.4rem 0.6rem', borderRadius: '7px', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', color: 'white', fontSize: '0.7rem', fontWeight: 600, textDecoration: 'none', border: 'none', cursor: 'pointer', marginTop: '0.3rem' },
-  btnSecondary: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', padding: '0.35rem', borderRadius: '7px', background: 'linear-gradient(135deg, #8b5cf6, #a78bfa)', color: 'white', fontSize: '0.65rem', fontWeight: 600, textDecoration: 'none' },
-  btnOutline: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', padding: '0.35rem', borderRadius: '7px', background: '#ede9fe', color: '#7c3aed', fontSize: '0.65rem', fontWeight: 600, textDecoration: 'none', border: '1px solid #c4b5fd' },
+  link: { fontSize: '0.65rem', color: '#2E073F', textDecoration: 'none', display: 'flex', alignItems: 'center', fontWeight: 500 },
+  btn: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', padding: '0.4rem 0.6rem', borderRadius: '7px', background: 'linear-gradient(135deg, #2E073F, #2E073F)', color: 'white', fontSize: '0.7rem', fontWeight: 600, textDecoration: 'none', border: 'none', cursor: 'pointer', marginTop: '0.3rem' },
+  btnSecondary: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', padding: '0.35rem', borderRadius: '7px', background: 'linear-gradient(135deg, #2E073F, #a78bfa)', color: 'white', fontSize: '0.65rem', fontWeight: 600, textDecoration: 'none' },
+  btnOutline: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', padding: '0.35rem', borderRadius: '7px', background: '#ede9fe', color: '#2E073F', fontSize: '0.65rem', fontWeight: 600, textDecoration: 'none', border: '1px solid #c4b5fd' },
   achieveGrid: { display: 'flex', gap: '0.3rem', flexWrap: 'wrap' },
   achieveItem: { width: '26px', height: '26px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f3ff', fontSize: '0.85rem', border: '1px solid #ede9fe' },
   statsRow: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' },
@@ -369,7 +369,7 @@ const styles = {
   statInfo: { display: 'flex', flexDirection: 'column' },
   statValue: { fontSize: '1.1rem', fontWeight: 700, color: '#1f2937' },
   statLabel: { fontSize: '0.65rem', color: '#6b7280' },
-  statTrend: { fontSize: '0.6rem', color: '#7c3aed', display: 'flex', alignItems: 'center', gap: '0.15rem' },
+  statTrend: { fontSize: '0.6rem', color: '#2E073F', display: 'flex', alignItems: 'center', gap: '0.15rem' },
   twoCol: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' },
   skillItem: { display: 'flex', gap: '0.35rem', padding: '0.35rem 0', borderBottom: '1px solid #f3f4f6' },
   skillIcon: { fontSize: '0.85rem' },
@@ -385,14 +385,14 @@ const styles = {
   jobInfo: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
   jobTitle: { fontSize: '0.7rem', fontWeight: 600, color: '#1f2937', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
   jobMeta: { fontSize: '0.6rem', color: '#6b7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
-  jobMatch: { fontSize: '0.65rem', fontWeight: 700, color: '#7c3aed', background: '#ede9fe', padding: '0.2rem 0.35rem', borderRadius: '5px', flexShrink: 0 },
+  jobMatch: { fontSize: '0.65rem', fontWeight: 700, color: '#2E073F', background: '#ede9fe', padding: '0.2rem 0.35rem', borderRadius: '5px', flexShrink: 0 },
   courseGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.45rem' },
   courseItem: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.45rem', background: '#faf5ff', borderRadius: '7px', border: '1px solid #ede9fe' },
   courseIcon: { fontSize: '0.9rem', flexShrink: 0 },
   courseInfo: { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
   courseTitle: { fontSize: '0.65rem', fontWeight: 600, color: '#1f2937', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
   courseMeta: { fontSize: '0.55rem', color: '#9ca3af' },
-  courseProgress: { fontSize: '0.65rem', fontWeight: 700, color: '#7c3aed', flexShrink: 0 },
+  courseProgress: { fontSize: '0.65rem', fontWeight: 700, color: '#2E073F', flexShrink: 0 },
   eventItem: { display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0' },
   eventDot: { width: '6px', height: '6px', borderRadius: '50%', flexShrink: 0 },
   eventTitle: { fontSize: '0.65rem', fontWeight: 500, color: '#374151', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
