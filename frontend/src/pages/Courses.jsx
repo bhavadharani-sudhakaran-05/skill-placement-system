@@ -25,8 +25,14 @@ const Courses = () => {
     markVideoWatched: storeMarkVideoWatched, 
     enrollCourse,
     getCourseProgress,
-    getEnrolledCourseIds 
+    getEnrolledCourseIds,
+    updateCourseProgress 
   } = useCourseStore();
+
+  // Mark course as complete
+  const markCourseComplete = (courseId) => {
+    updateCourseProgress(courseId, { progress: 100, status: 'completed' });
+  };
   
   const enrolledCourses = getEnrolledCourseIds(); // Real enrolled courses from store
 
@@ -863,6 +869,11 @@ const Courses = () => {
           >
             <div style={styles.cardHeader(course.color)}>
               <div style={styles.cardBadge}>{course.provider}</div>
+              {getCourseProgress(course.id).progress === 100 && (
+                <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'linear-gradient(135deg, #f59e0b, #fbbf24)', padding: '4px 10px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 700, color: '#ffffff', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.4)' }}>
+                  <Star size={12} fill="#ffffff" /> Completed
+                </div>
+              )}
               <div style={styles.cardIcon}>{course.image}</div>
             </div>
 
@@ -906,9 +917,15 @@ const Courses = () => {
                   {course.price === 0 ? 'Free' : `₹${course.price.toLocaleString()}`}
                 </span>
                 {isEnrolled(course.id) ? (
-                  <button style={styles.continueBtn} onClick={(e) => { e.stopPropagation(); setSelectedCourse(course); setActiveTab('videos'); }}>
-                    <Play size={12} /> Continue
-                  </button>
+                  getCourseProgress(course.id).progress === 100 ? (
+                    <button style={{ ...styles.continueBtn, background: 'linear-gradient(135deg, #f59e0b, #fbbf24)', color: '#ffffff' }} onClick={(e) => { e.stopPropagation(); setSelectedCourse(course); setActiveTab('videos'); }}>
+                      <Star size={12} fill="#ffffff" /> Finished
+                    </button>
+                  ) : (
+                    <button style={styles.continueBtn} onClick={(e) => { e.stopPropagation(); setSelectedCourse(course); setActiveTab('videos'); }}>
+                      <Play size={12} /> Continue
+                    </button>
+                  )
                 ) : (
                   <button style={styles.enrollBtn} onClick={(e) => { e.stopPropagation(); setSelectedCourse(course); handleEnroll(course); }}>
                     Enroll <ArrowRight size={12} />
@@ -1042,11 +1059,21 @@ const Courses = () => {
                       </div>
                     ) : (
                       <>
-                        <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f0fdf4', borderRadius: '12px', border: '2px solid #10b981' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#065f46', fontWeight: 600 }}>
-                            <CheckCircle size={20} /> Watch videos in sequence to unlock the next one
+                        {getCourseProgress(selectedCourse.id).progress === 100 ? (
+                          <div style={{ marginBottom: '1rem', padding: '1.5rem', background: 'linear-gradient(135deg, #fef3c7, #fde68a)', borderRadius: '12px', border: '2px solid #f59e0b', textAlign: 'center' }}>
+                            <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🏆</div>
+                            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#92400e', marginBottom: '0.25rem' }}>Course Completed!</div>
+                            <div style={{ color: '#b45309', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                              <Star size={16} fill="#f59e0b" color="#f59e0b" /> You've earned the completion badge <Star size={16} fill="#f59e0b" color="#f59e0b" />
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f0fdf4', borderRadius: '12px', border: '2px solid #10b981' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#065f46', fontWeight: 600 }}>
+                              <CheckCircle size={20} /> Watch videos in sequence to unlock the next one
+                            </div>
+                          </div>
+                        )}
                         
                         <h4 style={{ marginBottom: '1rem', color: '#111827', fontWeight: 600 }}>Course Videos</h4>
                         <div style={styles.videoList}>
