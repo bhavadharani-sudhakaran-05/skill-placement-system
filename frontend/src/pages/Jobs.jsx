@@ -116,8 +116,6 @@ const Jobs = () => {
                 </div>
               </div>
               <div style={styles.badgesRow}>
-                {job.featured && <span style={styles.featuredBadge}><Star size={10} /> Featured</span>}
-                <span style={styles.matchBadge(job.match)}>{job.match}%</span>
                 <button style={styles.bookmarkBtn}><Bookmark size={14} /></button>
               </div>
             </div>
