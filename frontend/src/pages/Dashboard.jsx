@@ -10,11 +10,13 @@ import {
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import useAssessmentStore from '../store/assessmentStore';
+import useCourseStore from '../store/courseStore';
 import api from '../utils/api';
 
 const Dashboard = () => {
   const { user } = useAuthStore();
   const { subscribe, getStats, fetchAssessments, lastUpdated } = useAssessmentStore();
+  const { getCourseProgress } = useCourseStore();
   const [readinessScore, setReadinessScore] = useState(0);
   const [liveUpdates, setLiveUpdates] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -127,11 +129,32 @@ const Dashboard = () => {
   
   useEffect(() => { fetchUserData(); }, [fetchUserData]);
 
+  // Course completion badges (calculate first for use in quickStats)
+  const dsaProgress = getCourseProgress(1);
+  const mernProgress = getCourseProgress(12);
+  const mlProgress = getCourseProgress(2);
+  const reactProgress = getCourseProgress(3);
+  const awsProgress = getCourseProgress(4);
+  const pythonProgress = getCourseProgress(5);
+  const devopsProgress = getCourseProgress(14);
+
+  const courseBadges = [
+    { name: 'DSA Master', icon: '📊', course: 'Data Structures & Algorithms', earned: dsaProgress.progress === 100, color: '#2E073F' },
+    { name: 'MERN Expert', icon: '💻', course: 'MERN Stack Developer', earned: mernProgress.progress === 100, color: '#10b981' },
+    { name: 'ML Pioneer', icon: '🤖', course: 'Machine Learning A-Z', earned: mlProgress.progress === 100, color: '#8b5cf6' },
+    { name: 'React Pro', icon: '⚛️', course: 'Complete React Developer', earned: reactProgress.progress === 100, color: '#06b6d4' },
+    { name: 'Cloud Architect', icon: '☁️', course: 'AWS Solutions Architect', earned: awsProgress.progress === 100, color: '#f59e0b' },
+    { name: 'Python Guru', icon: '🐍', course: 'Python for Data Science', earned: pythonProgress.progress === 100, color: '#3b82f6' },
+    { name: 'DevOps Engineer', icon: '🚀', course: 'DevOps Engineer', earned: devopsProgress.progress === 100, color: '#ec4899' }
+  ];
+
+  const earnedCourseBadges = courseBadges.filter(b => b.earned).length;
+
   const quickStats = [
     { icon: Target, label: 'Skill Score', value: loading ? '...' : `${readinessScore}%`, trend: readinessScore > 0 ? 'Calculated' : 'Take tests', color: '#2E073F' },
     { icon: Briefcase, label: 'Job Matches', value: loading ? '...' : jobMatchCount.toString(), trend: 'Available', color: '#2E073F' },
     { icon: BookOpen, label: 'Assessments', value: loading ? '...' : completedAssessments.toString(), trend: completedAssessments > 0 ? `${assessmentStats.averageScore}% avg` : 'Take tests', color: '#a78bfa' },
-    { icon: Award, label: 'Badges', value: loading ? '...' : badgesEarned.toString(), trend: 'Earned', color: '#c4b5fd' }
+    { icon: Award, label: 'Badges', value: loading ? '...' : (badgesEarned + earnedCourseBadges).toString(), trend: 'Earned', color: '#f59e0b' }
   ];
 
   const skillGaps = userSkills.length > 0 ? userSkills.slice(0, 3).map(s => ({
@@ -215,6 +238,28 @@ const Dashboard = () => {
               <div style={styles.achieveGrid}>
                 {achievements.map((a, i) => (
                   <div key={i} style={{...styles.achieveItem, opacity: a.earned ? 1 : 0.4}} title={a.title}>{a.icon}</div>
+                ))}
+              </div>
+            </div>
+
+            {/* Course Badges */}
+            <div style={styles.card}>
+              <span style={styles.cardTitle}><Award size={12} /> Course Badges ({earnedCourseBadges}/{courseBadges.length})</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginTop: '0.5rem' }}>
+                {courseBadges.map((badge, i) => (
+                  <div key={i} style={{ 
+                    display: 'flex', alignItems: 'center', gap: '0.5rem', 
+                    padding: '0.4rem 0.5rem', borderRadius: '8px', 
+                    background: badge.earned ? `${badge.color}15` : '#f5f5f5',
+                    border: badge.earned ? `2px solid ${badge.color}` : '2px solid #e5e5e5',
+                    opacity: badge.earned ? 1 : 0.5
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>{badge.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.7rem', color: badge.earned ? badge.color : '#6b7280' }}>{badge.name}</div>
+                      <div style={{ fontSize: '0.6rem', color: '#9ca3af' }}>{badge.earned ? '✓ Earned' : badge.course}</div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
