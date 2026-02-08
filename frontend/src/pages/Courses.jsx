@@ -862,9 +862,6 @@ const Courses = () => {
             onClick={() => { setSelectedCourse(course); setActiveTab(isEnrolled(course.id) ? 'videos' : 'overview'); }}
           >
             <div style={styles.cardHeader(course.color)}>
-              {course.recommended && (
-                <div style={styles.recommendedBadge}><Zap size={10} /> Recommended</div>
-              )}
               <div style={styles.cardBadge}>{course.provider}</div>
               <div style={styles.cardIcon}>{course.image}</div>
             </div>
