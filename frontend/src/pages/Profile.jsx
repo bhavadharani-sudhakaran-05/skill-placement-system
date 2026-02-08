@@ -11,42 +11,46 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   const profile = {
-    name: 'John Doe',
-    title: 'Full Stack Developer',
-    email: 'john.doe@email.com',
-    phone: '+1 (555) 123-4567',
-    location: 'San Francisco, CA',
-    bio: 'Passionate developer with 3+ years of experience in building scalable web applications. Always eager to learn new technologies and solve complex problems.',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-    linkedin: 'linkedin.com/in/johndoe',
-    github: 'github.com/johndoe',
-    portfolio: 'johndoe.dev'
+    name: 'Bhavadharani S',
+    title: 'Aspiring Full Stack Developer',
+    email: 'bhava05dhanu05@gmail.com',
+    phone: '+91 6383632556',
+    location: 'Tamil Nadu, India',
+    bio: 'Passionate Full Stack Developer Intern with hands-on experience in building real-world applications. Skilled in Java, Spring Boot, MySQL, and modern web technologies. National Level Runner Up in CBIT Hacktoberfest Hackathon 2025, Finalist at Smart India Hackathon 2025, and Top Contributor at ByteWars Hackathon.',
+    avatar: 'https://ui-avatars.com/api/?name=Bhavadharani+S&background=2E073F&color=fff&size=150',
+    linkedin: 'linkedin.com/in/bhavadharani',
+    github: 'github.com/bhavadharani',
+    portfolio: 'bhavadharani.dev'
   };
 
   const skills = [
-    { name: 'JavaScript', level: 92, verified: true },
-    { name: 'React', level: 88, verified: true },
-    { name: 'Node.js', level: 82, verified: true },
-    { name: 'Python', level: 75, verified: false },
-    { name: 'MongoDB', level: 78, verified: true },
-    { name: 'TypeScript', level: 70, verified: false },
-    { name: 'AWS', level: 65, verified: false },
-    { name: 'Docker', level: 60, verified: false }
+    { name: 'Java', level: 85, verified: true },
+    { name: 'JavaScript', level: 80, verified: true },
+    { name: 'SQL', level: 82, verified: true },
+    { name: 'HTML/CSS', level: 88, verified: true },
+    { name: 'Spring Boot', level: 75, verified: true },
+    { name: 'React', level: 70, verified: false },
+    { name: 'MySQL', level: 80, verified: true },
+    { name: 'MongoDB', level: 65, verified: false },
+    { name: 'Git & GitHub', level: 78, verified: true },
+    { name: 'REST APIs', level: 75, verified: true }
   ];
 
   const experience = [
-    { id: 1, title: 'Senior Developer', company: 'Tech Corp', location: 'San Francisco', period: '2022 - Present', description: 'Lead development of microservices architecture' },
-    { id: 2, title: 'Full Stack Developer', company: 'StartupXYZ', location: 'Remote', period: '2020 - 2022', description: 'Built and maintained e-commerce platform' }
+    { id: 1, title: 'Full Stack Developer Intern', company: 'UdiCrafts India Pvt. Ltd.', location: 'India', period: 'September 2025 - Present', description: 'Gaining hands-on experience in Full Stack Development through practical tasks and real-world applications, focusing on strengthening programming skills, teamwork, and professional software development practices.' }
   ];
 
   const education = [
-    { id: 1, degree: 'B.S. Computer Science', school: 'Stanford University', year: '2020', gpa: '3.8' }
+    { id: 1, degree: 'B.Tech Information Technology', school: 'Sri Shakthi Institute of Engineering & Technology', year: '2023 - 2027', gpa: '8.49 CGPA' },
+    { id: 2, degree: 'Class XII', school: 'Sri Aravindar Balar Matric Higher Secondary School', year: '2021 - 2022', gpa: '85%' }
   ];
 
   const certifications = [
-    { id: 1, name: 'AWS Solutions Architect', issuer: 'Amazon', date: 'Jan 2024', badge: '🏆' },
-    { id: 2, name: 'React Developer Certification', issuer: 'Meta', date: 'Nov 2023', badge: '⚛️' },
-    { id: 3, name: 'Node.js Certification', issuer: 'OpenJS', date: 'Aug 2023', badge: '🟢' }
+    { id: 1, name: 'Full-Stack Web Development', issuer: 'Udemy', date: '2024', badge: '🏆' },
+    { id: 2, name: 'National Level Runner Up - Hackathon', issuer: 'CBIT Hacktoberfest 2025', date: '2025', badge: '🥈' },
+    { id: 3, name: 'Smart India Hackathon Finalist', issuer: 'Government of India', date: '2025', badge: '🚀' },
+    { id: 4, name: 'Java OOP Certification', issuer: 'LinkedIn Learning', date: '2024', badge: '☕' },
+    { id: 5, name: 'Figma Essential Training', issuer: 'LinkedIn Learning', date: '2024', badge: '🎨' }
   ];
 
   const tabs = ['overview', 'skills', 'experience', 'education'];

@@ -291,6 +291,8 @@ const LearningPath = () => {
   const [selectedPathId, setSelectedPathId] = useState('full-stack');
   const [showMilestoneDetails, setShowMilestoneDetails] = useState(null);
   const [showCertificates, setShowCertificates] = useState(false);
+  const [certificateName, setCertificateName] = useState(user?.name || 'Bhavadharani S');
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
 
   // Get enrolled course IDs from store
   const enrolledCourseIds = getEnrolledCourseIds();
@@ -343,6 +345,25 @@ const LearningPath = () => {
   });
 
   const selectedPath = pathsWithProgress.find(p => p.id === selectedPathId);
+
+  // Calculate stats for selected path only
+  const selectedPathCourses = selectedPath?.courses || [];
+  const selectedPathEnrolledCourses = selectedPathCourses.filter(c => c.isEnrolled);
+  const selectedPathCompletedCourses = selectedPathEnrolledCourses.filter(c => c.progress === 100);
+  const selectedPathInProgressCourses = selectedPathEnrolledCourses.filter(c => c.progress > 0 && c.progress < 100);
+  const selectedPathProgress = selectedPath?.progress || 0;
+  
+  // Certificates only for completed courses in selected path
+  const selectedPathCertificates = selectedPathCompletedCourses.map((course) => ({
+    id: course.id,
+    name: course.title,
+    issuer: course.provider,
+    date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+    image: '🎓',
+    skills: course.skills?.slice(0, 3) || course.tags,
+    hours: course.duration,
+    grade: 'A'
+  }));
 
   // Generate milestones from enrolled courses
   const milestones = enrolledCourses.map((course, index) => ({
@@ -442,58 +463,88 @@ const LearningPath = () => {
         image: course.image
       }));
 
-  const downloadCertificate = (cert) => {
+  const downloadCertificate = (cert, customName) => {
+    const nameOnCertificate = customName || certificateName || user?.name || 'Student';
     const certificateHTML = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${cert.name} - Certificate</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 40px; }
-    .certificate { width: 800px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,0.3); }
-    .header { background: linear-gradient(135deg, #2E073F 0%, #2E073F 100%); padding: 40px; text-align: center; color: white; }
-    .header h1 { font-size: 36px; letter-spacing: 3px; margin-bottom: 5px; }
-    .body { padding: 50px; text-align: center; }
-    .name { font-size: 42px; color: #111827; border-bottom: 3px solid #10b981; display: inline-block; padding-bottom: 10px; margin: 20px 0 30px; }
-    .course-box { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #10b981; border-radius: 15px; padding: 25px; margin: 30px 0; }
-    .course-title { font-size: 24px; font-weight: 700; color: #059669; }
-    .skills { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 25px 0; }
-    .skill { background: linear-gradient(135deg, #ede9fe, #c4b5fd); color: #6d28d9; padding: 8px 20px; border-radius: 25px; font-weight: 600; }
-    .footer { display: flex; justify-content: space-around; padding: 30px; background: #f9fafb; }
-    .seal { width: 80px; height: 80px; border: 4px solid #f59e0b; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #fef3c7, #fde68a); }
-    .seal-grade { font-size: 28px; color: #d97706; font-weight: 700; }
-    .print-btn { display: block; margin: 20px auto; padding: 15px 40px; background: linear-gradient(135deg, #2E073F, #2E073F); color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; }
-    @media print { .print-btn { display: none; } }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #2E073F 0%, #4a1259 100%); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+    .container { max-width: 700px; width: 100%; }
+    .certificate { width: 100%; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.3); border: 6px solid #c147e9; }
+    .header { background: linear-gradient(135deg, #2E073F 0%, #4a1259 100%); padding: 30px 25px; text-align: center; color: white; }
+    .header h1 { font-size: 28px; letter-spacing: 4px; margin-bottom: 5px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+    .header p { font-size: 12px; letter-spacing: 2px; opacity: 0.9; }
+    .academy-name { font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .body { padding: 35px 30px; text-align: center; background: linear-gradient(180deg, #faf5ff 0%, white 100%); }
+    .certify-text { font-size: 11px; color: #6b7280; margin-bottom: 8px; letter-spacing: 2px; }
+    .name { font-size: 32px; color: #2E073F; border-bottom: 3px solid #c147e9; display: inline-block; padding-bottom: 10px; margin: 10px 0 20px; font-weight: 700; font-style: italic; }
+    .completed-text { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+    .course-box { background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 2px solid #c147e9; border-radius: 14px; padding: 18px 25px; margin: 20px auto; max-width: 450px; }
+    .course-title { font-size: 20px; font-weight: 700; color: #2E073F; margin-bottom: 6px; }
+    .course-hours { font-size: 12px; color: #7c3aed; }
+    .skills-section { margin: 25px 0; }
+    .skills-title { font-size: 10px; color: #6b7280; margin-bottom: 10px; letter-spacing: 2px; }
+    .skills { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .skill { background: linear-gradient(135deg, #2E073F, #4a1259); color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 11px; }
+    .footer { display: flex; justify-content: space-around; align-items: center; padding: 20px 30px; background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%); border-top: 2px solid #ede9fe; }
+    .footer-item { text-align: center; }
+    .footer-label { font-size: 9px; color: #9ca3af; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; }
+    .footer-value { font-size: 12px; color: #1f2937; font-weight: 600; }
+    .seal { width: 65px; height: 65px; border: 4px solid #f59e0b; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #fef3c7, #fde68a); box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3); }
+    .seal-grade { font-size: 24px; color: #d97706; font-weight: 700; }
+    .seal-text { font-size: 8px; color: #92400e; font-weight: 600; letter-spacing: 1px; }
+    .certificate-id { font-size: 10px; color: #9ca3af; margin-top: 15px; }
+    .print-btn { display: block; margin: 15px auto 0; padding: 12px 35px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 10px; font-size: 14px; cursor: pointer; font-weight: 600; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); transition: transform 0.2s; }
+    .print-btn:hover { transform: scale(1.05); }
+    @media print { .print-btn { display: none; } body { padding: 0; background: white; } .container { max-width: 100%; } }
   </style>
 </head>
 <body>
+  <div class="container">
   <div class="certificate">
     <div class="header">
-      <div>🎓 SkillForge Academy</div>
+      <div class="academy-name">🎓 SkillForge Academy</div>
       <h1>CERTIFICATE</h1>
       <p>OF COMPLETION</p>
     </div>
     <div class="body">
-      <p>This is to certify that</p>
-      <div class="name">${user?.name || 'Student'}</div>
-      <p>has successfully completed the course</p>
+      <p class="certify-text">THIS IS TO CERTIFY THAT</p>
+      <div class="name">${nameOnCertificate}</div>
+      <p class="completed-text">has successfully completed the professional course</p>
       <div class="course-box">
         <div class="course-title">${cert.name}</div>
-        <p>Completed ${cert.hours} hours of training</p>
+        <p class="course-hours">Completed ${cert.hours} hours of intensive training</p>
       </div>
-      <p>Skills Acquired:</p>
-      <div class="skills">
-        ${cert.skills.map(s => `<span class="skill">${s}</span>`).join('')}
+      <div class="skills-section">
+        <p class="skills-title">SKILLS ACQUIRED</p>
+        <div class="skills">
+          ${cert.skills.map(s => `<span class="skill">${s}</span>`).join('')}
+        </div>
       </div>
+      <p class="certificate-id">Certificate ID: SFCERT-${Date.now().toString(36).toUpperCase()}</p>
     </div>
     <div class="footer">
-      <div><strong>Date:</strong> ${cert.date}</div>
-      <div class="seal"><div class="seal-grade">${cert.grade}</div><small>CERTIFIED</small></div>
-      <div><strong>Issuer:</strong> ${cert.issuer}</div>
+      <div class="footer-item">
+        <div class="footer-label">Date of Completion</div>
+        <div class="footer-value">${cert.date}</div>
+      </div>
+      <div class="seal">
+        <div class="seal-grade">${cert.grade}</div>
+        <div class="seal-text">CERTIFIED</div>
+      </div>
+      <div class="footer-item">
+        <div class="footer-label">Issued By</div>
+        <div class="footer-value">${cert.issuer}</div>
+      </div>
     </div>
   </div>
   <button class="print-btn" onclick="window.print()">📄 Print / Save as PDF</button>
+  </div>
 </body>
 </html>`;
     
@@ -711,34 +762,40 @@ const LearningPath = () => {
           {/* Progress Overview */}
           <motion.div style={styles.progressCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div style={styles.progressCircle}>
-              <CircularProgressbar value={overallProgress} text={`${overallProgress}%`}
-                styles={buildStyles({ textSize: '22px', pathColor: '#2E073F', textColor: '#111827', trailColor: '#ede9fe' })} />
+              <CircularProgressbar value={selectedPathProgress} text={`${selectedPathProgress}%`}
+                styles={buildStyles({ textSize: '22px', pathColor: selectedPathProgress === 100 ? '#10b981' : '#2E073F', textColor: '#111827', trailColor: '#ede9fe' })} />
             </div>
             <div style={styles.progressInfo}>
               <h2 style={styles.progressTitle}>{selectedPath?.icon} {selectedPath?.title} Path</h2>
               <p style={styles.progressSubtitle}>
-                {totalEnrolled === 0 
+                {selectedPathEnrolledCourses.length === 0 
                   ? 'Start your journey by enrolling in courses!' 
-                  : `You're making great progress! ${completedCourses.length} course${completedCourses.length !== 1 ? 's' : ''} completed.`}
+                  : selectedPathProgress === 100 
+                    ? '🎉 Congratulations! You completed this path!'
+                    : `You're making great progress! ${selectedPathCompletedCourses.length} course${selectedPathCompletedCourses.length !== 1 ? 's' : ''} completed.`}
               </p>
               <div style={styles.statsRow}>
                 <div style={styles.statBox}>
                   <div style={styles.statIcon('#10b981')}><CheckCircle size={20} /></div>
-                  <div><div style={styles.statValue}>{completedCourses.length}</div><div style={styles.statLabel}>Completed</div></div>
+                  <div><div style={styles.statValue}>{selectedPathCompletedCourses.length}</div><div style={styles.statLabel}>Completed</div></div>
                 </div>
                 <div style={styles.statBox}>
                   <div style={styles.statIcon('#2E073F')}><Target size={20} /></div>
-                  <div><div style={styles.statValue}>{inProgressCourses.length}</div><div style={styles.statLabel}>In Progress</div></div>
+                  <div><div style={styles.statValue}>{selectedPathInProgressCourses.length}</div><div style={styles.statLabel}>In Progress</div></div>
                 </div>
                 <div style={styles.statBox}>
                   <div style={styles.statIcon('#f59e0b')}><Trophy size={20} /></div>
-                  <div><div style={styles.statValue}>{earnedCertificates.length}</div><div style={styles.statLabel}>Certificates</div></div>
+                  <div><div style={styles.statValue}>{selectedPathCertificates.length}</div><div style={styles.statLabel}>Certificates</div></div>
                 </div>
               </div>
-              {earnedCertificates.length > 0 && (
+              {selectedPathCertificates.length > 0 ? (
                 <button style={styles.certsBtn} onClick={() => setShowCertificates(true)}>
                   <Award size={18} /> View My Certificates
                 </button>
+              ) : (
+                <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <Lock size={14} /> Complete 100% to unlock certificate
+                </p>
               )}
             </div>
           </motion.div>
@@ -889,13 +946,41 @@ const LearningPath = () => {
       {/* Certificates Modal */}
       <AnimatePresence>
         {showCertificates && (
-          <motion.div style={styles.modalOverlay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowCertificates(false)}>
+          <motion.div style={styles.modalOverlay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => { setShowCertificates(false); setSelectedCertificate(null); }}>
             <motion.div style={styles.certModal} initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }} onClick={(e) => e.stopPropagation()}>
               <div style={styles.certModalHeader}>
                 <h2 style={styles.certModalTitle}><Award size={24} color="#10b981" /> My Certificates</h2>
-                <button style={styles.closeBtn} onClick={() => setShowCertificates(false)}><X size={20} /></button>
+                <button style={styles.closeBtn} onClick={() => { setShowCertificates(false); setSelectedCertificate(null); }}><X size={20} /></button>
               </div>
-              {earnedCertificates.length > 0 ? earnedCertificates.map(cert => (
+              
+              {/* Name Input Section */}
+              <div style={{ marginBottom: '1rem', padding: '1rem', background: 'linear-gradient(135deg, #f5f3ff, #ede9fe)', borderRadius: '12px', border: '2px solid #c4b5fd' }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#2E073F', marginBottom: '0.5rem' }}>
+                  Your Name on Certificate
+                </label>
+                <input
+                  type="text"
+                  value={certificateName}
+                  onChange={(e) => setCertificateName(e.target.value)}
+                  placeholder="Enter your full name"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    fontSize: '1rem',
+                    border: '2px solid #c4b5fd',
+                    borderRadius: '8px',
+                    outline: 'none',
+                    fontWeight: 500,
+                    background: 'white',
+                    color: '#1f2937'
+                  }}
+                />
+                <p style={{ fontSize: '0.7rem', color: '#6b7280', marginTop: '0.5rem' }}>
+                  This name will appear on your downloaded certificate
+                </p>
+              </div>
+
+              {selectedPathCertificates.length > 0 ? selectedPathCertificates.map(cert => (
                 <div key={cert.id} style={styles.certCard}>
                   <span style={styles.certIcon}>{cert.image}</span>
                   <div style={styles.certInfo}>
@@ -903,10 +988,26 @@ const LearningPath = () => {
                     <div style={styles.certIssuer}>{cert.issuer}</div>
                     <div style={styles.certDate}>Earned on {cert.date}</div>
                   </div>
-                  <button style={styles.downloadBtn} onClick={() => downloadCertificate(cert)}><ExternalLink size={14} /> View</button>
+                  <button style={styles.downloadBtn} onClick={() => downloadCertificate(cert, certificateName)}><Download size={14} /> Generate</button>
                 </div>
               )) : (
-                <p style={{ textAlign: 'center', color: '#6b7280' }}>Complete courses to earn certificates!</p>
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔒</div>
+                  <p style={{ fontWeight: 600, marginBottom: '0.5rem' }}>No certificates yet!</p>
+                  <p style={{ fontSize: '0.85rem' }}>Complete 100% of "{selectedPath?.title}" to unlock certificate</p>
+                  <div style={{ marginTop: '1rem', padding: '0.75rem', background: '#f5f3ff', borderRadius: '10px' }}>
+                    <p style={{ fontSize: '0.8rem', color: '#2E073F', fontWeight: 500 }}>Current Progress: {selectedPathProgress}%</p>
+                    <div style={{ height: '8px', background: '#ede9fe', borderRadius: '4px', marginTop: '0.5rem', overflow: 'hidden' }}>
+                      <div style={{ width: `${selectedPathProgress}%`, height: '100%', background: 'linear-gradient(90deg, #2E073F, #c147e9)', borderRadius: '4px' }} />
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => { setShowCertificates(false); navigate('/courses'); }}
+                    style={{ marginTop: '1rem', padding: '0.75rem 1.5rem', background: 'linear-gradient(135deg, #2E073F, #4a1259)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    Continue Learning
+                  </button>
+                </div>
               )}
             </motion.div>
           </motion.div>
