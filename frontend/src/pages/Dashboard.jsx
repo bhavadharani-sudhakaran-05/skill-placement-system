@@ -45,7 +45,7 @@ const Dashboard = () => {
       const latest = stats.recentAssessments[0];
       setLiveUpdates(prev => {
         const newUpdate = {
-          id: Date.now(),
+          id: `assessment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           type: 'assessment',
           message: `Completed "${latest.title}" with ${latest.score}% score!`,
           time: 'Just now',
@@ -99,13 +99,13 @@ const Dashboard = () => {
       const updates = [];
       if (finalAssessmentCount > 0) {
         const avgScore = stats.averageScore > 0 ? stats.averageScore : backendScore;
-        updates.push({ id: 1, type: 'success', message: `${finalAssessmentCount} assessments completed with ${avgScore}% avg score!`, time: 'Updated', icon: '🎯' });
+        updates.push({ id: 'update-1', type: 'success', message: `${finalAssessmentCount} assessments completed with ${avgScore}% avg score!`, time: 'Updated', icon: '🎯' });
       } else {
-        updates.push({ id: 1, type: 'info', message: 'Complete assessments to increase your skill score!', time: 'Now', icon: '📊' });
+        updates.push({ id: 'update-1', type: 'info', message: 'Complete assessments to increase your skill score!', time: 'Now', icon: '📊' });
       }
-      if (skills.length > 0) updates.push({ id: 2, type: 'skill', message: `${skills.length} skills detected`, time: 'Resume', icon: '📝' });
-      if (finalBadgesCount > 0) updates.push({ id: 3, type: 'badge', message: `${finalBadgesCount} badges earned!`, time: 'Achievement', icon: '🏆' });
-      else updates.push({ id: 3, type: 'assessment', message: 'Take assessments to verify expertise', time: 'Recommended', icon: '✅' });
+      if (skills.length > 0) updates.push({ id: 'update-2', type: 'skill', message: `${skills.length} skills detected`, time: 'Resume', icon: '📝' });
+      if (finalBadgesCount > 0) updates.push({ id: 'update-3', type: 'badge', message: `${finalBadgesCount} badges earned!`, time: 'Achievement', icon: '🏆' });
+      else updates.push({ id: 'update-3', type: 'assessment', message: 'Take assessments to verify expertise', time: 'Recommended', icon: '✅' });
       setLiveUpdates(updates);
     } catch (error) {
       console.error('Error fetching user data:', error);
