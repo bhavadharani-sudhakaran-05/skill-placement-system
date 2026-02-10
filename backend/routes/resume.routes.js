@@ -23,16 +23,31 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
     // Parse the resume
     const parsedData = await ResumeParserService.parseResume(req.file.path);
 
-    // Update user's resume data
+    // Update user's resume data (matches User model schema)
     const user = await User.findByIdAndUpdate(
       req.user.id,
       {
         $set: {
-          resumeData: {
-            filePath: req.file.path,
-            fileName: req.file.originalname,
+          resume: {
+            url: req.file.path,
+            filename: req.file.originalname,
             uploadedAt: new Date(),
-            ...parsedData
+            atsScore: parsedData.atsScore,
+            parsedData: {
+              skills: parsedData.parsedSkills || [],
+              experience: JSON.stringify(parsedData.parsedExperience || []),
+              education: JSON.stringify(parsedData.parsedEducation || [])
+            }
+          },
+          resumeAnalysis: {
+            parsedSkills: parsedData.parsedSkills || [],
+            parsedProjects: parsedData.parsedProjects || [],
+            parsedCertifications: parsedData.parsedCertifications || [],
+            parsedEducation: parsedData.parsedEducation || [],
+            parsedExperience: parsedData.parsedExperience || [],
+            atsScore: parsedData.atsScore,
+            improvementSuggestions: parsedData.improvementSuggestions || [],
+            analyzedAt: new Date()
           }
         }
       },
@@ -41,14 +56,14 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
 
     // Auto-update skills from parsed resume
     if (parsedData.parsedSkills && parsedData.parsedSkills.length > 0) {
-      const existingSkillNames = user.skills.map(s => s.name.toLowerCase());
+      const existingSkillNames = (user.skills || []).map(s => (s.name || '').toLowerCase());
       const newSkills = parsedData.parsedSkills
         .filter(skill => !existingSkillNames.includes(skill.toLowerCase()))
         .map(skill => ({
           name: skill,
-          proficiencyLevel: 'intermediate',
-          proficiencyScore: 50,
-          verifiedBy: 'resume'
+          level: 50,
+          verified: false,
+          category: 'technical'
         }));
 
       if (newSkills.length > 0) {
@@ -57,8 +72,17 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
       }
     }
 
-    // Update skill readiness score
-    await user.updateSkillReadinessScore();
+    // Update skill readiness score if user model has the method
+    if (typeof user.updateSkillReadinessScore === 'function') {
+      await user.updateSkillReadinessScore();
+    }
+
+    // Calculate detailed scores
+    const normalizedText = (await require('pdf-parse')(require('fs').readFileSync(req.file.path))).text;
+    const wordCount = normalizedText.split(/\s+/).length;
+    const formattingScore = ResumeParserService.calculateFormattingScore(normalizedText);
+    const keywordScore = ResumeParserService.calculateKeywordScore(normalizedText);
+    const skillMatchScore = Math.min(100, (parsedData.parsedSkills.length / 15) * 100);
 
     res.json({
       success: true,
@@ -71,6 +95,10 @@ router.post('/upload', protect, upload.single('resume'), async (req, res) => {
         parsedEducation: parsedData.parsedEducation,
         parsedExperience: parsedData.parsedExperience,
         atsScore: parsedData.atsScore,
+        skillMatchScore: Math.round(skillMatchScore),
+        formattingScore,
+        keywordScore,
+        wordCount,
         improvementSuggestions: parsedData.improvementSuggestions
       }
     });

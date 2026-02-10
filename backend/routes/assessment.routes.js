@@ -37,6 +37,37 @@ router.get('/', async (req, res) => {
 });
 
 /**
+ * @route   GET /api/assessments/my
+ * @desc    Get current user's assessment history
+ * @access  Private
+ */
+router.get('/my', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+    
+    const assessments = user.assessmentHistory || [];
+    
+    res.json({
+      success: true,
+      data: assessments
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch assessment history',
+      error: error.message
+    });
+  }
+});
+
+/**
  * @route   GET /api/assessments/:id
  * @desc    Get assessment details (without answers)
  * @access  Public
@@ -437,37 +468,6 @@ router.post('/save-result', protect, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to save assessment result',
-      error: error.message
-    });
-  }
-});
-
-/**
- * @route   GET /api/assessments/my
- * @desc    Get current user's assessment history
- * @access  Private
- */
-router.get('/my', protect, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id);
-    
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found'
-      });
-    }
-    
-    const assessments = user.assessmentHistory || [];
-    
-    res.json({
-      success: true,
-      data: assessments
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch assessment history',
       error: error.message
     });
   }

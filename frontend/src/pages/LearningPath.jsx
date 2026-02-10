@@ -8,7 +8,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import {
   Route, Target, CheckCircle, Clock, BookOpen, Award, ChevronRight,
   Play, Lock, TrendingUp, Zap, Star, ArrowRight, AlertCircle, Gift,
-  Trophy, Sparkles, X, ArrowLeft, Download, ExternalLink
+  Trophy, Sparkles, X, Download
 } from 'lucide-react';
 
 // Same courses data as Courses page - Single source of truth
@@ -287,12 +287,12 @@ const learningPaths = [
 const LearningPath = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  const { courseProgress, getEnrolledCourseIds, getCourseProgress, reset: resetProgress, enrollCourse } = useCourseStore();
+  const { getEnrolledCourseIds, getCourseProgress, enrollCourse } = useCourseStore();
   const [selectedPathId, setSelectedPathId] = useState('full-stack');
-  const [showMilestoneDetails, setShowMilestoneDetails] = useState(null);
+  const [, setShowMilestoneDetails] = useState(null);
   const [showCertificates, setShowCertificates] = useState(false);
   const [certificateName, setCertificateName] = useState(user?.name || 'Bhavadharani S');
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [, setSelectedCertificate] = useState(null);
 
   // Get enrolled course IDs from store
   const enrolledCourseIds = getEnrolledCourseIds();
@@ -315,11 +315,6 @@ const LearningPath = () => {
   const completedCourses = enrolledCourses.filter(c => c.progress === 100);
   const inProgressCourses = enrolledCourses.filter(c => c.progress > 0 && c.progress < 100);
   
-  // Calculate overall progress
-  const overallProgress = totalEnrolled > 0 
-    ? Math.round(enrolledCourses.reduce((sum, c) => sum + c.progress, 0) / totalEnrolled)
-    : 0;
-
   // Build path data with real progress
   const pathsWithProgress = learningPaths.map(path => {
     const pathCourses = path.courseIds.map(id => {
@@ -330,7 +325,6 @@ const LearningPath = () => {
     });
     
     const enrolledInPath = pathCourses.filter(c => c.isEnrolled).length;
-    const totalInPath = pathCourses.length;
     const pathProgress = enrolledInPath > 0 
       ? Math.round(pathCourses.filter(c => c.isEnrolled).reduce((sum, c) => sum + c.progress, 0) / enrolledInPath)
       : 0;
@@ -429,17 +423,8 @@ const LearningPath = () => {
     courseId: course.id
   }));
 
-  // Generate certificates from completed courses
-  const earnedCertificates = completedCourses.map((course, index) => ({
-    id: course.id,
-    name: course.title,
-    issuer: course.provider,
-    date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
-    image: '🎓',
-    skills: course.skills?.slice(0, 3) || course.tags,
-    hours: course.duration,
-    grade: 'A'
-  }));
+  // Certificates from completed courses available for display
+  // const earnedCertificates = completedCourses.map(...);
 
   // Current courses to continue (in progress)
   const currentCourses = inProgressCourses.map(course => ({

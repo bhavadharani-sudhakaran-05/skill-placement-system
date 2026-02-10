@@ -36,7 +36,8 @@ router.get('/profile', protect, async (req, res) => {
 router.put('/profile', protect, async (req, res) => {
   try {
     const allowedUpdates = [
-      'name', 'avatar', 'studentProfile', 'interests', 
+      'name', 'avatar', 'phone', 'location', 'profile',
+      'education', 'experience', 'studentProfile', 'interests', 
       'careerPreferences', 'recruiterProfile', 'collegeProfile'
     ];
 

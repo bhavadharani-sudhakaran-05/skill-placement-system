@@ -256,12 +256,12 @@ class LearningPathService {
     for (const skill of skills) {
       // Find matching course
       const matchingCourse = courses.find(c => 
-        c.skillsTaught.some(s => 
+        (c.skills || c.skillsTaught || []).some(s => 
           s.name.toLowerCase().includes(skill.name.toLowerCase()) ||
           skill.name.toLowerCase().includes(s.name.toLowerCase())
-        ) && c.difficulty === difficulty
+        ) && (c.level || c.difficulty) === difficulty
       ) || courses.find(c =>
-        c.skillsTaught.some(s => 
+        (c.skills || c.skillsTaught || []).some(s => 
           s.name.toLowerCase().includes(skill.name.toLowerCase())
         )
       );

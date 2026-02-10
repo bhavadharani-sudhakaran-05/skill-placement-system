@@ -45,3 +45,5 @@ Thumbs.db
 # Git internals (safety)
 # =====================
 .git/index.lock
+
+

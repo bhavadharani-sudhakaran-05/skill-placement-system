@@ -91,6 +91,18 @@ const userSchema = new mongoose.Schema({
       education: String
     }
   },
+
+  // Detailed resume analysis from AI parser
+  resumeAnalysis: {
+    parsedSkills: [String],
+    parsedProjects: [mongoose.Schema.Types.Mixed],
+    parsedCertifications: [mongoose.Schema.Types.Mixed],
+    parsedEducation: [mongoose.Schema.Types.Mixed],
+    parsedExperience: [mongoose.Schema.Types.Mixed],
+    atsScore: Number,
+    improvementSuggestions: [mongoose.Schema.Types.Mixed],
+    analyzedAt: Date
+  },
   
   preferences: {
     jobTypes: [String],
@@ -165,6 +177,23 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course'
   }],
+  
+  // Active learning path
+  activeLearningPath: {
+    pathId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'LearningPath'
+    },
+    startedAt: Date,
+    currentStage: { type: Number, default: 0 },
+    completedModules: [String],
+    estimatedCompletionDate: Date,
+    status: {
+      type: String,
+      enum: ['active', 'completed', 'paused'],
+      default: 'active'
+    }
+  },
   
   isActive: {
     type: Boolean,

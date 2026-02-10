@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const bcrypt = require('bcryptjs');
+const path = require('path');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Import models
 const User = require('./models/User');
@@ -34,16 +34,14 @@ const seedDatabase = async () => {
 
     // Create Admin User first (needed for jobs)
     console.log('👤 Creating admin user...');
-    const salt = await bcrypt.genSalt(10);
-    const adminPassword = await bcrypt.hash('admin123', salt);
     
     const admin = await User.create({
       name: 'Admin User',
       email: 'admin@skillforge.com',
-      password: adminPassword,
+      password: 'admin123',
       role: 'admin',
       skills: [],
-      skillReadinessScore: 100
+      metrics: { skillReadinessScore: 100 }
     });
 
     // Seed Skills
@@ -72,102 +70,103 @@ const seedDatabase = async () => {
     console.log('💼 Seeding jobs...');
     const jobsData = [
       {
-        title: 'Senior Full Stack Developer',
-        company: { name: 'TechCorp Inc.', industry: 'Technology', size: '500-1000' },
-        location: { city: 'San Francisco', state: 'CA', country: 'USA', remote: true },
+        title: 'Software Engineer',
+        company: { name: 'TCS', website: 'https://ibegin.tcs.com/iBegin/', industry: 'IT Services', size: '10000+' },
+        location: { city: 'Chennai', state: 'Tamil Nadu', country: 'India', remote: false },
         type: 'full-time',
         mode: 'hybrid',
-        description: 'Join our team to build scalable web applications serving millions of users worldwide.',
-        responsibilities: ['Design scalable systems', 'Mentor junior developers', 'Code reviews'],
-        requirements: ['5+ years experience', 'React expertise', 'Node.js proficiency'],
-        benefits: ['Health insurance', 'Stock options', 'Remote work'],
-        skills: [
-          { name: 'JavaScript', importance: 'required', minLevel: 80 },
-          { name: 'React', importance: 'required', minLevel: 75 },
-          { name: 'Node.js', importance: 'required', minLevel: 70 }
-        ],
-        experience: { min: 5, max: 10 },
-        salary: { min: 150000, max: 180000, currency: 'USD', period: 'yearly' },
-        postedBy: admin._id,
-        status: 'active'
-      },
-      {
-        title: 'Frontend Developer',
-        company: { name: 'StartupXYZ', industry: 'E-commerce', size: '50-200' },
-        location: { city: 'New York', state: 'NY', country: 'USA', remote: true },
-        type: 'full-time',
-        mode: 'remote',
-        description: 'Create beautiful user interfaces for our e-commerce platform.',
-        responsibilities: ['Build UI components', 'Optimize performance', 'Collaborate with designers'],
-        requirements: ['3+ years experience', 'React/Vue expertise'],
-        benefits: ['Flexible hours', '401k', 'Learning budget'],
+        description: 'Join TCS Digital as a Software Engineer to work on enterprise solutions for Fortune 500 clients. Great learning opportunities and global exposure across banking, retail, and healthcare domains.',
+        responsibilities: ['Develop and maintain enterprise-grade web applications', 'Collaborate with cross-functional global teams', 'Participate in code reviews and agile ceremonies', 'Write unit tests and maintain code quality'],
+        requirements: ['B.Tech/B.E. in Computer Science or related field', 'Strong proficiency in JavaScript and React', 'Knowledge of Node.js and REST APIs', 'Good understanding of databases (SQL/NoSQL)'],
+        benefits: ['Health insurance for family', 'Performance bonus', 'Learning & development programs', 'Work from home flexibility'],
         skills: [
           { name: 'JavaScript', importance: 'required', minLevel: 70 },
-          { name: 'React', importance: 'required', minLevel: 70 },
-          { name: 'TypeScript', importance: 'preferred', minLevel: 50 }
+          { name: 'React', importance: 'required', minLevel: 65 },
+          { name: 'Node.js', importance: 'required', minLevel: 60 }
         ],
-        experience: { min: 3, max: 6 },
-        salary: { min: 90000, max: 120000, currency: 'USD', period: 'yearly' },
+        experience: { min: 0, max: 3 },
+        salary: { min: 400000, max: 700000, currency: 'INR', period: 'yearly' },
         postedBy: admin._id,
         status: 'active'
       },
       {
-        title: 'Backend Engineer',
-        company: { name: 'DataFlow Systems', industry: 'Technology', size: '200-500' },
-        location: { city: 'Austin', state: 'TX', country: 'USA', remote: false },
+        title: 'Associate Software Engineer',
+        company: { name: 'Infosys', website: 'https://www.infosys.com/careers.html', industry: 'IT Services', size: '10000+' },
+        location: { city: 'Bangalore', state: 'Karnataka', country: 'India', remote: false },
         type: 'full-time',
         mode: 'onsite',
-        description: 'Build robust APIs and microservices for data processing.',
-        responsibilities: ['Design APIs', 'Optimize databases', 'Write tests'],
-        requirements: ['4+ years experience', 'Strong algorithms knowledge'],
-        benefits: ['Health insurance', 'Gym membership', 'Free lunch'],
+        description: 'Infosys is hiring freshers for its Mysore DC. Training provided on cutting-edge technologies. Work on projects across banking, retail, and healthcare domains with global exposure.',
+        responsibilities: ['Develop software solutions using Python and JavaScript', 'Work in agile teams with daily standups', 'Debug and resolve production issues', 'Write technical documentation'],
+        requirements: ['B.Tech/B.E./MCA with 60%+ aggregate', 'Knowledge of Python and JavaScript', 'Understanding of MySQL and databases', 'Good communication skills'],
+        benefits: ['Comprehensive training program', 'Health & life insurance', 'Employee stock options', 'Relocation assistance'],
         skills: [
-          { name: 'Python', importance: 'required', minLevel: 75 },
-          { name: 'SQL', importance: 'required', minLevel: 70 },
-          { name: 'Docker', importance: 'preferred', minLevel: 50 }
+          { name: 'Python', importance: 'required', minLevel: 60 },
+          { name: 'JavaScript', importance: 'required', minLevel: 55 },
+          { name: 'SQL', importance: 'preferred', minLevel: 50 }
         ],
-        experience: { min: 4, max: 8 },
-        salary: { min: 120000, max: 150000, currency: 'USD', period: 'yearly' },
+        experience: { min: 0, max: 2 },
+        salary: { min: 360000, max: 500000, currency: 'INR', period: 'yearly' },
         postedBy: admin._id,
         status: 'active'
       },
       {
-        title: 'Data Scientist',
-        company: { name: 'AI Innovations', industry: 'AI/ML', size: '100-200' },
-        location: { city: 'Seattle', state: 'WA', country: 'USA', remote: true },
+        title: 'Full Stack Developer',
+        company: { name: 'Wipro', website: 'https://careers.wipro.com/', industry: 'IT Services', size: '10000+' },
+        location: { city: 'Hyderabad', state: 'Telangana', country: 'India', remote: true },
         type: 'full-time',
         mode: 'hybrid',
-        description: 'Drive data-driven decisions with ML models.',
-        responsibilities: ['Build ML models', 'Analyze data', 'Present insights'],
-        requirements: ['PhD or Masters preferred', 'ML framework experience'],
-        benefits: ['Research budget', 'Conference attendance', 'Stock options'],
+        description: 'Build scalable web applications for Wipro\'s digital transformation projects. Collaborative team environment with flexible work options and exposure to cloud technologies.',
+        responsibilities: ['Build end-to-end features using React and Node.js', 'Design and implement RESTful APIs', 'Work with MongoDB and cloud services (AWS)', 'Mentor junior developers and conduct code reviews'],
+        requirements: ['1-3 years experience in full stack development', 'Proficiency in React, Node.js, and MongoDB', 'Experience with AWS or Azure cloud services', 'Understanding of CI/CD pipelines'],
+        benefits: ['Flexible work hours', 'Health insurance', 'Annual performance bonus', 'Skill development budget'],
         skills: [
-          { name: 'Python', importance: 'required', minLevel: 80 },
-          { name: 'Machine Learning', importance: 'required', minLevel: 75 },
-          { name: 'Data Analysis', importance: 'required', minLevel: 70 }
+          { name: 'React', importance: 'required', minLevel: 70 },
+          { name: 'Node.js', importance: 'required', minLevel: 65 },
+          { name: 'MongoDB', importance: 'required', minLevel: 60 },
+          { name: 'AWS', importance: 'preferred', minLevel: 40 }
         ],
-        experience: { min: 3, max: 7 },
-        salary: { min: 140000, max: 170000, currency: 'USD', period: 'yearly' },
+        experience: { min: 1, max: 4 },
+        salary: { min: 500000, max: 900000, currency: 'INR', period: 'yearly' },
+        postedBy: admin._id,
+        status: 'active'
+      },
+      {
+        title: 'Data Analyst',
+        company: { name: 'Zoho', website: 'https://www.zoho.com/careers.html', industry: 'Product Development', size: '5000-10000' },
+        location: { city: 'Chennai', state: 'Tamil Nadu', country: 'India', remote: false },
+        type: 'full-time',
+        mode: 'onsite',
+        description: 'Analyze large datasets to derive business insights at Zoho. Work in a product company with direct impact on millions of users worldwide. Great opportunity for data enthusiasts.',
+        responsibilities: ['Analyze user behavior and product usage data', 'Create dashboards and reports using Power BI', 'Write complex SQL queries for data extraction', 'Present data-driven insights to stakeholders'],
+        requirements: ['Strong proficiency in Python and SQL', 'Experience with data visualization tools (Power BI/Tableau)', 'Knowledge of statistical analysis and Excel', 'Good analytical and problem-solving skills'],
+        benefits: ['Free meals at office', 'No dress code', 'Product company culture', 'Annual retreat and team outings'],
+        skills: [
+          { name: 'Python', importance: 'required', minLevel: 70 },
+          { name: 'SQL', importance: 'required', minLevel: 75 },
+          { name: 'Data Analysis', importance: 'required', minLevel: 65 }
+        ],
+        experience: { min: 1, max: 3 },
+        salary: { min: 600000, max: 1000000, currency: 'INR', period: 'yearly' },
         postedBy: admin._id,
         status: 'active'
       },
       {
         title: 'DevOps Engineer',
-        company: { name: 'CloudNative Co', industry: 'Cloud', size: '50-100' },
-        location: { city: 'Remote', country: 'USA', remote: true },
+        company: { name: 'Cognizant', website: 'https://careers.cognizant.com/', industry: 'IT Services', size: '10000+' },
+        location: { city: 'Pune', state: 'Maharashtra', country: 'India', remote: true },
         type: 'full-time',
         mode: 'remote',
-        description: 'Manage cloud infrastructure and CI/CD pipelines.',
-        responsibilities: ['Manage AWS', 'Build CI/CD', 'Monitor systems'],
-        requirements: ['Kubernetes experience', 'Strong Linux skills'],
-        benefits: ['Remote work', 'Equipment budget', 'Unlimited PTO'],
+        description: 'Build CI/CD pipelines and manage cloud infrastructure for enterprise clients. Work with cutting-edge DevOps tools. Remote-friendly with hybrid work options available.',
+        responsibilities: ['Set up and maintain CI/CD pipelines using Jenkins/GitHub Actions', 'Manage AWS cloud infrastructure and services', 'Containerize applications using Docker and Kubernetes', 'Monitor system performance and handle incidents'],
+        requirements: ['2+ years experience in DevOps/Cloud', 'Strong knowledge of AWS services and Docker', 'Experience with Git and Linux administration', 'Understanding of networking and security'],
+        benefits: ['Remote work option', 'Health & wellness programs', 'Performance-based incentives', 'Certifications sponsorship'],
         skills: [
-          { name: 'AWS', importance: 'required', minLevel: 75 },
-          { name: 'Docker', importance: 'required', minLevel: 70 },
+          { name: 'AWS', importance: 'required', minLevel: 70 },
+          { name: 'Docker', importance: 'required', minLevel: 65 },
           { name: 'Git', importance: 'required', minLevel: 60 }
         ],
-        experience: { min: 3, max: 6 },
-        salary: { min: 130000, max: 160000, currency: 'USD', period: 'yearly' },
+        experience: { min: 2, max: 5 },
+        salary: { min: 800000, max: 1500000, currency: 'INR', period: 'yearly' },
         postedBy: admin._id,
         status: 'active'
       }
@@ -335,6 +334,11 @@ const seedDatabase = async () => {
         description: 'Complete path to become a full stack developer',
         targetRole: 'Full Stack Developer',
         level: 'intermediate',
+        category: 'full-stack-developer',
+        isPublic: true,
+        isPersonalized: false,
+        totalDuration: 240,
+        totalModules: 4,
         duration: { weeks: 24, hoursPerWeek: 10 },
         skills: [
           { name: 'JavaScript', targetLevel: 80 },
@@ -342,11 +346,12 @@ const seedDatabase = async () => {
           { name: 'Node.js', targetLevel: 70 },
           { name: 'MongoDB', targetLevel: 65 }
         ],
+        successMetrics: { enrollments: 150, completions: 45, averageRating: 4.7 },
         stages: [
-          { order: 1, title: 'Frontend Fundamentals', description: 'Learn HTML, CSS, JavaScript', duration: 80, modules: [] },
-          { order: 2, title: 'React Development', description: 'Master React and state management', duration: 60, modules: [] },
-          { order: 3, title: 'Backend Development', description: 'Build APIs with Node.js', duration: 60, modules: [] },
-          { order: 4, title: 'Database & Deployment', description: 'MongoDB and cloud deployment', duration: 40, modules: [] }
+          { order: 1, title: 'Frontend Fundamentals', description: 'Learn HTML, CSS, JavaScript', duration: 80, difficulty: 'beginner', estimatedDuration: 80, modules: [] },
+          { order: 2, title: 'React Development', description: 'Master React and state management', duration: 60, difficulty: 'intermediate', estimatedDuration: 60, modules: [] },
+          { order: 3, title: 'Backend Development', description: 'Build APIs with Node.js', duration: 60, difficulty: 'intermediate', estimatedDuration: 60, modules: [] },
+          { order: 4, title: 'Database & Deployment', description: 'MongoDB and cloud deployment', duration: 40, difficulty: 'advanced', estimatedDuration: 40, modules: [] }
         ],
         isActive: true,
         isAdaptive: true
@@ -356,6 +361,11 @@ const seedDatabase = async () => {
         description: 'Path to becoming a data scientist',
         targetRole: 'Data Scientist',
         level: 'advanced',
+        category: 'data-scientist',
+        isPublic: true,
+        isPersonalized: false,
+        totalDuration: 320,
+        totalModules: 4,
         duration: { weeks: 32, hoursPerWeek: 12 },
         skills: [
           { name: 'Python', targetLevel: 85 },
@@ -363,11 +373,12 @@ const seedDatabase = async () => {
           { name: 'Machine Learning', targetLevel: 75 },
           { name: 'SQL', targetLevel: 70 }
         ],
+        successMetrics: { enrollments: 200, completions: 60, averageRating: 4.8 },
         stages: [
-          { order: 1, title: 'Python Basics', description: 'Learn Python programming', duration: 60, modules: [] },
-          { order: 2, title: 'Data Analysis', description: 'Master pandas and visualization', duration: 80, modules: [] },
-          { order: 3, title: 'Machine Learning', description: 'Learn ML algorithms', duration: 100, modules: [] },
-          { order: 4, title: 'Deep Learning', description: 'Neural networks and AI', duration: 80, modules: [] }
+          { order: 1, title: 'Python Basics', description: 'Learn Python programming', duration: 60, difficulty: 'beginner', estimatedDuration: 60, modules: [] },
+          { order: 2, title: 'Data Analysis', description: 'Master pandas and visualization', duration: 80, difficulty: 'intermediate', estimatedDuration: 80, modules: [] },
+          { order: 3, title: 'Machine Learning', description: 'Learn ML algorithms', duration: 100, difficulty: 'advanced', estimatedDuration: 100, modules: [] },
+          { order: 4, title: 'Deep Learning', description: 'Neural networks and AI', duration: 80, difficulty: 'advanced', estimatedDuration: 80, modules: [] }
         ],
         isActive: true,
         isAdaptive: true
@@ -377,17 +388,23 @@ const seedDatabase = async () => {
         description: 'Become a cloud infrastructure expert',
         targetRole: 'Cloud Engineer',
         level: 'intermediate',
+        category: 'devops-engineer',
+        isPublic: true,
+        isPersonalized: false,
+        totalDuration: 200,
+        totalModules: 4,
         duration: { weeks: 20, hoursPerWeek: 10 },
         skills: [
           { name: 'AWS', targetLevel: 80 },
           { name: 'Docker', targetLevel: 75 },
           { name: 'Git', targetLevel: 70 }
         ],
+        successMetrics: { enrollments: 100, completions: 30, averageRating: 4.5 },
         stages: [
-          { order: 1, title: 'Cloud Fundamentals', description: 'Learn cloud concepts', duration: 40, modules: [] },
-          { order: 2, title: 'AWS Services', description: 'Master core AWS services', duration: 80, modules: [] },
-          { order: 3, title: 'Containerization', description: 'Docker and Kubernetes', duration: 60, modules: [] },
-          { order: 4, title: 'Infrastructure as Code', description: 'Terraform and automation', duration: 40, modules: [] }
+          { order: 1, title: 'Cloud Fundamentals', description: 'Learn cloud concepts', duration: 40, difficulty: 'beginner', estimatedDuration: 40, modules: [] },
+          { order: 2, title: 'AWS Services', description: 'Master core AWS services', duration: 80, difficulty: 'intermediate', estimatedDuration: 80, modules: [] },
+          { order: 3, title: 'Containerization', description: 'Docker and Kubernetes', duration: 60, difficulty: 'intermediate', estimatedDuration: 60, modules: [] },
+          { order: 4, title: 'Infrastructure as Code', description: 'Terraform and automation', duration: 40, difficulty: 'advanced', estimatedDuration: 40, modules: [] }
         ],
         isActive: true,
         isAdaptive: true
@@ -397,34 +414,43 @@ const seedDatabase = async () => {
 
     // Seed Test Users
     console.log('👥 Seeding test users...');
-    const userPassword = await bcrypt.hash('password123', salt);
     
     await User.create({
       name: 'John Doe',
       email: 'john@example.com',
-      password: userPassword,
+      password: 'password123',
       role: 'student',
       skills: [
-        { name: 'JavaScript', proficiencyLevel: 85, verified: true },
-        { name: 'React', proficiencyLevel: 80, verified: true },
-        { name: 'Node.js', proficiencyLevel: 70, verified: false }
+        { name: 'JavaScript', level: 85, verified: true, category: 'technical' },
+        { name: 'React', level: 80, verified: true, category: 'technical' },
+        { name: 'Node.js', level: 70, verified: false, category: 'technical' }
       ],
-      education: [{ institution: 'Stanford University', degree: 'B.S. Computer Science', year: 2022 }],
-      skillReadinessScore: 78
+      education: [{ institution: 'Stanford University', degree: 'B.S. Computer Science', year: '2022' }],
+      metrics: { skillReadinessScore: 78 }
     });
 
     await User.create({
       name: 'Jane Smith',
       email: 'jane@example.com',
-      password: userPassword,
+      password: 'password123',
       role: 'student',
       skills: [
-        { name: 'Python', proficiencyLevel: 90, verified: true },
-        { name: 'Machine Learning', proficiencyLevel: 75, verified: false },
-        { name: 'Data Analysis', proficiencyLevel: 85, verified: true }
+        { name: 'Python', level: 90, verified: true, category: 'technical' },
+        { name: 'Machine Learning', level: 75, verified: false, category: 'technical' },
+        { name: 'Data Analysis', level: 85, verified: true, category: 'technical' }
       ],
-      education: [{ institution: 'MIT', degree: 'M.S. Data Science', year: 2023 }],
-      skillReadinessScore: 82
+      education: [{ institution: 'MIT', degree: 'M.S. Data Science', year: '2023' }],
+      metrics: { skillReadinessScore: 82 }
+    });
+
+    await User.create({
+      name: 'Bhavadharani S M',
+      email: 'bhavadharanis23it@srishakthi.ac.in',
+      password: 'password123',
+      role: 'student',
+      skills: [],
+      education: [{ institution: 'Sri Shakthi Institute of Engineering and Technology', degree: 'B.Tech IT', year: '2027' }],
+      metrics: { skillReadinessScore: 0 }
     });
 
     console.log('\n✅ Database seeded successfully!');
@@ -435,12 +461,13 @@ const seedDatabase = async () => {
     console.log(`   • ${coursesData.length} Courses`);
     console.log(`   • ${assessmentsData.length} Assessments`);
     console.log(`   • ${learningPathsData.length} Learning Paths`);
-    console.log(`   • 3 Users (1 admin + 2 students)`);
+    console.log(`   • 4 Users (1 admin + 3 students)`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('\n🔐 Test Accounts:');
-    console.log('   Admin: admin@skillforge.com | Password: admin123');
-    console.log('   User:  john@example.com     | Password: password123');
-    console.log('   User:  jane@example.com     | Password: password123');
+    console.log('   Admin: admin@skillforge.com                | Password: admin123');
+    console.log('   User:  john@example.com                    | Password: password123');
+    console.log('   User:  jane@example.com                    | Password: password123');
+    console.log('   User:  bhavadharanis23it@srishakthi.ac.in  | Password: password123');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
     process.exit(0);

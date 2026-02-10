@@ -75,6 +75,113 @@ router.get('/', async (req, res) => {
 });
 
 /**
+ * @route   GET /api/jobs/matched
+ * @desc    Get jobs matched against user's resume skills with real match scores
+ * @access  Private
+ */
+router.get('/matched', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('skills resume resumeAnalysis');
+
+    // Gather user's skills from profile + resume
+    const userSkills = new Set();
+    (user.skills || []).forEach(s => {
+      if (s.name) userSkills.add(s.name.toLowerCase());
+    });
+    // Also include resume-parsed skills
+    if (user.resume?.parsedData?.skills) {
+      user.resume.parsedData.skills.forEach(s => userSkills.add(s.toLowerCase()));
+    }
+    if (user.resumeAnalysis?.parsedSkills) {
+      user.resumeAnalysis.parsedSkills.forEach(s => userSkills.add(s.toLowerCase()));
+    }
+
+    // Include skills learned from completed courses (sent from frontend)
+    let learnedSkills = [];
+    if (req.query.learnedSkills) {
+      try {
+        learnedSkills = JSON.parse(req.query.learnedSkills);
+        learnedSkills.forEach(s => userSkills.add(s.toLowerCase()));
+      } catch (e) { /* ignore parse error */ }
+    }
+
+    const userSkillsArray = Array.from(userSkills);
+
+    // Get all active jobs
+    const jobs = await Job.find({ status: 'active', isActive: true })
+      .populate('postedBy', 'name')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Calculate match score for each job
+    const matchedJobs = jobs.map(job => {
+      const jobSkills = (job.skills || []).map(s => (s.name || '').toLowerCase());
+      const requiredSkills = jobSkills.filter(Boolean);
+
+      if (requiredSkills.length === 0) {
+        return { ...job, matchScore: 50, matchingSkills: [], missingSkills: [] };
+      }
+
+      const matching = requiredSkills.filter(js => 
+        userSkillsArray.some(us => us.includes(js) || js.includes(us))
+      );
+      const missing = requiredSkills.filter(js => 
+        !userSkillsArray.some(us => us.includes(js) || js.includes(us))
+      );
+
+      const matchScore = Math.round((matching.length / requiredSkills.length) * 100);
+
+      return {
+        ...job,
+        matchScore,
+        matchingSkills: matching,
+        missingSkills: missing
+      };
+    });
+
+    // Sort by match score descending
+    matchedJobs.sort((a, b) => b.matchScore - a.matchScore);
+
+    res.json({
+      success: true,
+      data: matchedJobs,
+      userSkills: userSkillsArray,
+      hasResume: !!(user.resume?.url || user.resume?.filename)
+    });
+  } catch (error) {
+    console.error('Matched jobs error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch matched jobs',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * @route   GET /api/jobs/my/posted
+ * @desc    Get jobs posted by recruiter
+ * @access  Private (Recruiter)
+ */
+router.get('/my/posted', protect, authorize('recruiter'), async (req, res) => {
+  try {
+    const jobs = await Job.find({ postedBy: req.user.id })
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data: jobs
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch jobs',
+      error: error.message
+    });
+  }
+});
+
+/**
  * @route   GET /api/jobs/:id
  * @desc    Get job by ID with skill gap analysis for logged-in user
  * @access  Public
@@ -364,29 +471,6 @@ router.put('/:id/applicants/:applicantId/status', protect, authorize('recruiter'
     res.status(500).json({
       success: false,
       message: 'Failed to update status',
-      error: error.message
-    });
-  }
-});
-
-/**
- * @route   GET /api/jobs/my/posted
- * @desc    Get jobs posted by recruiter
- * @access  Private (Recruiter)
- */
-router.get('/my/posted', protect, authorize('recruiter'), async (req, res) => {
-  try {
-    const jobs = await Job.find({ postedBy: req.user.id })
-      .sort({ createdAt: -1 });
-
-    res.json({
-      success: true,
-      data: jobs
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch jobs',
       error: error.message
     });
   }

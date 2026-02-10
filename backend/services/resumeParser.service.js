@@ -447,6 +447,68 @@ class ResumeParserService {
     const match = text.match(durationPattern);
     return match ? match[0] : '';
   }
+
+  /**
+   * Calculate formatting score (0-100)
+   */
+  static calculateFormattingScore(text) {
+    let score = 0;
+
+    // Check for section headers
+    const sections = ['education', 'experience', 'skills', 'projects', 'certifications', 'summary', 'objective'];
+    let sectionsFound = 0;
+    sections.forEach(s => { if (text.toLowerCase().includes(s)) sectionsFound++; });
+    score += Math.min(30, sectionsFound * 6);
+
+    // Check for consistent bullet points
+    const bullets = (text.match(/[•\-\*]/g) || []).length;
+    score += Math.min(20, bullets * 2);
+
+    // Word count in ideal range (300-800)
+    const wordCount = text.split(/\s+/).length;
+    if (wordCount >= 300 && wordCount <= 800) score += 20;
+    else if (wordCount >= 200 && wordCount <= 1200) score += 10;
+
+    // Contact info present
+    const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(text);
+    const hasPhone = /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/.test(text);
+    if (hasEmail) score += 10;
+    if (hasPhone) score += 10;
+
+    // LinkedIn / GitHub
+    if (text.toLowerCase().includes('linkedin')) score += 5;
+    if (text.toLowerCase().includes('github')) score += 5;
+
+    return Math.round(Math.min(100, score));
+  }
+
+  /**
+   * Calculate keyword density score (0-100)
+   */
+  static calculateKeywordScore(text) {
+    let score = 0;
+    const lower = text.toLowerCase();
+
+    // Action verbs
+    let actionCount = 0;
+    this.atsKeywords.forEach(v => { if (lower.includes(v)) actionCount++; });
+    score += Math.min(35, actionCount * 4);
+
+    // Technical keywords from all categories
+    let techCount = 0;
+    for (const skills of Object.values(this.skillKeywords)) {
+      for (const skill of skills) {
+        if (lower.includes(skill.toLowerCase())) techCount++;
+      }
+    }
+    score += Math.min(40, techCount * 3);
+
+    // Quantified results
+    const quantified = (text.match(/\b\d+%|\$\d+|\d+\s*(users|customers|projects|team|members|clients)/gi) || []).length;
+    score += Math.min(25, quantified * 5);
+
+    return Math.round(Math.min(100, score));
+  }
 }
 
 module.exports = ResumeParserService;

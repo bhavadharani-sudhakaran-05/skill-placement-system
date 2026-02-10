@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-  User, Mail, Phone, MapPin, Briefcase, GraduationCap,
-  Award, Edit2, Camera, Save, X, Linkedin, Github,
-  Globe, Star, CheckCircle, Plus, Trash2
+  Mail, Phone, MapPin, GraduationCap,
+  Edit2, Camera, Save, X, Linkedin, Github,
+  Globe, CheckCircle, Plus, Trash2
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import api from '../utils/api';

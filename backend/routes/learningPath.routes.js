@@ -83,7 +83,7 @@ router.post('/generate', protect, async (req, res) => {
     }
 
     const learningPath = await LearningPathService.generatePersonalizedPath(
-      req.user.id,
+      req.user._id,
       targetRole
     );
 
@@ -109,12 +109,13 @@ router.post('/generate', protect, async (req, res) => {
 router.get('/my', protect, async (req, res) => {
   try {
     const User = require('../models/User');
-    const user = await User.findById(req.user.id)
-      .populate('activeLearningPath.pathId');
+    const user = await User.findById(req.user._id)
+      .populate('activeLearningPath.pathId', 'title targetRole totalModules totalDuration stages');
 
     if (!user.activeLearningPath?.pathId) {
-      return res.status(404).json({
-        success: false,
+      return res.json({
+        success: true,
+        data: null,
         message: 'No active learning path found'
       });
     }
@@ -138,6 +139,7 @@ router.get('/my', protect, async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Get learning path error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch learning path',
@@ -156,7 +158,7 @@ router.put('/my/progress', protect, async (req, res) => {
     const { moduleId, score } = req.body;
 
     const progress = await LearningPathService.updateProgress(
-      req.user.id,
+      req.user._id,
       moduleId,
       score
     );
@@ -221,7 +223,7 @@ router.post('/:id/enroll', protect, async (req, res) => {
     }
 
     const User = require('../models/User');
-    await User.findByIdAndUpdate(req.user.id, {
+    await User.findByIdAndUpdate(req.user._id, {
       activeLearningPath: {
         pathId: path._id,
         startedAt: new Date(),

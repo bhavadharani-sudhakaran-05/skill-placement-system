@@ -94,7 +94,7 @@ router.post('/login', validateLogin, async (req, res) => {
 
     // Update last login
     user.lastLogin = new Date();
-    await user.save();
+    await User.updateOne({ _id: user._id }, { lastLogin: new Date() });
 
     // Generate token
     const token = generateToken(user._id);
@@ -133,9 +133,9 @@ const { protect } = require('../middleware/auth.middleware');
 
 router.get('/me', protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id)
-      .populate('skills.skillId', 'name category')
-      .populate('activeLearningPath.pathId', 'title targetRole');
+    const user = await User.findById(req.user._id)
+      .populate('savedJobs', 'title company')
+      .populate('savedCourses', 'title description');
 
     res.json({
       success: true,

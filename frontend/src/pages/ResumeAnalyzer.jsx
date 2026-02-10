@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
 import {
-  FileText, Upload, CheckCircle, AlertTriangle, Target, Award,
-  TrendingUp, Zap, Download, RefreshCw, Eye, Star, ChevronRight,
+  FileText, Upload, CheckCircle, AlertTriangle, Award,
+  TrendingUp, Zap, RefreshCw,
   Briefcase, BookOpen, GraduationCap, Code
 } from 'lucide-react';
 import api from '../utils/api';
