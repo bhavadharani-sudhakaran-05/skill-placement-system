@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 const JobDetail = () => {
-  const { id } = useParams();
+  useParams();
   const navigate = useNavigate();
   const [isSaved, setIsSaved] = useState(false);
   const [isApplying, setIsApplying] = useState(false);

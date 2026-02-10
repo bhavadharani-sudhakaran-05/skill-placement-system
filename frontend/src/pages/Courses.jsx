@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
 import {
   Search, Filter, BookOpen, Clock, Users, Star, Play, ChevronDown,
-  X, Video, FileText, Map, Code, CheckCircle, Lock, Download,
-  CreditCard, Smartphone, ArrowRight, Award, Zap, Target, ExternalLink,
-  Circle, ChevronRight, Github, Eye, PlayCircle, ArrowLeft
+  Video, FileText, Map, Code, CheckCircle, Lock, Download,
+  CreditCard, Smartphone, ArrowRight, Award, Target,
+  Circle, ChevronRight, Eye, ArrowLeft
 } from 'lucide-react';
 import useCourseStore from '../store/courseStore';
 
@@ -17,22 +17,17 @@ const Courses = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [playingVideo, setPlayingVideo] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [showProjectModal, setShowProjectModal] = useState(null);
 
   // Use course store for progress tracking
   const { 
-    courseProgress, 
     markVideoWatched: storeMarkVideoWatched, 
     enrollCourse,
     getCourseProgress,
     getEnrolledCourseIds,
     updateCourseProgress 
   } = useCourseStore();
-
-  // Mark course as complete
-  const markCourseComplete = (courseId) => {
-    updateCourseProgress(courseId, { progress: 100, status: 'completed' });
-  };
   
   const enrolledCourses = getEnrolledCourseIds(); // Real enrolled courses from store
 

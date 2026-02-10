@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {
-  Route, Target, CheckCircle, Clock, BookOpen, Award, ChevronRight,
-  Play, Lock, TrendingUp, Zap, Star, ArrowRight, AlertCircle, Gift,
+  Route, Target, CheckCircle, BookOpen, Award, ChevronRight,
+  Play, Lock, TrendingUp, AlertCircle, Gift,
   Trophy, Sparkles, X, Download
 } from 'lucide-react';
 

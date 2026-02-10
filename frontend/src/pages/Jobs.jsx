@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Filter, MapPin, Building2, Clock, DollarSign, Users,
-  Bookmark, ExternalLink, TrendingUp, Briefcase, ChevronDown, ChevronUp, Star,
+  ExternalLink, TrendingUp, Briefcase, ChevronDown, ChevronUp, Star,
   AlertCircle, Loader, Upload, CheckCircle, ListChecks, ShieldCheck, Gift
 } from 'lucide-react';
 import api from '../utils/api';
@@ -53,6 +53,7 @@ const Jobs = () => {
 
   useEffect(() => {
     fetchJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseProgress]);
 
   const fetchJobs = async () => {

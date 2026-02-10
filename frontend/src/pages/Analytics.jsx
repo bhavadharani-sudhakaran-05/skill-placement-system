@@ -6,8 +6,8 @@ import {
   BarElement, ArcElement, RadialLinearScale, Title, Tooltip, Legend, Filler
 } from 'chart.js';
 import {
-  BarChart3, TrendingUp, Users, Award, Target, Calendar,
-  Download, Filter, ChevronDown, ArrowUp, ArrowDown, BookOpen, Briefcase, Clock, Star
+  BarChart3, TrendingUp, Award, Target, Calendar,
+  Download, ChevronDown, ArrowUp, ArrowDown, BookOpen, Briefcase, Clock
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import useAssessmentStore from '../store/assessmentStore';
@@ -20,7 +20,7 @@ const Analytics = () => {
   const { user } = useAuthStore();
   const { completedAssessments, getStats, fetchAssessments, lastUpdated } = useAssessmentStore();
   const { getStats: getCourseStats, courseProgress, lastUpdated: courseLastUpdated } = useCourseStore();
-  const [timeRange, setTimeRange] = useState('6 months');
+  const [timeRange] = useState('6 months');
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [jobMatchCount, setJobMatchCount] = useState(0);
@@ -263,12 +263,14 @@ const Analytics = () => {
       await fetchAnalyticsData();
     };
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   // Refetch when assessments or courses update
   useEffect(() => {
     if (lastUpdated || courseLastUpdated) fetchAnalyticsData();
-  }, [lastUpdated]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastUpdated, courseLastUpdated]);
 
   // Generate dynamic month labels based on current date
   const getMonthLabels = () => {
@@ -332,6 +334,7 @@ const Analytics = () => {
     }]
   };
 
+  // eslint-disable-next-line no-unused-vars
   const chartOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f5f3ff' } }, x: { grid: { display: false } } } };
 
   // Generate contribution heatmap data (GitHub-style)

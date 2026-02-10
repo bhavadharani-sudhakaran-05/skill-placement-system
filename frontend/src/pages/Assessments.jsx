@@ -30,6 +30,7 @@ const Assessments = () => {
   const [setupDetectionStatus, setSetupDetectionStatus] = useState({ faces: 0, phone: false, person: 0, books: false, headphones: false });
   const [testCameraReady, setTestCameraReady] = useState(false);
   const [testStartTime, setTestStartTime] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [assessmentsList, setAssessmentsList] = useState([]);
   
   // Assessment store for real-time updates
@@ -113,6 +114,7 @@ const Assessments = () => {
       // Small delay to ensure DOM is ready
       setTimeout(connectCamera, 200);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testStarted, testTerminated, testCameraReady]);
 
   const categories = ['all', 'recommended', 'completed', 'in progress', 'technical', 'aptitude'];
@@ -589,6 +591,7 @@ const Assessments = () => {
   };
   
   // Handle test termination with store update
+  // eslint-disable-next-line no-unused-vars
   const handleTestTermination = async (reason) => {
     if (activeAssessment) {
       await addTerminatedAssessment(activeAssessment.title, reason);

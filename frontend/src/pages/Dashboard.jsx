@@ -22,6 +22,7 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [jobMatchCount, setJobMatchCount] = useState(0);
   const [completedAssessments, setCompletedAssessments] = useState(0);
+  // eslint-disable-next-line no-unused-vars
   const [activeCourses, setActiveCourses] = useState(0);
   const [badgesEarned, setBadgesEarned] = useState(0);
   const [userSkills, setUserSkills] = useState([]);
