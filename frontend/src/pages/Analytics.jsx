@@ -109,7 +109,7 @@ const Analytics = () => {
       
       // Also try to fetch learning path data from API
       try {
-        const pathRes = await api.get('/learning-path/my');
+        const pathRes = await api.get('/learning-paths/my');
         const activePath = pathRes.data.data;
         if (activePath && activePath.courses) {
           const apiCompleted = activePath.courses.filter(c => c.status === 'completed').length;
@@ -118,8 +118,15 @@ const Analytics = () => {
           coursesCompleted = Math.max(coursesCompleted, apiCompleted);
           coursesInProgress = Math.max(coursesInProgress, apiInProgress);
           totalCourses = Math.max(totalCourses, activePath.courses.length);
+        } else if (activePath && activePath.path?.stages) {
+          const stageCount = activePath.path.stages.length;
+          const completedStages = activePath.progress?.completedModules || 0;
+          coursesCompleted = Math.max(coursesCompleted, completedStages);
+          totalCourses = Math.max(totalCourses, stageCount);
         }
-      } catch { /* ignore */ }
+      } catch (err) { 
+        console.error('Error fetching learning path:', err);
+      }
       
       // Ensure we have at least the store values
       if (courseStats.totalEnrolled > 0) {
@@ -492,7 +499,7 @@ const Analytics = () => {
 
   if (loading || !userData) {
     return (
-      <div style={{ ...styles.container, textAlign: 'center', paddingTop: '4rem' }}>
+      <div style={{ ...styles.container, textAlign: 'center', padding: '4rem 1rem 1rem 1rem' }}>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📊</div>
           <h2 style={{ color: '#111827', marginBottom: '0.5rem' }}>Loading Your Analytics...</h2>

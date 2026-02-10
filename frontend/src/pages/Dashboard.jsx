@@ -83,13 +83,17 @@ const Dashboard = () => {
       setCompletedAssessments(finalAssessmentCount);
       
       try {
-        const pathRes = await api.get('/learning-path/my');
+        const pathRes = await api.get('/learning-paths/my');
         const activePath = pathRes.data.data;
         if (activePath) {
-          const inProgress = activePath.courses?.filter(c => c.status === 'in-progress').length || 0;
+          const inProgress = activePath.courses?.filter(c => c.status === 'in-progress').length || 
+                             activePath.path?.stages?.length || 0;
           setActiveCourses(inProgress);
         }
-      } catch { setActiveCourses(0); }
+      } catch (err) { 
+        console.error('Error fetching learning path:', err);
+        setActiveCourses(0); 
+      }
       
       try {
         const jobsRes = await api.get('/jobs?limit=100');
