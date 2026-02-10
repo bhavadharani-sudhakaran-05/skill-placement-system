@@ -7,6 +7,26 @@ import {
   AlertCircle, Loader, Upload, CheckCircle, ListChecks, ShieldCheck, Gift
 } from 'lucide-react';
 import api from '../utils/api';
+import useCourseStore from '../store/courseStore';
+
+// Course ID to skills mapping (matches Courses.jsx tags)
+const courseSkillsMap = {
+  1: ['DSA', 'Problem Solving', 'Coding'],
+  2: ['ML', 'Python', 'TensorFlow', 'Machine Learning'],
+  3: ['React', 'JavaScript', 'Frontend'],
+  4: ['AWS', 'Cloud', 'DevOps'],
+  5: ['Python', 'Data Science', 'Analytics', 'Data Analysis'],
+  6: ['MongoDB', 'NoSQL', 'Database'],
+  7: ['Node.js', 'Express', 'Backend', 'API'],
+  8: ['Docker', 'Kubernetes', 'Containers', 'DevOps'],
+  9: ['TensorFlow', 'Deep Learning', 'Neural Networks', 'AI'],
+  10: ['CI/CD', 'Jenkins', 'GitHub Actions', 'DevOps'],
+  11: ['NLP', 'Transformers', 'BERT', 'GPT', 'AI'],
+  12: ['MongoDB', 'Express', 'React', 'Node.js', 'JavaScript', 'Full Stack'],
+  13: ['Python', 'Machine Learning', 'Deep Learning', 'AI', 'Data Science'],
+  14: ['Git', 'Docker', 'AWS', 'CI/CD', 'DevOps'],
+  15: ['SQL', 'MySQL', 'PostgreSQL', 'Database']
+};
 
 const Jobs = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,16 +37,31 @@ const Jobs = () => {
   const [userSkills, setUserSkills] = useState([]);
   const [hasResume, setHasResume] = useState(false);
   const [expandedJob, setExpandedJob] = useState(null);
+  const { courseProgress } = useCourseStore();
+
+  // Get skills learned from completed courses
+  const getLearnedSkills = () => {
+    const learned = new Set();
+    Object.entries(courseProgress).forEach(([courseId, data]) => {
+      if (data.progress >= 100 || data.status === 'completed') {
+        const skills = courseSkillsMap[parseInt(courseId)] || [];
+        skills.forEach(s => learned.add(s));
+      }
+    });
+    return Array.from(learned);
+  };
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [courseProgress]);
 
   const fetchJobs = async () => {
     setLoading(true);
     setError('');
     try {
-      const response = await api.get('/jobs/matched');
+      const learnedSkills = getLearnedSkills();
+      const params = learnedSkills.length > 0 ? `?learnedSkills=${encodeURIComponent(JSON.stringify(learnedSkills))}` : '';
+      const response = await api.get(`/jobs/matched${params}`);
       if (response.data.success) {
         const rawJobs = response.data.data || [];
         setUserSkills(response.data.userSkills || []);
