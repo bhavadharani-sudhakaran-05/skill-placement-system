@@ -287,7 +287,7 @@ const learningPaths = [
 const LearningPath = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  const { getEnrolledCourseIds, getCourseProgress, enrollCourse } = useCourseStore();
+  const { getEnrolledCourseIds, getCourseProgress, enrollCourse, reset: resetProgress } = useCourseStore();
   const [selectedPathId, setSelectedPathId] = useState('full-stack');
   const [, setShowMilestoneDetails] = useState(null);
   const [showCertificates, setShowCertificates] = useState(false);
