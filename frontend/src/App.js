@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
@@ -20,7 +20,25 @@ import Profile from './pages/Profile';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
+// Stores
+import useAuthStore from './store/authStore';
+import useCourseStore from './store/courseStore';
+import useAssessmentStore from './store/assessmentStore';
+
 function App() {
+  const { user, isAuthenticated } = useAuthStore();
+
+  // On app load, restore user-specific data if already logged in
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const userId = user.id || user._id;
+      if (userId) {
+        useCourseStore.getState().loadForUser(userId);
+        useAssessmentStore.getState().loadForUser(userId);
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <AnimatePresence mode="wait">
       <Routes>

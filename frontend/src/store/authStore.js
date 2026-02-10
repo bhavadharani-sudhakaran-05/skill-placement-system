@@ -2,6 +2,10 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import api from '../utils/api';
 
+// Import stores to load/clear per-user data
+import useCourseStore from './courseStore';
+import useAssessmentStore from './assessmentStore';
+
 const useAuthStore = create(
   persist(
     (set, get) => ({
@@ -22,6 +26,11 @@ const useAuthStore = create(
             isAuthenticated: true, 
             isLoading: false 
           });
+
+          // Load user-specific progress data
+          const userId = user.id || user._id;
+          useCourseStore.getState().loadForUser(userId);
+          useAssessmentStore.getState().loadForUser(userId);
           
           return { success: true };
         } catch (error) {
@@ -45,6 +54,11 @@ const useAuthStore = create(
             isAuthenticated: true, 
             isLoading: false 
           });
+
+          // Fresh user — load empty data for this user
+          const userId = user.id || user._id;
+          useCourseStore.getState().loadForUser(userId);
+          useAssessmentStore.getState().loadForUser(userId);
           
           return { success: true };
         } catch (error) {
@@ -57,6 +71,14 @@ const useAuthStore = create(
       },
 
       logout: () => {
+        // Save current user's data before clearing
+        useCourseStore.getState()._saveForCurrentUser();
+        useAssessmentStore.getState()._saveForCurrentUser();
+
+        // Clear stores (in-memory state only, per-user data stays in localStorage)
+        useCourseStore.getState().reset();
+        useAssessmentStore.getState().clearAssessments();
+
         set({ 
           user: null, 
           token: null, 

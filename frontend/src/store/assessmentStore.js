@@ -2,6 +2,26 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import api from '../utils/api';
 
+// Helper to get storage key for current user
+const getUserStorageKey = (userId) => `assessment-${userId || 'guest'}`;
+
+// Load user-specific data from localStorage
+const loadUserData = (userId) => {
+  try {
+    const key = getUserStorageKey(userId);
+    const data = JSON.parse(localStorage.getItem(key) || '{}');
+    return data?.state || {};
+  } catch { return {}; }
+};
+
+// Save user-specific data to localStorage
+const saveUserData = (userId, state) => {
+  try {
+    const key = getUserStorageKey(userId);
+    localStorage.setItem(key, JSON.stringify({ state }));
+  } catch (e) { console.error('Failed to save assessment data:', e); }
+};
+
 const useAssessmentStore = create(
   persist(
     (set, get) => ({
@@ -12,9 +32,31 @@ const useAssessmentStore = create(
       badgesEarned: [],
       lastUpdated: null,
       isLoading: false,
+      currentUserId: null,
       
       // Real-time event listeners
       listeners: [],
+
+      // Load data for a specific user (called on login/register)
+      loadForUser: (userId) => {
+        const userData = loadUserData(userId);
+        set({
+          completedAssessments: userData.completedAssessments || [],
+          totalScore: userData.totalScore || 0,
+          averageScore: userData.averageScore || 0,
+          badgesEarned: userData.badgesEarned || [],
+          lastUpdated: userData.lastUpdated || null,
+          currentUserId: userId
+        });
+      },
+
+      // Save current state for current user
+      _saveForCurrentUser: () => {
+        const { currentUserId, completedAssessments, totalScore, averageScore, badgesEarned, lastUpdated } = get();
+        if (currentUserId) {
+          saveUserData(currentUserId, { completedAssessments, totalScore, averageScore, badgesEarned, lastUpdated });
+        }
+      },
       
       // Subscribe to updates
       subscribe: (callback) => {
@@ -80,6 +122,8 @@ const useAssessmentStore = create(
           lastUpdated: new Date().toISOString()
         });
         
+        // Auto-save for current user
+        setTimeout(() => get()._saveForCurrentUser(), 0);
         // Try to save to backend
         try {
           await api.post('/assessments/save-result', {
@@ -120,6 +164,9 @@ const useAssessmentStore = create(
           completedAssessments: updatedAssessments,
           lastUpdated: new Date().toISOString()
         });
+        
+        // Auto-save for current user
+        setTimeout(() => get()._saveForCurrentUser(), 0);
         
         // Try to save to backend
         try {
@@ -195,6 +242,7 @@ const useAssessmentStore = create(
       
       // Clear all data
       clearAssessments: () => {
+        const userId = get().currentUserId;
         set({
           completedAssessments: [],
           totalScore: 0,
@@ -202,6 +250,7 @@ const useAssessmentStore = create(
           badgesEarned: [],
           lastUpdated: null
         });
+        if (userId) saveUserData(userId, { completedAssessments: [], totalScore: 0, averageScore: 0, badgesEarned: [], lastUpdated: null });
       }
     }),
     {
@@ -211,7 +260,8 @@ const useAssessmentStore = create(
         totalScore: state.totalScore,
         averageScore: state.averageScore,
         badgesEarned: state.badgesEarned,
-        lastUpdated: state.lastUpdated
+        lastUpdated: state.lastUpdated,
+        currentUserId: state.currentUserId
       })
     }
   )

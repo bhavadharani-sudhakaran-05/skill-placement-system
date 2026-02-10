@@ -1,12 +1,59 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Helper to get current user ID from auth storage
+const getCurrentUserId = () => {
+  try {
+    const authData = JSON.parse(localStorage.getItem('auth-storage') || '{}');
+    return authData?.state?.user?.id || authData?.state?.user?._id || null;
+  } catch { return null; }
+};
+
+// Helper to get storage key for current user
+const getUserStorageKey = (userId) => `course-progress-${userId || 'guest'}`;
+
+// Load user-specific data from localStorage
+const loadUserData = (userId) => {
+  try {
+    const key = getUserStorageKey(userId);
+    const data = JSON.parse(localStorage.getItem(key) || '{}');
+    return data?.state || {};
+  } catch { return {}; }
+};
+
+// Save user-specific data to localStorage
+const saveUserData = (userId, state) => {
+  try {
+    const key = getUserStorageKey(userId);
+    localStorage.setItem(key, JSON.stringify({ state }));
+  } catch (e) { console.error('Failed to save course data:', e); }
+};
+
 const useCourseStore = create(
   persist(
     (set, get) => ({
       // Course progress data: { courseId: { progress, videosWatched, completedAt, startedAt, status } }
       courseProgress: {},
       lastUpdated: null,
+      currentUserId: null,
+
+      // Load data for a specific user (called on login/register)
+      loadForUser: (userId) => {
+        const userData = loadUserData(userId);
+        set({
+          courseProgress: userData.courseProgress || {},
+          lastUpdated: userData.lastUpdated || null,
+          currentUserId: userId
+        });
+      },
+
+      // Save current state for current user
+      _saveForCurrentUser: () => {
+        const { currentUserId, courseProgress, lastUpdated } = get();
+        if (currentUserId) {
+          saveUserData(currentUserId, { courseProgress, lastUpdated });
+        }
+      },
 
       // Update course progress
       updateCourseProgress: (courseId, progressData) => {
@@ -33,6 +80,8 @@ const useCourseStore = create(
           },
           lastUpdated: Date.now()
         }));
+        // Auto-save for current user
+        setTimeout(() => get()._saveForCurrentUser(), 0);
       },
 
       // Mark video as watched
@@ -103,11 +152,20 @@ const useCourseStore = create(
         return Object.keys(get().courseProgress).map(id => parseInt(id));
       },
 
-      // Reset store
-      reset: () => set({ courseProgress: {}, lastUpdated: null })
+      // Reset store (clears for current user too)
+      reset: () => {
+        const userId = get().currentUserId;
+        set({ courseProgress: {}, lastUpdated: null });
+        if (userId) saveUserData(userId, { courseProgress: {}, lastUpdated: null });
+      }
     }),
     {
-      name: 'course-progress-storage'
+      name: 'course-progress-storage',
+      partialize: (state) => ({
+        courseProgress: state.courseProgress,
+        lastUpdated: state.lastUpdated,
+        currentUserId: state.currentUserId
+      })
     }
   )
 );
