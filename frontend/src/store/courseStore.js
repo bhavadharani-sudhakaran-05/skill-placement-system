@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import api from '../utils/api';
 
 // Helper to get storage key for current user
@@ -22,9 +21,7 @@ const saveUserData = (userId, state) => {
   } catch (e) { console.error('Failed to save course data:', e); }
 };
 
-const useCourseStore = create(
-  persist(
-    (set, get) => ({
+const useCourseStore = create((set, get) => ({
       // Course progress data: { courseId: { progress, videosWatched, completedAt, startedAt, status } }
       courseProgress: {},
       lastUpdated: null,
@@ -189,16 +186,6 @@ const useCourseStore = create(
         set({ courseProgress: {}, lastUpdated: null });
         if (userId) saveUserData(userId, { courseProgress: {}, lastUpdated: null });
       }
-    }),
-    {
-      name: 'course-progress-storage',
-      partialize: (state) => ({
-        courseProgress: state.courseProgress,
-        lastUpdated: state.lastUpdated,
-        currentUserId: state.currentUserId
-      })
-    }
-  )
-);
+    }));
 
 export default useCourseStore;

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import api from '../utils/api';
 
 // Helper to get storage key for current user
@@ -22,9 +21,7 @@ const saveUserData = (userId, state) => {
   } catch (e) { console.error('Failed to save assessment data:', e); }
 };
 
-const useAssessmentStore = create(
-  persist(
-    (set, get) => ({
+const useAssessmentStore = create((set, get) => ({
       // Assessment results history
       completedAssessments: [],
       totalScore: 0,
@@ -311,19 +308,6 @@ const useAssessmentStore = create(
         });
         if (userId) saveUserData(userId, { completedAssessments: [], totalScore: 0, averageScore: 0, badgesEarned: [], lastUpdated: null });
       }
-    }),
-    {
-      name: 'assessment-storage',
-      partialize: (state) => ({
-        completedAssessments: state.completedAssessments,
-        totalScore: state.totalScore,
-        averageScore: state.averageScore,
-        badgesEarned: state.badgesEarned,
-        lastUpdated: state.lastUpdated,
-        currentUserId: state.currentUserId
-      })
-    }
-  )
-);
+    }));
 
 export default useAssessmentStore;

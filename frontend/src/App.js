@@ -28,16 +28,17 @@ import useAssessmentStore from './store/assessmentStore';
 function App() {
   const { user, isAuthenticated } = useAuthStore();
 
-  // On app load, restore user-specific data if already logged in
+  // On app load and when user changes, restore user-specific data
   useEffect(() => {
     if (isAuthenticated && user) {
       const userId = user.id || user._id;
       if (userId) {
+        // Reload fresh data from backend for this user
         useCourseStore.getState().loadForUser(userId);
         useAssessmentStore.getState().loadForUser(userId);
       }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, user?.id, user?._id]);
 
   return (
     <AnimatePresence mode="wait">
