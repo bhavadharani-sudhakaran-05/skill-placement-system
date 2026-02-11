@@ -37,8 +37,38 @@ const useAssessmentStore = create(
       // Real-time event listeners
       listeners: [],
 
-      // Load data for a specific user (called on login/register)
-      loadForUser: (userId) => {
+      // Load data for a specific user - fetches from backend first
+      loadForUser: async (userId) => {
+        set({ currentUserId: userId, isLoading: true });
+        
+        try {
+          // Try to fetch from backend first
+          const response = await api.get('/users/get-progress');
+          if (response.data.success && response.data.data.assessmentData) {
+            const backendData = response.data.data.assessmentData;
+            set({
+              completedAssessments: backendData.completedAssessments || [],
+              badgesEarned: backendData.badgesEarned || [],
+              totalScore: backendData.totalScore || 0,
+              averageScore: backendData.averageScore || 0,
+              lastUpdated: Date.now(),
+              isLoading: false
+            });
+            // Also save to localStorage as cache
+            saveUserData(userId, {
+              completedAssessments: backendData.completedAssessments || [],
+              badgesEarned: backendData.badgesEarned || [],
+              totalScore: backendData.totalScore || 0,
+              averageScore: backendData.averageScore || 0,
+              lastUpdated: Date.now()
+            });
+            return;
+          }
+        } catch (error) {
+          console.log('Could not fetch from backend, using local data:', error.message);
+        }
+        
+        // Fallback to localStorage
         const userData = loadUserData(userId);
         set({
           completedAssessments: userData.completedAssessments || [],
@@ -46,15 +76,34 @@ const useAssessmentStore = create(
           averageScore: userData.averageScore || 0,
           badgesEarned: userData.badgesEarned || [],
           lastUpdated: userData.lastUpdated || null,
-          currentUserId: userId
+          isLoading: false
         });
       },
 
-      // Save current state for current user
+      // Sync to backend
+      _syncToBackend: async () => {
+        const { completedAssessments, badgesEarned, totalScore, averageScore } = get();
+        try {
+          await api.post('/users/sync-progress', {
+            assessmentData: {
+              completedAssessments,
+              badgesEarned,
+              totalScore,
+              averageScore
+            }
+          });
+        } catch (error) {
+          console.log('Backend sync failed, data saved locally:', error.message);
+        }
+      },
+
+      // Save current state for current user (local + backend)
       _saveForCurrentUser: () => {
         const { currentUserId, completedAssessments, totalScore, averageScore, badgesEarned, lastUpdated } = get();
         if (currentUserId) {
           saveUserData(currentUserId, { completedAssessments, totalScore, averageScore, badgesEarned, lastUpdated });
+          // Also sync to backend
+          get()._syncToBackend();
         }
       },
       
@@ -122,9 +171,10 @@ const useAssessmentStore = create(
           lastUpdated: new Date().toISOString()
         });
         
-        // Auto-save for current user
+        // Auto-save for current user (local + backend)
         setTimeout(() => get()._saveForCurrentUser(), 0);
-        // Try to save to backend
+        
+        // Try to save to backend directly too
         try {
           await api.post('/assessments/save-result', {
             title: assessmentResult.title,
@@ -165,7 +215,7 @@ const useAssessmentStore = create(
           lastUpdated: new Date().toISOString()
         });
         
-        // Auto-save for current user
+        // Auto-save for current user (local + backend)
         setTimeout(() => get()._saveForCurrentUser(), 0);
         
         // Try to save to backend

@@ -245,4 +245,173 @@ router.get('/all', protect, authorize('admin', 'recruiter', 'college'), async (r
   }
 });
 
+/**
+ * @route   POST /api/users/sync-progress
+ * @desc    Sync course and assessment progress from frontend
+ * @access  Private
+ */
+router.post('/sync-progress', protect, async (req, res) => {
+  try {
+    const { courseProgress, assessmentData } = req.body;
+    const user = await User.findById(req.user.id);
+
+    // Sync course progress
+    if (courseProgress && typeof courseProgress === 'object') {
+      const courseProgressArray = Object.entries(courseProgress).map(([courseId, data]) => ({
+        courseId: parseInt(courseId),
+        courseTitle: data.courseTitle || '',
+        progress: data.progress || 0,
+        status: data.status || 'enrolled',
+        videosWatched: data.videosWatched || [],
+        completedWeeks: data.completedWeeks || [],
+        enrolledAt: data.enrolledAt ? new Date(data.enrolledAt) : new Date(),
+        startedAt: data.startedAt ? new Date(data.startedAt) : null,
+        completedAt: data.completedAt ? new Date(data.completedAt) : null,
+        updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date()
+      }));
+
+      // Merge with existing progress (update existing, add new)
+      courseProgressArray.forEach(newProgress => {
+        const existingIndex = user.courseProgress.findIndex(
+          cp => cp.courseId === newProgress.courseId
+        );
+        if (existingIndex >= 0) {
+          user.courseProgress[existingIndex] = newProgress;
+        } else {
+          user.courseProgress.push(newProgress);
+        }
+      });
+    }
+
+    // Sync assessment data
+    if (assessmentData) {
+      if (assessmentData.completedAssessments) {
+        assessmentData.completedAssessments.forEach(newAssessment => {
+          const existingIndex = user.assessmentHistory.findIndex(
+            a => a.title === newAssessment.title
+          );
+          const assessmentRecord = {
+            title: newAssessment.title,
+            score: newAssessment.score || 0,
+            correctAnswers: newAssessment.correctAnswers || 0,
+            totalQuestions: newAssessment.totalQuestions || 0,
+            timeTaken: newAssessment.timeTaken || '',
+            badge: newAssessment.badge || '',
+            status: newAssessment.status || 'completed',
+            terminationReason: newAssessment.terminationReason || '',
+            takenAt: newAssessment.completedAt ? new Date(newAssessment.completedAt) : new Date()
+          };
+          
+          if (existingIndex >= 0) {
+            user.assessmentHistory[existingIndex] = assessmentRecord;
+          } else {
+            user.assessmentHistory.push(assessmentRecord);
+          }
+        });
+      }
+
+      if (assessmentData.badgesEarned) {
+        assessmentData.badgesEarned.forEach(newBadge => {
+          const exists = user.badges.find(b => b.name === newBadge.name);
+          if (!exists) {
+            user.badges.push({
+              name: newBadge.name,
+              earnedFor: newBadge.earnedFor,
+              earnedAt: newBadge.earnedAt ? new Date(newBadge.earnedAt) : new Date(),
+              score: newBadge.score || 0
+            });
+          }
+        });
+      }
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Progress synced successfully'
+    });
+  } catch (error) {
+    console.error('Sync progress error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to sync progress',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * @route   GET /api/users/get-progress
+ * @desc    Get all user progress data for frontend
+ * @access  Private
+ */
+router.get('/get-progress', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    // Convert courseProgress array to object format for frontend
+    const courseProgressObj = {};
+    (user.courseProgress || []).forEach(cp => {
+      courseProgressObj[cp.courseId] = {
+        courseTitle: cp.courseTitle,
+        progress: cp.progress,
+        status: cp.status,
+        videosWatched: cp.videosWatched || [],
+        completedWeeks: cp.completedWeeks || [],
+        enrolledAt: cp.enrolledAt?.toISOString(),
+        startedAt: cp.startedAt?.toISOString(),
+        completedAt: cp.completedAt?.toISOString(),
+        updatedAt: cp.updatedAt?.toISOString()
+      };
+    });
+
+    // Format assessment data for frontend
+    const completedAssessments = (user.assessmentHistory || []).map(a => ({
+      id: a._id,
+      title: a.title,
+      score: a.score,
+      correctAnswers: a.correctAnswers,
+      totalQuestions: a.totalQuestions,
+      timeTaken: a.timeTaken,
+      badge: a.badge,
+      status: a.status,
+      terminationReason: a.terminationReason,
+      completedAt: a.takenAt?.toISOString()
+    }));
+
+    const badgesEarned = (user.badges || []).map(b => ({
+      name: b.name,
+      earnedFor: b.earnedFor,
+      earnedAt: b.earnedAt?.toISOString(),
+      score: b.score
+    }));
+
+    // Calculate stats
+    const completed = completedAssessments.filter(a => a.status === 'completed');
+    const totalScore = completed.reduce((sum, a) => sum + (a.score || 0), 0);
+    const averageScore = completed.length > 0 ? Math.round(totalScore / completed.length) : 0;
+
+    res.json({
+      success: true,
+      data: {
+        courseProgress: courseProgressObj,
+        assessmentData: {
+          completedAssessments,
+          badgesEarned,
+          totalScore,
+          averageScore
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Get progress error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get progress',
+      error: error.message
+    });
+  }
+});
+
 module.exports = router;

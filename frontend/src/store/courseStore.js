@@ -1,13 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-// Helper to get current user ID from auth storage
-const getCurrentUserId = () => {
-  try {
-    const authData = JSON.parse(localStorage.getItem('auth-storage') || '{}');
-    return authData?.state?.user?.id || authData?.state?.user?._id || null;
-  } catch { return null; }
-};
+import api from '../utils/api';
 
 // Helper to get storage key for current user
 const getUserStorageKey = (userId) => `course-progress-${userId || 'guest'}`;
@@ -37,21 +30,52 @@ const useCourseStore = create(
       lastUpdated: null,
       currentUserId: null,
 
-      // Load data for a specific user (called on login/register)
-      loadForUser: (userId) => {
+      // Load data for a specific user - fetches from backend first, then localStorage fallback
+      loadForUser: async (userId) => {
+        set({ currentUserId: userId });
+        
+        try {
+          // Try to fetch from backend first
+          const response = await api.get('/users/get-progress');
+          if (response.data.success && response.data.data.courseProgress) {
+            const backendProgress = response.data.data.courseProgress;
+            set({
+              courseProgress: backendProgress,
+              lastUpdated: Date.now()
+            });
+            // Also save to localStorage as cache
+            saveUserData(userId, { courseProgress: backendProgress, lastUpdated: Date.now() });
+            return;
+          }
+        } catch (error) {
+          console.log('Could not fetch from backend, using local data:', error.message);
+        }
+        
+        // Fallback to localStorage
         const userData = loadUserData(userId);
         set({
           courseProgress: userData.courseProgress || {},
-          lastUpdated: userData.lastUpdated || null,
-          currentUserId: userId
+          lastUpdated: userData.lastUpdated || null
         });
       },
 
-      // Save current state for current user
+      // Sync progress to backend
+      _syncToBackend: async () => {
+        const { courseProgress } = get();
+        try {
+          await api.post('/users/sync-progress', { courseProgress });
+        } catch (error) {
+          console.log('Backend sync failed, data saved locally:', error.message);
+        }
+      },
+
+      // Save current state for current user (local + backend)
       _saveForCurrentUser: () => {
         const { currentUserId, courseProgress, lastUpdated } = get();
         if (currentUserId) {
           saveUserData(currentUserId, { courseProgress, lastUpdated });
+          // Also sync to backend (debounced)
+          get()._syncToBackend();
         }
       },
 
@@ -80,7 +104,7 @@ const useCourseStore = create(
           },
           lastUpdated: Date.now()
         }));
-        // Auto-save for current user
+        // Auto-save for current user (local + backend)
         setTimeout(() => get()._saveForCurrentUser(), 0);
       },
 

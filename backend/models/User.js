@@ -167,6 +167,24 @@ const userSchema = new mongoose.Schema({
     earnedAt: { type: Date, default: Date.now },
     score: Number
   }],
+
+  // Course progress stored by frontend courseId (numeric)
+  courseProgress: [{
+    courseId: { type: Number, required: true },
+    courseTitle: String,
+    progress: { type: Number, default: 0 },
+    status: { 
+      type: String, 
+      enum: ['enrolled', 'in-progress', 'completed', 'not-started'],
+      default: 'enrolled'
+    },
+    videosWatched: [Number],
+    completedWeeks: [Number],
+    enrolledAt: Date,
+    startedAt: Date,
+    completedAt: Date,
+    updatedAt: Date
+  }],
   
   savedJobs: [{
     type: mongoose.Schema.Types.ObjectId,
