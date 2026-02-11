@@ -64,19 +64,22 @@ const Dashboard = () => {
       const userData = userRes.data.data;
       
       const skills = userData.skills || [];
-      const totalLevel = skills.reduce((sum, s) => sum + (s.level || 0), 0);
-      const maxLevel = skills.length * 100;
-      const calculatedScore = maxLevel > 0 ? Math.round((totalLevel / maxLevel) * 100) : 0;
-      
-      const backendScore = userData.metrics?.skillReadinessScore || 0;
-      const backendBadges = userData.badges || [];
       const assessmentHistory = userData.assessmentHistory || [];
       const completedFromBackend = assessmentHistory.filter(a => a.status === 'completed');
       
+      // Get backend score from metrics (updated by assessments)
+      const backendScore = userData.metrics?.skillReadinessScore || 0;
+      
+      // Get assessment stats from store
       const stats = getStats();
-      const finalScore = Math.max(calculatedScore, backendScore, stats.averageScore);
+      const assessmentAvg = stats.averageScore || 0;
+      
+      // Use backend score first (from assessments), then fall back to assessment store
+      const finalScore = backendScore > 0 ? backendScore : assessmentAvg;
+      
+      const backendBadges = userData.badges || [];
       const finalBadgesCount = Math.max(backendBadges.length, stats.badgesCount);
-      const finalAssessmentCount = Math.max(completedFromBackend.length, stats.completedCount);
+      const finalAssessmentCount = completedFromBackend.length;
       
       setReadinessScore(finalScore);
       setUserSkills(skills);
@@ -103,8 +106,8 @@ const Dashboard = () => {
       
       const updates = [];
       if (finalAssessmentCount > 0) {
-        const avgScore = stats.averageScore > 0 ? stats.averageScore : backendScore;
-        updates.push({ id: 'update-1', type: 'success', message: `${finalAssessmentCount} assessments completed with ${avgScore}% avg score!`, time: 'Updated', icon: '🎯' });
+        const displayScore = backendScore > 0 ? backendScore : assessmentAvg;
+        updates.push({ id: 'update-1', type: 'success', message: `${finalAssessmentCount} assessments completed with ${displayScore}% avg score!`, time: 'Updated', icon: '🎯' });
       } else {
         updates.push({ id: 'update-1', type: 'info', message: 'Complete assessments to increase your skill score!', time: 'Now', icon: '📊' });
       }

@@ -410,15 +410,15 @@ router.post('/save-result', protect, async (req, res) => {
       // Calculate new skill readiness score
       const completedAssessments = user.assessmentHistory.filter(a => a.status === 'completed');
       const totalScore = completedAssessments.reduce((sum, a) => sum + (a.score || 0), 0);
-      const avgScore = completedAssessments.length > 0 ? totalScore / completedAssessments.length : 0;
+      const avgScore = completedAssessments.length > 0 ? Math.round(totalScore / completedAssessments.length) : 0;
       
       // Initialize metrics if not exists
       if (!user.metrics) {
         user.metrics = {};
       }
       
-      // Update user's skill readiness score in metrics
-      user.metrics.skillReadinessScore = Math.round(avgScore);
+      // Update user's skill readiness score in metrics to reflect assessment performance
+      user.metrics.skillReadinessScore = Math.max(user.metrics.skillReadinessScore || 0, avgScore);
       user.metrics.assessmentsTaken = completedAssessments.length;
       
       // Add badge to user skills if earned
