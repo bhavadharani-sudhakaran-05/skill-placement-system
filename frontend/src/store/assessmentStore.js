@@ -36,6 +36,12 @@ const useAssessmentStore = create((set, get) => ({
 
       // Load data for a specific user - fetches from backend first
       loadForUser: async (userId) => {
+        // Clear old persist keys and any previous user's data
+        try {
+          localStorage.removeItem('course-progress-storage'); // Old persist key
+          localStorage.removeItem('assessment-storage'); // Old persist key
+        } catch {}
+        
         // Clear any previous user's data
         set({ 
           currentUserId: userId, 
@@ -48,7 +54,7 @@ const useAssessmentStore = create((set, get) => ({
         });
         
         try {
-          // Fetch fresh data from backend
+          // Always fetch fresh data from MongoDB via backend
           const response = await api.get('/users/get-progress');
           if (response.data.success && response.data.data.assessmentData) {
             const backendData = response.data.data.assessmentData;
@@ -60,7 +66,7 @@ const useAssessmentStore = create((set, get) => ({
               lastUpdated: Date.now(),
               isLoading: false
             });
-            // Also save to localStorage as cache for this user
+            // Save to user-specific localStorage as backup cache
             saveUserData(userId, {
               completedAssessments: backendData.completedAssessments || [],
               badgesEarned: backendData.badgesEarned || [],
@@ -71,10 +77,10 @@ const useAssessmentStore = create((set, get) => ({
             return;
           }
         } catch (error) {
-          console.log('Could not fetch from backend, using local data:', error.message);
+          console.log('Could not fetch from backend:', error.message);
         }
         
-        // Fallback to localStorage only if backend fails
+        // Only fallback to localStorage for the SAME user
         const userData = loadUserData(userId);
         set({
           completedAssessments: userData.completedAssessments || [],

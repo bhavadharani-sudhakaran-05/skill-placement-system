@@ -75,11 +75,28 @@ const useAuthStore = create(
       },
 
       logout: () => {
+        const currentUserId = useCourseStore.getState().currentUserId;
+        
         // Save current user's data before clearing
         useCourseStore.getState()._saveForCurrentUser();
         useAssessmentStore.getState()._saveForCurrentUser();
 
-        // Clear stores (in-memory state only, per-user data stays in localStorage)
+        // Clear all user-specific localStorage data
+        if (currentUserId) {
+          try {
+            localStorage.removeItem(`course-progress-${currentUserId}`);
+            localStorage.removeItem(`assessment-${currentUserId}`);
+          } catch {}
+        }
+        
+        // Also clear old persist keys if they exist
+        try {
+          localStorage.removeItem('course-progress-storage');
+          localStorage.removeItem('assessment-storage');
+          localStorage.removeItem('auth-storage');
+        } catch {}
+
+        // Clear stores (in-memory state only)
         useCourseStore.getState().reset();
         useAssessmentStore.getState().clearAssessments();
 
