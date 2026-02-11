@@ -27,10 +27,12 @@ const useAuthStore = create(
             isLoading: false 
           });
 
-          // Load user-specific progress data
+          // Load user-specific progress data (non-blocking)
           const userId = user.id || user._id;
-          useCourseStore.getState().loadForUser(userId);
-          useAssessmentStore.getState().loadForUser(userId);
+          Promise.all([
+            useCourseStore.getState().loadForUser(userId).catch(e => console.log('Course load error:', e)),
+            useAssessmentStore.getState().loadForUser(userId).catch(e => console.log('Assessment load error:', e))
+          ]).catch(() => {});
           
           return { success: true };
         } catch (error) {
@@ -55,10 +57,12 @@ const useAuthStore = create(
             isLoading: false 
           });
 
-          // Fresh user — load empty data for this user
+          // Fresh user — load empty data for this user (non-blocking)
           const userId = user.id || user._id;
-          useCourseStore.getState().loadForUser(userId);
-          useAssessmentStore.getState().loadForUser(userId);
+          Promise.all([
+            useCourseStore.getState().loadForUser(userId).catch(e => console.log('Course load error:', e)),
+            useAssessmentStore.getState().loadForUser(userId).catch(e => console.log('Assessment load error:', e))
+          ]).catch(() => {});
           
           return { success: true };
         } catch (error) {
