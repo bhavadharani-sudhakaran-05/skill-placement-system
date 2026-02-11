@@ -109,26 +109,28 @@ const useCourseStore = create(
       },
 
       // Mark video as watched
-      markVideoWatched: (courseId, videoId, totalVideos) => {
+      markVideoWatched: (courseId, videoId, totalVideos, courseTitle) => {
         const current = get().courseProgress[courseId] || { videosWatched: [] };
         const videosWatched = [...new Set([...(current.videosWatched || []), videoId])];
         const progress = Math.round((videosWatched.length / totalVideos) * 100);
         
         get().updateCourseProgress(courseId, {
           videosWatched,
-          progress
+          progress,
+          courseTitle: courseTitle || current.courseTitle || ''
         });
       },
 
       // Mark roadmap week as completed
-      markRoadmapCompleted: (courseId, weekIndex, totalWeeks) => {
+      markRoadmapCompleted: (courseId, weekIndex, totalWeeks, courseTitle) => {
         const current = get().courseProgress[courseId] || { completedWeeks: [] };
         const completedWeeks = [...new Set([...(current.completedWeeks || []), weekIndex])];
         const progress = Math.round((completedWeeks.length / totalWeeks) * 100);
         
         get().updateCourseProgress(courseId, {
           completedWeeks,
-          progress
+          progress,
+          courseTitle: courseTitle || current.courseTitle || ''
         });
       },
 

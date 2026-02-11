@@ -591,7 +591,7 @@ const Courses = () => {
 
   const markVideoWatched = (courseId, videoId, course) => {
     const totalVideos = course?.videos?.length || 6;
-    storeMarkVideoWatched(courseId, videoId, totalVideos);
+    storeMarkVideoWatched(courseId, videoId, totalVideos, course?.title || '');
   };
 
   const handleEnroll = (course) => {
