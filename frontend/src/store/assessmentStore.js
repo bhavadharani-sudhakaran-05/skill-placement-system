@@ -39,10 +39,19 @@ const useAssessmentStore = create(
 
       // Load data for a specific user - fetches from backend first
       loadForUser: async (userId) => {
-        set({ currentUserId: userId, isLoading: true });
+        // Clear any previous user's data
+        set({ 
+          currentUserId: userId, 
+          isLoading: true,
+          completedAssessments: [],
+          totalScore: 0,
+          averageScore: 0,
+          badgesEarned: [],
+          lastUpdated: null
+        });
         
         try {
-          // Try to fetch from backend first
+          // Fetch fresh data from backend
           const response = await api.get('/users/get-progress');
           if (response.data.success && response.data.data.assessmentData) {
             const backendData = response.data.data.assessmentData;
@@ -54,7 +63,7 @@ const useAssessmentStore = create(
               lastUpdated: Date.now(),
               isLoading: false
             });
-            // Also save to localStorage as cache
+            // Also save to localStorage as cache for this user
             saveUserData(userId, {
               completedAssessments: backendData.completedAssessments || [],
               badgesEarned: backendData.badgesEarned || [],
@@ -68,7 +77,7 @@ const useAssessmentStore = create(
           console.log('Could not fetch from backend, using local data:', error.message);
         }
         
-        // Fallback to localStorage
+        // Fallback to localStorage only if backend fails
         const userData = loadUserData(userId);
         set({
           completedAssessments: userData.completedAssessments || [],

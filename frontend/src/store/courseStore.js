@@ -32,7 +32,12 @@ const useCourseStore = create(
 
       // Load data for a specific user - fetches from backend first, then localStorage fallback
       loadForUser: async (userId) => {
-        set({ currentUserId: userId });
+        // Clear any previous user's data first
+        set({ 
+          currentUserId: userId,
+          courseProgress: {},
+          lastUpdated: null
+        });
         
         try {
           // Try to fetch from backend first
