@@ -71,7 +71,7 @@ const seedDatabase = async () => {
     const jobsData = [
       {
         title: 'Software Engineer',
-        company: { name: 'TCS', website: 'https://ibegin.tcs.com/iBegin/', industry: 'IT Services', size: '10000+' },
+        company: { name: 'TCS', website: 'https://www.tcs.com/careers', industry: 'IT Services', size: '10000+' },
         location: { city: 'Chennai', state: 'Tamil Nadu', country: 'India', remote: false },
         type: 'full-time',
         mode: 'hybrid',
@@ -91,7 +91,7 @@ const seedDatabase = async () => {
       },
       {
         title: 'Associate Software Engineer',
-        company: { name: 'Infosys', website: 'https://www.infosys.com/careers.html', industry: 'IT Services', size: '10000+' },
+        company: { name: 'Infosys', website: 'https://www.infosys.com/careers/', industry: 'IT Services', size: '10000+' },
         location: { city: 'Bangalore', state: 'Karnataka', country: 'India', remote: false },
         type: 'full-time',
         mode: 'onsite',
@@ -111,7 +111,7 @@ const seedDatabase = async () => {
       },
       {
         title: 'Full Stack Developer',
-        company: { name: 'Wipro', website: 'https://careers.wipro.com/', industry: 'IT Services', size: '10000+' },
+        company: { name: 'Wipro', website: 'https://careers.wipro.com/careers-home', industry: 'IT Services', size: '10000+' },
         location: { city: 'Hyderabad', state: 'Telangana', country: 'India', remote: true },
         type: 'full-time',
         mode: 'hybrid',
@@ -132,7 +132,7 @@ const seedDatabase = async () => {
       },
       {
         title: 'Data Analyst',
-        company: { name: 'Zoho', website: 'https://www.zoho.com/careers.html', industry: 'Product Development', size: '5000-10000' },
+        company: { name: 'Zoho', website: 'https://www.zoho.com/careers/', industry: 'Product Development', size: '5000-10000' },
         location: { city: 'Chennai', state: 'Tamil Nadu', country: 'India', remote: false },
         type: 'full-time',
         mode: 'onsite',
@@ -152,7 +152,7 @@ const seedDatabase = async () => {
       },
       {
         title: 'DevOps Engineer',
-        company: { name: 'Cognizant', website: 'https://careers.cognizant.com/', industry: 'IT Services', size: '10000+' },
+        company: { name: 'Cognizant', website: 'https://careers.cognizant.com/global/en', industry: 'IT Services', size: '10000+' },
         location: { city: 'Pune', state: 'Maharashtra', country: 'India', remote: true },
         type: 'full-time',
         mode: 'remote',

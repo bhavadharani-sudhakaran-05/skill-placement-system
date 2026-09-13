@@ -402,13 +402,13 @@ const Analytics = () => {
     
     // Get month labels with positions
     const monthLabels = [];
-    let lastMonth = -1;
+    const labeledMonths = new Set();
     weeks.forEach((week, weekIndex) => {
       const firstDayOfWeek = week[0].date;
       const month = firstDayOfWeek.getMonth();
-      if (month !== lastMonth) {
+      if (!labeledMonths.has(month)) {
         monthLabels.push({ month: months[month], position: weekIndex });
-        lastMonth = month;
+        labeledMonths.add(month);
       }
     });
     
@@ -492,7 +492,7 @@ const Analytics = () => {
     contributionLabels: { display: 'flex', flexDirection: 'column', gap: '2px', marginRight: '6px', paddingTop: '16px' },
     contributionDayLabel: { fontSize: '9px', color: '#6b7280', height: '10px', lineHeight: '10px' },
     contributionWeeksContainer: { display: 'flex', flexDirection: 'column' },
-    contributionMonths: { display: 'flex', marginBottom: '3px', fontSize: '9px', color: '#6b7280' },
+    contributionMonths: { display: 'grid', gridTemplateColumns: 'repeat(53, 10px)', columnGap: '4px', marginBottom: '3px', fontSize: '9px', color: '#6b7280' },
     contributionWeeks: { display: 'flex', gap: '2px' },
     contributionWeek: { display: 'flex', flexDirection: 'column', gap: '2px' },
     contributionDay: { width: '10px', height: '10px', borderRadius: '2px', cursor: 'pointer' },
@@ -589,8 +589,8 @@ const Analytics = () => {
             <div style={styles.contributionWeeksContainer}>
               {/* Month labels */}
               <div style={styles.contributionMonths}>
-                {contributionData.monthLabels.map((m, i) => (
-                  <span key={i} style={{ marginLeft: i === 0 ? 0 : `${(m.position - (contributionData.monthLabels[i-1]?.position || 0)) * 14 - 20}px` }}>
+                {contributionData.monthLabels.map((m) => (
+                  <span key={`${m.month}-${m.position}`} style={{ gridColumn: m.position + 1 }}>
                     {m.month}
                   </span>
                 ))}

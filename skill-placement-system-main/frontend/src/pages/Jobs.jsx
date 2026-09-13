@@ -79,6 +79,7 @@ const Jobs = () => {
           experience: job.experience ? `${job.experience.min || 0}-${job.experience.max || '?'} years` : 'Not specified',
           salary: job.salary ? `₹${(job.salary.min / 100000).toFixed(1)}-${(job.salary.max / 100000).toFixed(1)} LPA` : 'Not disclosed',
           match: job.matchScore || 0,
+          matchReason: job.matchReason || '',
           matchingSkills: job.matchingSkills || [],
           missingSkills: job.missingSkills || [],
           skills: (job.skills || []).map(s => s.name || s),
@@ -402,6 +403,16 @@ const Jobs = () => {
                     transition={{ duration: 0.25 }}
                     style={{ overflow: 'hidden' }}
                   >
+                    {/* AI Reasoning */}
+                    {job.matchReason && (
+                      <div style={{ ...sectionStyle, background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                        <div style={{ ...sectionTitle, color: '#059669' }}><Star size={14} /> AI Recommendation Reason</div>
+                        <div style={{ fontSize: '0.75rem', color: '#047857', paddingLeft: '0.2rem' }}>
+                          {job.matchReason}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Requirements */}
                     {job.requirements.length > 0 && (
                       <div style={sectionStyle}>

@@ -4,6 +4,7 @@ const User = require('../models/User');
 const { protect, authorize } = require('../middleware/auth.middleware');
 const { validateJob } = require('../middleware/validation.middleware');
 const SkillGapService = require('../services/skillGap.service');
+const RecommendationService = require('../services/recommendation.service');
 
 const router = express.Router();
 
@@ -107,40 +108,28 @@ router.get('/matched', protect, async (req, res) => {
 
     const userSkillsArray = Array.from(userSkills);
 
-    // Get all active jobs
-    const jobs = await Job.find({ status: 'active', isActive: true })
-      .populate('postedBy', 'name')
-      .sort({ createdAt: -1 })
-      .lean();
-
-    // Calculate match score for each job
-    const matchedJobs = jobs.map(job => {
-      const jobSkills = (job.skills || []).map(s => (s.name || '').toLowerCase());
+    // Use RecommendationService to get AI-powered job matches
+    const recommendations = await RecommendationService.getJobRecommendations(req.user.id, { limit: 50 });
+    
+    // recommendations already has the full job objects with matchScore and matchReason added
+    const matchedJobs = recommendations.map(rec => {
+      // Also calculate matching and missing skills for the UI
+      const jobSkills = (rec.skills || []).map(s => (s.name || '').toLowerCase());
       const requiredSkills = jobSkills.filter(Boolean);
-
-      if (requiredSkills.length === 0) {
-        return { ...job, matchScore: 50, matchingSkills: [], missingSkills: [] };
-      }
-
+      
       const matching = requiredSkills.filter(js => 
         userSkillsArray.some(us => us.includes(js) || js.includes(us))
       );
       const missing = requiredSkills.filter(js => 
         !userSkillsArray.some(us => us.includes(js) || js.includes(us))
       );
-
-      const matchScore = Math.round((matching.length / requiredSkills.length) * 100);
-
+      
       return {
-        ...job,
-        matchScore,
+        ...rec,
         matchingSkills: matching,
         missingSkills: missing
       };
     });
-
-    // Sort by match score descending
-    matchedJobs.sort((a, b) => b.matchScore - a.matchScore);
 
     res.json({
       success: true,
