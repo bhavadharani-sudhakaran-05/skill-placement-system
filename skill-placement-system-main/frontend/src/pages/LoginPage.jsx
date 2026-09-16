@@ -114,18 +114,18 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit}>
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Email Address</label>
+              <label htmlFor="email" style={styles.label}>Email Address</label>
               <div style={styles.inputWrapper}>
                 <Mail size={20} style={styles.inputIcon} />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" style={styles.input} required />
+                <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" style={styles.input} required />
               </div>
             </div>
 
             <div style={styles.inputGroup}>
-              <label style={styles.label}>Password</label>
+              <label htmlFor="password" style={styles.label}>Password</label>
               <div style={styles.inputWrapper}>
                 <Lock size={20} style={styles.inputIcon} />
-                <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" style={styles.input} required />
+                <input id="password" type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" style={styles.input} required />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.eyeButton}>
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>

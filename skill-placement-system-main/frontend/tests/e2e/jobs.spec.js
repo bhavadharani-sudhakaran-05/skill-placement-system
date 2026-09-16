@@ -4,14 +4,12 @@ test.describe('Jobs Page', () => {
   test('should load jobs page', async ({ page }) => {
     // Some apps require login first. We assume jobs might be accessible or will redirect.
     await page.goto('/jobs');
-    
-    // Just verify that the page loads without crashing. 
-    // If it redirects to login, check for login.
-    const url = page.url();
-    if (url.includes('/login')) {
-      await expect(page.getByRole('heading', { name: /login/i })).toBeVisible();
-    } else {
-      await expect(page.getByRole('heading', { name: /jobs/i })).toBeVisible();
-    }
+
+    // The app uses client-side routing, so page.url() might not reflect the redirect immediately.
+    // Wait for either the jobs heading or the login heading to appear.
+    const jobsHeading = page.getByRole('heading', { name: /job recommendations/i });
+    const loginHeading = page.getByRole('heading', { name: /sign in/i });
+
+    await expect(jobsHeading.or(loginHeading)).toBeVisible();
   });
 });
