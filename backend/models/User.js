@@ -99,7 +99,12 @@ const userSchema = new mongoose.Schema({
     parsedCertifications: [mongoose.Schema.Types.Mixed],
     parsedEducation: [mongoose.Schema.Types.Mixed],
     parsedExperience: [mongoose.Schema.Types.Mixed],
+    structuredData: mongoose.Schema.Types.Mixed,
     atsScore: Number,
+    skillMatchScore: Number,
+    formattingScore: Number,
+    keywordScore: Number,
+    scoreDetails: [mongoose.Schema.Types.Mixed],
     improvementSuggestions: [mongoose.Schema.Types.Mixed],
     analyzedAt: Date
   },
