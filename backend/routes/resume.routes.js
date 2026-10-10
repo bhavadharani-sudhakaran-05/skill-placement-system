@@ -1,286 +1,145 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
 const ResumeParserService = require('../services/resumeParser.service');
+const ResumeAnalysisService = require('../services/resumeAnalysis.service');
 
 const router = express.Router();
 
-/**
- * @route   POST /api/resume/upload
- * @desc    Upload and parse resume (PDF)
- * @access  Private
- */
-router.post('/upload', protect, upload.single('resume'), async (req, res) => {
+function handleUpload(req, res, next) {
+  upload.single('resume')(req, res, error => {
+    if (!error) return next();
+    const status = error.code === 'LIMIT_FILE_SIZE' ? 413 : (error.status || 400);
+    const message = error.code === 'LIMIT_FILE_SIZE'
+      ? 'Resume file exceeds the 5 MB limit.'
+      : (error.status ? error.message : 'The resume upload could not be accepted. Check that it is a PDF or DOCX under 5 MB.');
+    return res.status(status).json({ success: false, message, code: error.code || 'UPLOAD_INVALID' });
+  });
+}
+
+function safeFailure(res, error, fallback) {
+  const status = Number.isInteger(error.status) ? error.status : 500;
+  const known = Boolean(error.code);
+  return res.status(status).json({
+    success: false,
+    message: known ? error.message : fallback,
+    code: known ? error.code : 'RESUME_ANALYSIS_FAILED'
+  });
+}
+
+router.post('/upload', protect, handleUpload, async (req, res) => {
+  let tempFile;
   try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please upload a resume file (PDF or DOC)'
-      });
-    }
+    if (!req.file) return res.status(400).json({ success: false, message: 'Please select a PDF or DOCX resume.' });
+    tempFile = req.file.path;
+    const jobDescription = typeof req.body.jobDescription === 'string' ? req.body.jobDescription.trim() : '';
+    if (jobDescription.length > 20000) return res.status(400).json({ success: false, message: 'Job description must be 20,000 characters or fewer.' });
 
-    // Parse the resume
-    const parsedData = await ResumeParserService.parseResume(req.file.path);
-
-    // Update user's resume data (matches User model schema)
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      {
-        $set: {
-          resume: {
-            url: req.file.path,
-            filename: req.file.originalname,
-            uploadedAt: new Date(),
-            atsScore: parsedData.atsScore,
-            parsedData: {
-              skills: parsedData.parsedSkills || [],
-              experience: JSON.stringify(parsedData.parsedExperience || []),
-              education: JSON.stringify(parsedData.parsedEducation || [])
-            }
-          },
-          resumeAnalysis: {
-            parsedSkills: parsedData.parsedSkills || [],
-            parsedProjects: parsedData.parsedProjects || [],
-            parsedCertifications: parsedData.parsedCertifications || [],
-            parsedEducation: parsedData.parsedEducation || [],
-            parsedExperience: parsedData.parsedExperience || [],
-            atsScore: parsedData.atsScore,
-            improvementSuggestions: parsedData.improvementSuggestions || [],
-            analyzedAt: new Date()
-          }
+    const extracted = await ResumeParserService.extractDocument(tempFile, req.file.originalname);
+    const analysis = await ResumeAnalysisService.analyzeResumeText(extracted.text, jobDescription);
+    const user = await User.findByIdAndUpdate(req.user.id, {
+      $set: {
+        'resume.url': '',
+        'resume.filename': path.basename(req.file.originalname),
+        'resume.uploadedAt': new Date(),
+        'resume.atsScore': analysis.atsScore,
+        'resume.parsedData.skills': analysis.parsedSkills,
+        'resume.parsedData.experience': JSON.stringify(analysis.parsedExperience),
+        'resume.parsedData.education': JSON.stringify(analysis.parsedEducation),
+        resumeAnalysis: {
+          parsedSkills: analysis.parsedSkills,
+          parsedProjects: analysis.parsedProjects,
+          parsedCertifications: analysis.parsedCertifications,
+          parsedEducation: analysis.parsedEducation,
+          parsedExperience: analysis.parsedExperience,
+          structuredData: analysis.structuredData,
+          atsScore: analysis.atsScore,
+          skillMatchScore: analysis.skillMatchScore,
+          formattingScore: analysis.formattingScore,
+          keywordScore: analysis.keywordScore,
+          scoreDetails: analysis.scoreDetails,
+          improvementSuggestions: analysis.improvementSuggestions,
+          analyzedAt: new Date()
         }
-      },
-      { new: true }
-    );
-
-    // Auto-update skills from parsed resume
-    if (parsedData.parsedSkills && parsedData.parsedSkills.length > 0) {
-      const existingSkillNames = (user.skills || []).map(s => (s.name || '').toLowerCase());
-      const newSkills = parsedData.parsedSkills
-        .filter(skill => !existingSkillNames.includes(skill.toLowerCase()))
-        .map(skill => ({
-          name: skill,
-          level: 50,
-          verified: false,
-          category: 'technical'
-        }));
-
-      if (newSkills.length > 0) {
-        user.skills.push(...newSkills);
-        await user.save();
       }
-    }
+    }, { new: true, runValidators: true }).select('_id');
 
-    // Update skill readiness score if user model has the method
-    if (typeof user.updateSkillReadinessScore === 'function') {
-      await user.updateSkillReadinessScore();
-    }
-
-    // Calculate detailed scores
-    const normalizedText = (await require('pdf-parse')(require('fs').readFileSync(req.file.path))).text;
-    const wordCount = normalizedText.split(/\s+/).length;
-    const formattingScore = ResumeParserService.calculateFormattingScore(normalizedText);
-    const keywordScore = ResumeParserService.calculateKeywordScore(normalizedText);
-    const skillMatchScore = Math.min(100, (parsedData.parsedSkills.length / 15) * 100);
-
-    res.json({
+    if (!user) return res.status(404).json({ success: false, message: 'Your account could not be found.' });
+    return res.json({
       success: true,
-      message: 'Resume uploaded and parsed successfully',
+      message: 'Resume analyzed from its extracted content.',
       data: {
-        fileName: req.file.originalname,
-        parsedSkills: parsedData.parsedSkills,
-        parsedProjects: parsedData.parsedProjects,
-        parsedCertifications: parsedData.parsedCertifications,
-        parsedEducation: parsedData.parsedEducation,
-        parsedExperience: parsedData.parsedExperience,
-        atsScore: parsedData.atsScore,
-        skillMatchScore: Math.round(skillMatchScore),
-        formattingScore,
-        keywordScore,
-        wordCount,
-        improvementSuggestions: parsedData.improvementSuggestions
+        fileName: path.basename(req.file.originalname),
+        extractionSource: extracted.source,
+        extractionConfidence: extracted.source === 'ocr' ? 'review-recommended' : 'text-extracted',
+        ...analysis
       }
     });
   } catch (error) {
-    console.error('Resume upload error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to process resume',
-      error: error.message
-    });
+    return safeFailure(res, error, 'The resume could not be analyzed. Please check the file and try again.');
+  } finally {
+    if (tempFile) await fs.promises.rm(tempFile, { force: true }).catch(() => {});
   }
 });
 
-/**
- * @route   GET /api/resume
- * @desc    Get user's resume data
- * @access  Private
- */
 router.get('/', protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('resumeData');
-
-    if (!user.resumeData || !user.resumeData.filePath) {
-      return res.status(404).json({
-        success: false,
-        message: 'No resume uploaded yet'
-      });
-    }
-
-    res.json({
-      success: true,
-      data: user.resumeData
-    });
+    const user = await User.findById(req.user.id).select('resume resumeAnalysis');
+    if (!user?.resumeAnalysis?.analyzedAt) return res.status(404).json({ success: false, message: 'No resume analysis is available yet.' });
+    return res.json({ success: true, data: { resume: user.resume, analysis: user.resumeAnalysis } });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch resume data',
-      error: error.message
-    });
+    return res.status(500).json({ success: false, message: 'Failed to fetch resume analysis.' });
   }
 });
 
-/**
- * @route   GET /api/resume/ats-score
- * @desc    Get ATS score and suggestions
- * @access  Private
- */
 router.get('/ats-score', protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('resumeData');
-
-    if (!user.resumeData) {
-      return res.status(404).json({
-        success: false,
-        message: 'No resume uploaded yet'
-      });
-    }
-
-    res.json({
+    const user = await User.findById(req.user.id).select('resumeAnalysis');
+    if (!user?.resumeAnalysis?.analyzedAt) return res.status(404).json({ success: false, message: 'No resume analysis is available yet.' });
+    const analysis = user.resumeAnalysis;
+    return res.json({
       success: true,
       data: {
-        atsScore: user.resumeData.atsScore || 0,
-        improvementSuggestions: user.resumeData.improvementSuggestions || [],
-        skillsCount: user.resumeData.parsedSkills?.length || 0,
-        projectsCount: user.resumeData.parsedProjects?.length || 0,
-        certificationsCount: user.resumeData.parsedCertifications?.length || 0
+        atsScore: analysis.atsScore ?? null,
+        scoreDetails: analysis.scoreDetails || [],
+        improvementSuggestions: analysis.improvementSuggestions || [],
+        skillsCount: analysis.parsedSkills?.length || 0,
+        projectsCount: analysis.parsedProjects?.length || 0,
+        certificationsCount: analysis.parsedCertifications?.length || 0
       }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch ATS score',
-      error: error.message
-    });
+    return res.status(500).json({ success: false, message: 'Failed to fetch resume score.' });
   }
 });
 
-/**
- * @route   POST /api/resume/analyze-text
- * @desc    Analyze resume text without upload
- * @access  Private
- */
 router.post('/analyze-text', protect, async (req, res) => {
   try {
-    const { text } = req.body;
-
-    if (!text || text.length < 100) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide resume text (minimum 100 characters)'
-      });
+    const { text, jobDescription = '' } = req.body || {};
+    if (typeof text !== 'string' || text.trim().length < 120) {
+      return res.status(400).json({ success: false, message: 'Please provide at least 120 characters of resume text.' });
     }
-
-    const analysis = await ResumeParserService.analyzeResumeText(text);
-
-    res.json({
-      success: true,
-      data: analysis
-    });
+    if (typeof jobDescription !== 'string' || jobDescription.length > 20000) {
+      return res.status(400).json({ success: false, message: 'Job description must be text under 20,000 characters.' });
+    }
+    const normalizedText = ResumeParserService.normalizeResumeText(text);
+    const analysis = await ResumeAnalysisService.analyzeResumeText(normalizedText, jobDescription);
+    return res.json({ success: true, data: analysis });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to analyze resume',
-      error: error.message
-    });
+    return safeFailure(res, error, 'Failed to analyze the supplied resume text.');
   }
 });
 
-/**
- * @route   GET /api/resume/optimization-tips
- * @desc    Get resume optimization tips based on target job
- * @access  Private
- */
 router.get('/optimization-tips', protect, async (req, res) => {
   try {
-    const { targetRole } = req.query;
-    const user = await User.findById(req.user.id).select('resumeData skills');
-
-    const tips = [];
-
-    // General tips
-    tips.push({
-      category: 'format',
-      priority: 'high',
-      tip: 'Use a clean, ATS-friendly format without tables, images, or graphics'
-    });
-
-    // Skills-based tips
-    if (user.skills.length < 8) {
-      tips.push({
-        category: 'skills',
-        priority: 'high',
-        tip: 'Add more relevant technical skills to your resume (aim for 10-15 skills)'
-      });
-    }
-
-    // Resume data-based tips
-    if (user.resumeData) {
-      if (!user.resumeData.parsedProjects || user.resumeData.parsedProjects.length < 2) {
-        tips.push({
-          category: 'projects',
-          priority: 'high',
-          tip: 'Include at least 2-3 significant projects with quantifiable outcomes'
-        });
-      }
-
-      if (user.resumeData.atsScore < 70) {
-        tips.push({
-          category: 'ats',
-          priority: 'high',
-          tip: 'Use more action verbs and quantify your achievements to improve ATS score'
-        });
-      }
-
-      if (!user.resumeData.parsedCertifications || user.resumeData.parsedCertifications.length === 0) {
-        tips.push({
-          category: 'certifications',
-          priority: 'medium',
-          tip: 'Add relevant certifications to stand out from other candidates'
-        });
-      }
-    }
-
-    // Target role specific tips
-    if (targetRole) {
-      tips.push({
-        category: 'targeting',
-        priority: 'high',
-        tip: `Tailor your resume summary and skills section for ${targetRole} positions`
-      });
-    }
-
-    res.json({
-      success: true,
-      data: tips
-    });
+    const user = await User.findById(req.user.id).select('resumeAnalysis');
+    if (!user?.resumeAnalysis?.analyzedAt) return res.json({ success: true, data: [] });
+    return res.json({ success: true, data: user.resumeAnalysis.improvementSuggestions || [] });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to get optimization tips',
-      error: error.message
-    });
+    return res.status(500).json({ success: false, message: 'Failed to fetch resume suggestions.' });
   }
 });
 
