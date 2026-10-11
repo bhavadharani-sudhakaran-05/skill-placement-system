@@ -9,7 +9,6 @@ The goal is to help students identify skill gaps, improve their technical abilit
 | Resource | Link |
 |---|---|
 | **Live Application** | [Open SkillForge](https://skill-placement-system-1.onrender.com/) |
-| **Backend Service** | [Backend API](https://skill-placement-system.onrender.com) |
 | **GitHub Repository** | [View Source Code](https://github.com/bhavadharani-sudhakaran-05/skill-placement-system) |
 
 ## ✨ Key Features
