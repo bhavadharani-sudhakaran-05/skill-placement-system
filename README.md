@@ -1,257 +1,222 @@
-# SkillForge - Intelligent Skill Development and Placement Recommendation System
+SkillForge — Skill Development and Placement Recommendation System
 
-## 🚀 MERN Stack Application for SIH (Smart India Hackathon)
+1. Project Description
 
-A comprehensive platform that bridges the gap between education and industry by providing AI-powered skill development and placement recommendations.
+SkillForge is a MERN stack web application designed to help students develop technical skills and prepare for placement opportunities. It brings resume analysis, skill assessments, learning resources, job listings, and progress-related features together in one platform.
 
----
+The main goal of SkillForge is to help students understand their skills, identify areas for improvement, explore learning opportunities, and discover relevant job openings.
 
-## ⭐ 7 Unique Features
+2. Key Features
 
-### 1. AI-Based Skill Gap Analyzer
+-> Resume Analyzer: Upload and analyze resumes to extract relevant information, including skills and project details.
+-> Skill Assessments: Evaluate technical knowledge and identify areas for improvement.
+-> Learning Paths: Explore learning resources to improve technical skills.
+-> Job Listings: Browse job opportunities, view job details, and access application links.
+-> Student Dashboard: Access the application's main features from one place.
+-> Analytics Dashboard: Review available skill development and learning progress information.
 
-- Analyzes current skills vs industry requirements
-- Identifies missing skills with priority levels
-- Provides personalized improvement roadmap
+3. Technologies Used
 
-### 2. Personalized Placement Recommendation Engine
+ Frontend
+-> React.js
+-> JavaScript
+-> HTML5
+-> CSS3
+-> React Router
+-> Axios
 
-- ML-powered job matching algorithm
-- Considers skills, interests, and application history
-- Smart ranking based on match percentage
+ Backend
+-> Node.js
+-> Express.js
+-> REST APIs
+-> Mongoose
 
-### 3. Real-Time Skill Demand Tracker
+ Database
+-> MongoDB Atlas
 
-- Tracks industry skill demands in real-time
-- Predicts emerging skill trends
-- Alerts users about trending skills
+ Development Tools
+-> Code0
+-> Visual Studio Code
+-> Git
+-> GitHub
+-> npm
 
-### 4. AI-Powered Resume Parsing & Optimization
+ 4. Project Structure
 
-- Extracts skills, projects, certifications
-- Provides ATS compatibility score
-- Suggests improvements for better visibility
-
-### 5. Adaptive Learning Path Generator
-
-- Creates personalized learning paths
-- Adapts based on progress and performance
-- Recommends courses from beginner to advanced
-
-### 6. College & Recruiter Analytics Dashboard
-
-- Skill trend analytics for institutions
-- Placement probability predictions
-- Course effectiveness metrics
-
-### 7. Feedback Loop Learning Model
-
-- Placement outcomes feed back into system
-- Continuous improvement of recommendations
-- ML models get smarter over time
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **React 18** with Hooks
-- **Framer Motion** for animations
-- **React Router v6** for routing
-- **Zustand** for state management
-- **Recharts & Chart.js** for data visualization
-- **Tailwind-style CSS** with custom properties
-
-### Backend
-
-- **Node.js** with Express
-- **MongoDB** with Mongoose
-- **JWT** for authentication
-- **Natural** for NLP processing
-- **pdf-parse** for resume parsing
-
----
-
-## 📁 Project Structure
-
-```
-skill-placement-system/
+SkillForge-codezero/
 ├── backend/
-│   ├── middleware/        # Auth, upload, validation
-│   ├── models/           # MongoDB schemas
-│   ├── routes/           # API endpoints
-│   ├── services/         # Business logic & AI features
-│   ├── uploads/          # File uploads
-│   ├── server.js         # Express server
+│   ├── services/
+│   │   ├── resumeAi.service.js
+│   │   └── resumeAnalysis.service.js
+│   ├── tests/
+│   │   ├── fixtures/
+│   │   └── resumeAnalyzer.test.js
+│   ├── seedDatabase.js
+│   ├── server.js
 │   └── package.json
-│
-└── frontend/
-    ├── public/           # Static files
-    └── src/
-        ├── components/   # Reusable components
-        ├── pages/        # Route pages
-        ├── store/        # Zustand state
-        ├── utils/        # API utilities
-        ├── App.js        # Main app
-        └── index.css     # Global styles
-```
+├── frontend/
+│   ├── src/
+│   │   └── pages/
+│   └── package.json
+├── .gitignore
+└── README.md
 
----
+This is a simplified view of the project structure, showing selected files and folders.
 
-## 🚀 Getting Started
+ 5. Workflow Diagram
 
-### Prerequisites
+flowchart TD
+    A([Start]) --> B[Open SkillForge]
+    B --> C[Register or Log In]
+    C --> D[Student Dashboard]
 
-- Node.js 18+
-- MongoDB (local or Atlas)
-- npm or yarn
+    D --> E[Resume Analyzer]
+    D --> F[Skill Assessments]
+    D --> G[Learning Paths]
+    D --> H[Job Listings]
+    D --> I[Analytics Dashboard]
 
-### Installation
+    E --> J[Review Resume Results]
+    F --> K[Review Assessment Results]
+    G --> L[Improve Technical Skills]
+    H --> M[View Job Details and Apply]
+    I --> N[Review Progress]
 
-1. **Clone the repository**
+    J --> O([Continue Learning])
+    K --> O
+    L --> O
+    M --> O
+    N --> O
 
-```bash
-git clone <repository-url>
-cd skill-placement-system
-```
 
-2. **Install Backend Dependencies**
+ 6. Prerequisites
 
-```bash
+Before running SkillForge, install the following:
+
+- Node.js and npm
+- Git
+- A MongoDB Atlas account or another configured MongoDB instance
+- Visual Studio Code (recommended)
+
+ 7. Setup and Installation
+
+ Step 1: Clone the Repository
+
+Replace the placeholder with your public GitHub repository URL.
+
+git clone https://github.com/bhavadharani-sudhakaran-05/skill-placement-system
+cd SkillForge-codezero
+
+ Step 2: Install Backend Dependencies
+
+From the project root, run:
+
 cd backend
 npm install
-```
 
-3. **Configure Environment**
+ Step 3: Configure Backend Environment Variables
 
-```bash
-# Copy .env.example to .env and update values
-cp .env.example .env
-```
+Create the backend environment file required by the application and configure the necessary environment variables, including the MongoDB connection string and port if required.
 
-4. **Install Frontend Dependencies**
+Check the backend configuration for the exact variable names.
 
-```bash
-cd ../frontend
-npm install
-```
+Security: Never commit database credentials, JWT secrets, API keys, or other sensitive values to GitHub.
 
-### Running the Application
+ Step 4: Start the Backend
 
-1. **Start Backend Server**
+From the `backend` directory, run:
 
-```bash
-cd backend
 npm run dev
-# Server runs on http://localhost:5000
-```
 
-2. **Start Frontend Development Server**
+This starts the backend using the development script configured in `backend/package.json`.
 
-```bash
-cd frontend
+Alternatively, run the production-style start script:
+
 npm start
-# App runs on http://localhost:3000
-```
 
----
+ Step 5: Install Frontend Dependencies
 
-## 📡 API Endpoints
+Open a second terminal from the project root and run:
 
-### Authentication
+cd frontend
+npm install
 
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
+Configure the frontend API URL or other environment variables if required by the application.
 
-### Jobs
+ Step 6: Start the Frontend
 
-- `GET /api/jobs` - List all jobs
-- `GET /api/jobs/:id` - Get job details
-- `POST /api/jobs` - Create job (Recruiter)
+From the `frontend` directory, run:
 
-### Courses
+npm start
 
-- `GET /api/courses` - List all courses
-- `GET /api/courses/:id` - Get course details
+Open the local URL displayed in the terminal.
 
-### Recommendations
+ Step 7: Build the Frontend
 
-- `GET /api/recommendations/jobs` - Get job recommendations
-- `GET /api/recommendations/courses` - Get course recommendations
+From the `frontend` directory, run:
 
-### Skills
+npm run build
 
-- `GET /api/skills/gap/:jobId` - Analyze skill gap
-- `GET /api/skills/trending` - Get trending skills
+The optimized production files will be generated in the `frontend/build` directory.
 
-### Resume
+ 8. Testing
 
-- `POST /api/resume/parse` - Parse and analyze resume
-- `GET /api/resume/ats-score` - Get ATS score
+Backend Tests
 
-### Learning Paths
+Run the backend test suite from the project root:
 
-- `GET /api/learning-paths` - Get available paths
-- `POST /api/learning-paths/generate` - Generate personalized path
+npm --prefix backend test
 
-### Analytics
+Frontend Tests
 
-- `GET /api/analytics/dashboard` - Get analytics dashboard
-- `GET /api/analytics/skill-trends` - Get skill trends
+Run the frontend test runner:
 
----
+npm --prefix frontend test
 
-## 🎨 UI Features
+Production Build
 
-- **Modern Glassmorphism** design
-- **Smooth page transitions** with Framer Motion
-- **Responsive layout** for all devices
-- **Dark mode ready** with CSS variables
-- **Animated components** throughout
-- **Interactive charts** and visualizations
+Verify that the frontend builds successfully:
 
----
+npm --prefix frontend run build
 
-## 👥 User Roles
+9. Code0 Development Workflow
 
-1. **Student** - Access skill development features
-2. **Recruiter** - Post jobs and view analytics
-3. **College Admin** - Institution-level analytics
-4. **Admin** - Full system access
+Code0 was used during the development of SkillForge as part of an AI-assisted development workflow.
 
----
+It supported selected implementation, debugging, refactoring, and testing tasks. AI-generated suggestions were reviewed and validated against the application's expected behavior rather than accepted without checking.
 
-## 🔒 Security
+10. AI Development Experience
 
-- JWT token-based authentication
-- Password hashing with bcrypt
-- Role-based access control
-- Input validation & sanitization
+Using Code0 helped investigate technical issues, review code changes, and improve selected parts of the application. It supported development across frontend components, backend logic, API data flow, and testing.
 
----
+AI assistance was used as a development aid, while implementation decisions and validation remained part of the development process. Changes were checked through code review, application testing, and debugging where appropriate.
 
-## 📈 Future Enhancements
+Specific Tasks Where Code0 Helped
 
-- [ ] Video resume analysis
-- [ ] Interview preparation module
-- [ ] Company culture matching
-- [ ] Peer mentorship platform
-- [ ] Mobile app (React Native)
+1. Frontend Component Development: Assisted with investigating resume analyzer rendering and mapping extracted project information to frontend components.
+2. Backend Logic and Validation: Assisted with reviewing resume analysis logic and refining validation behavior.
+3. Debugging: Assisted with investigating the TCS Software Engineer application link used by the Jobs page.
+4. API and Database Integration: Assisted with tracing job data returned by the backend and verifying the updated job website URL in MongoDB Atlas.
+5. Testing and Refactoring: Assisted with updating resume analyzer test cases and adding regression coverage for project extraction behavior.
 
----
+These examples describe tasks performed during development. The implementation and validation approach can be explained further during a technical interview.
 
-## 🏆 Built for SIH
+11. Git and GitHub Practices
 
-This project showcases innovative use of AI/ML for bridging the skill gap between education and industry, helping students become job-ready and connecting them with the right opportunities.
+Git was used to track source-code changes and maintain a commit history. GitHub is used to host the project repository for review.
 
----
+Code0's terminal was used for Git operations during the development workflow.
 
-## 📄 License
+12. Future Enhancements
 
-MIT License - feel free to use and modify!
+-> Improve personalized learning recommendations.
+-> Expand job matching and skill gap analysis.
+-> Add more assessment categories.
+-> Improve progress reporting and visualization.
 
----
+13. Author
 
-**Made with ❤️ for Smart India Hackathon**
+Bhavadharani S
+
+Project: SkillForge — Skill Development and Placement Recommendation System
+
