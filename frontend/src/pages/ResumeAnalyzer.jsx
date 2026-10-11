@@ -236,7 +236,7 @@ const ResumeAnalyzer = () => {
               {analysisResults.parsedEducation.map((edu, i) => (
                 <div key={i} style={{ padding: '0.5rem 0', borderBottom: i < analysisResults.parsedEducation.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
                   <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{edu.degree || 'Degree'} {edu.field ? `in ${edu.field}` : ''}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{edu.institution} {edu.year ? `(${edu.year})` : ''} {edu.grade ? `• ${edu.grade}` : ''}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{edu.institution} {edu.year ? `(${edu.year})` : ''} {edu.grade ? `ΓÇó ${edu.grade}` : ''}</div>
                 </div>
               ))}
             </motion.div>
@@ -249,7 +249,7 @@ const ResumeAnalyzer = () => {
               {analysisResults.parsedExperience.map((exp, i) => (
                 <div key={i} style={{ padding: '0.5rem 0', borderBottom: i < analysisResults.parsedExperience.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
                   <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{exp.role || exp.company || 'Role'}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{exp.company} {exp.duration ? `• ${exp.duration}` : ''}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{exp.company} {exp.duration ? `ΓÇó ${exp.duration}` : ''}</div>
                 </div>
               ))}
             </motion.div>
@@ -279,7 +279,7 @@ const ResumeAnalyzer = () => {
               {analysisResults.parsedCertifications.map((cert, i) => (
                 <div key={i} style={{ padding: '0.5rem 0' }}>
                   <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{cert.name}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{cert.issuer} {cert.date ? `• ${cert.date}` : ''}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{cert.issuer} {cert.date ? `ΓÇó ${cert.date}` : ''}</div>
                 </div>
               ))}
             </motion.div>

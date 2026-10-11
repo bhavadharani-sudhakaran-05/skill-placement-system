@@ -1,5 +1,5 @@
-/**
- * ⭐ UNIQUE FEATURE 4: AI-Powered Resume Parsing & Optimization
+﻿/**
+ * Γ¡É UNIQUE FEATURE 4: AI-Powered Resume Parsing & Optimization
  * Extracts skills, projects, certifications from resume
  * Provides ATS score and improvement suggestions
  */
@@ -281,14 +281,14 @@ class ResumeParserService {
         const projectText = match[1];
         
         // Split by bullet points or newlines
-        const projectItems = projectText.split(/[•\-\n]/).filter(p => p.trim().length > 20);
+        const projectItems = projectText.split(/[ΓÇó\-\n]/).filter(p => p.trim().length > 20);
         
         for (let i = 0; i < Math.min(projectItems.length, 5); i++) {
           const item = projectItems[i].trim();
           if (item) {
             const technologies = this.extractSkills(item.toLowerCase());
             projects.push({
-              name: item.split(/[:\-–]/)[0]?.trim().substring(0, 100) || `Project ${i + 1}`,
+              name: item.split(/[:\-ΓÇô]/)[0]?.trim().substring(0, 100) || `Project ${i + 1}`,
               description: item.substring(0, 300),
               technologies: technologies.slice(0, 10),
               duration: ''
@@ -322,7 +322,7 @@ class ResumeParserService {
       const match = text.match(pattern);
       if (match && match[1]) {
         const certText = match[1];
-        const certItems = certText.split(/[•\-\n]/).filter(c => c.trim().length > 5);
+        const certItems = certText.split(/[ΓÇó\-\n]/).filter(c => c.trim().length > 5);
         
         for (let i = 0; i < Math.min(certItems.length, 10); i++) {
           const item = certItems[i].trim();
@@ -364,7 +364,7 @@ class ResumeParserService {
         for (const pattern of degreePatterns) {
           if (pattern.test(item)) {
             education.push({
-              institution: item.split(/[,\-–]/)[0]?.trim() || '',
+              institution: item.split(/[,\-ΓÇô]/)[0]?.trim() || '',
               degree: (item.match(pattern) || [''])[0],
               field: '',
               year: this.extractYear(item),
@@ -394,8 +394,8 @@ class ResumeParserService {
       
       for (const item of expItems.slice(0, 5)) {
         experience.push({
-          company: item.split(/[,\-–\n]/)[0]?.trim().substring(0, 100) || '',
-          role: item.split(/[,\-–\n]/)[1]?.trim().substring(0, 100) || '',
+          company: item.split(/[,\-ΓÇô\n]/)[0]?.trim().substring(0, 100) || '',
+          role: item.split(/[,\-ΓÇô\n]/)[1]?.trim().substring(0, 100) || '',
           duration: this.extractDuration(item),
           description: item.substring(0, 500)
         });
@@ -579,7 +579,7 @@ class ResumeParserService {
   }
 
   static extractDuration(text) {
-    const durationPattern = /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*\d{4}\s*[-–to]+\s*(present|\w+\s*\d{4})/i;
+    const durationPattern = /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*\d{4}\s*[-ΓÇôto]+\s*(present|\w+\s*\d{4})/i;
     const match = text.match(durationPattern);
     return match ? match[0] : '';
   }
@@ -597,7 +597,7 @@ class ResumeParserService {
     score += Math.min(30, sectionsFound * 6);
 
     // Check for consistent bullet points
-    const bullets = (text.match(/[•\-\*]/g) || []).length;
+    const bullets = (text.match(/[ΓÇó\-\*]/g) || []).length;
     score += Math.min(20, bullets * 2);
 
     // Word count in ideal range (300-800)

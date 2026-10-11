@@ -1,4 +1,4 @@
-const test = require('node:test');
+﻿const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const os = require('node:os');
@@ -366,18 +366,18 @@ Beacon
 Tech Stack: Node.js
 - Developed a status monitor that summarizes service health reports.
 EXPERIENCE
-Maple Lab — Intern, Summer 2024
+Maple Lab ΓÇö Intern, Summer 2024
 - Prepared weekly sample summaries for the research team.
 CERTIFICATIONS
-Cloud Basics — North Institute — 2024
-Data Foundations — West Academy — 2023
+Cloud Basics ΓÇö North Institute ΓÇö 2024
+Data Foundations ΓÇö West Academy ΓÇö 2023
 Accessibility Essentials`;
   const modelResult = {
     name: 'Alex Rivera', name_evidence: 'Alex Rivera',
     contact: { email: '', phone: '', links: [], evidence: 'Alex Rivera' },
     education: [],
     skills: { languages: ['Python', 'JavaScript'], frameworks: ['React'], databases: [], tools: ['r'], core_subjects: [], concepts: [], soft_skills: [] },
-    experience: [{ company: 'Maple Lab', role: 'Intern', duration: 'Summer 2024', responsibilities: ['Prepared weekly sample summaries for the research team.'], evidence: 'Maple Lab — Intern, Summer 2024 Prepared weekly sample summaries for the research team.', confidence: 0.9 }],
+    experience: [{ company: 'Maple Lab', role: 'Intern', duration: 'Summer 2024', responsibilities: ['Prepared weekly sample summaries for the research team.'], evidence: 'Maple Lab ΓÇö Intern, Summer 2024 Prepared weekly sample summaries for the research team.', confidence: 0.9 }],
     projects: [
       { title: 'Orchard', tech_stack: ['Python'], description: 'Built a crop tracker for local growers and documented seasonal harvest notes.', evidence: 'Orchard Tech Stack: Python Built a crop tracker for local growers and documented seasonal harvest notes.', confidence: 0.9 },
       { title: 'Harbor', tech_stack: ['React', 'JavaScript'], description: 'Created a shipping dashboard for viewing regional delivery status.', evidence: 'Harbor Tech Stack: React, JavaScript Created a shipping dashboard for viewing regional delivery status.', confidence: 0.9 },
@@ -385,8 +385,8 @@ Accessibility Essentials`;
     ],
     achievements: [],
     certifications: [
-      { name: 'Cloud Basics', issuer: 'North Institute', date: '2024', evidence: 'Cloud Basics — North Institute — 2024', confidence: 0.9 },
-      { name: 'Data Foundations', issuer: 'West Academy', date: '2023', evidence: 'Data Foundations — West Academy — 2023', confidence: 0.9 },
+      { name: 'Cloud Basics', issuer: 'North Institute', date: '2024', evidence: 'Cloud Basics ΓÇö North Institute ΓÇö 2024', confidence: 0.9 },
+      { name: 'Data Foundations', issuer: 'West Academy', date: '2023', evidence: 'Data Foundations ΓÇö West Academy ΓÇö 2023', confidence: 0.9 },
       { name: 'Accessibility Essentials', issuer: '', date: '', evidence: 'Accessibility Essentials', confidence: 0.9 }
     ],
     scores: { ats_score: 1, skill_match: 2, formatting: 3, keywords: 4 },

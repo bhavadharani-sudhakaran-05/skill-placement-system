@@ -1,4 +1,4 @@
-const ResumeAiService = require('./resumeAi.service');
+﻿const ResumeAiService = require('./resumeAi.service');
 
 const arrayFields = ['education', 'experience', 'projects', 'skills', 'certifications', 'awards', 'achievements', 'publications', 'additionalSections', 'recommendations'];
 const stopWords = new Set(['and', 'the', 'for', 'with', 'from', 'into', 'that', 'this', 'your', 'you', 'our', 'are', 'will', 'have', 'has', 'not', 'all', 'can', 'who', 'what', 'their', 'they', 'about', 'work', 'role', 'team', 'job', 'must', 'should', 'using', 'use', 'years', 'year', 'experience', 'ability', 'skills', 'skill', 'including', 'such', 'strong', 'good', 'also', 'within', 'across', 'required', 'preferred']);
@@ -293,9 +293,9 @@ function makeScores(source, data, jobDescription) {
   const readableRatio = source.replace(/[^\x09\x0a\x0d\x20-\x7e]/g, '').length / Math.max(source.length, 1);
   const reasonableLineRatio = lines.filter(line => line.length <= 180).length / Math.max(lines.length, 1);
   const recognizedHeading = /^(professional\s+)?(summary|profile|experience|employment history|work history|projects?|academic projects|education|qualifications|skills|technical skills|achievements|awards|certifications|publications)\s*:??$/im.test(source);
-  const listLines = lines.filter(line => /^\s*(?:[-*•▪◦]|\d+[.)])\s+/.test(line));
+  const listLines = lines.filter(line => /^\s*(?:[-*ΓÇóΓû¬Γùª]|\d+[.)])\s+/.test(line));
   const listConsistency = listLines.length < 2 ? 1 : (() => {
-    const markers = listLines.map(line => line.trim().match(/^([-*•▪◦]|\d+[.)])/)[0]);
+    const markers = listLines.map(line => line.trim().match(/^([-*ΓÇóΓû¬Γùª]|\d+[.)])/)[0]);
     const common = Math.max(...[...new Set(markers)].map(marker => markers.filter(value => value === marker).length));
     return common / markers.length;
   })();

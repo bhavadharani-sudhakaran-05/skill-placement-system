@@ -1,4 +1,4 @@
-const freshGraduate = {
+﻿const freshGraduate = {
   name: 'fresh graduate without employment',
   text: `Alex Rivera\nalex@example.test\nPROFILE\nRecent computer science graduate interested in accessible web applications.\nACADEMIC BACKGROUND\nBSc Computer Science, North University, 2025\nPROJECTS\nCampus Map: Built an accessible campus map with React and JavaScript.\nSKILLS\nReact, JavaScript, Git`,
   result: {
@@ -17,11 +17,11 @@ const freshGraduate = {
 
 const experiencedProfessional = {
   name: 'professional with multiple employers and roles',
-  text: `Morgan Lee\nWORK HISTORY\nNorthwind Labs — Software Engineer | 2021–2023\nBuilt a billing dashboard used by internal teams.\nCedar Systems — Senior Engineer | 2023–Present\nLed API migration and reduced deployment downtime.`,
+  text: `Morgan Lee\nWORK HISTORY\nNorthwind Labs ΓÇö Software Engineer | 2021ΓÇô2023\nBuilt a billing dashboard used by internal teams.\nCedar Systems ΓÇö Senior Engineer | 2023ΓÇôPresent\nLed API migration and reduced deployment downtime.`,
   result: {
     experience: [
-      { employer: 'Northwind Labs', role: 'Software Engineer', startDate: '2021', endDate: '2023', description: 'Built a billing dashboard used by internal teams.', evidence: 'Northwind Labs — Software Engineer | 2021–2023 Built a billing dashboard used by internal teams.', confidence: 0.92 },
-      { employer: 'Cedar Systems', role: 'Senior Engineer', startDate: '2023', endDate: 'Present', current: true, description: 'Led API migration and reduced deployment downtime.', evidence: 'Cedar Systems — Senior Engineer | 2023–Present Led API migration and reduced deployment downtime.', confidence: 0.94 }
+      { employer: 'Northwind Labs', role: 'Software Engineer', startDate: '2021', endDate: '2023', description: 'Built a billing dashboard used by internal teams.', evidence: 'Northwind Labs ΓÇö Software Engineer | 2021ΓÇô2023 Built a billing dashboard used by internal teams.', confidence: 0.92 },
+      { employer: 'Cedar Systems', role: 'Senior Engineer', startDate: '2023', endDate: 'Present', current: true, description: 'Led API migration and reduced deployment downtime.', evidence: 'Cedar Systems ΓÇö Senior Engineer | 2023ΓÇôPresent Led API migration and reduced deployment downtime.', confidence: 0.94 }
     ]
   },
   expected: { projects: 0, experience: 2, education: 0, skills: 0 }
@@ -48,19 +48,19 @@ const manyProjectsAndCertifications = {
 
 const noOptionalSections = {
   name: 'resume without projects or certifications',
-  text: `SUMMARY\nCustomer support specialist with experience resolving account questions.\nEXPERIENCE\nHarbor Services — Support Associate\nResolved billing questions and documented customer requests.`,
+  text: `SUMMARY\nCustomer support specialist with experience resolving account questions.\nEXPERIENCE\nHarbor Services ΓÇö Support Associate\nResolved billing questions and documented customer requests.`,
   result: {
     summary: { text: 'Customer support specialist with experience resolving account questions.', evidence: 'Customer support specialist with experience resolving account questions.', confidence: 0.9 },
-    experience: [{ employer: 'Harbor Services', role: 'Support Associate', description: 'Resolved billing questions and documented customer requests.', evidence: 'Harbor Services — Support Associate Resolved billing questions and documented customer requests.', confidence: 0.91 }]
+    experience: [{ employer: 'Harbor Services', role: 'Support Associate', description: 'Resolved billing questions and documented customer requests.', evidence: 'Harbor Services ΓÇö Support Associate Resolved billing questions and documented customer requests.', confidence: 0.91 }]
   },
   expected: { projects: 0, experience: 1, education: 0, skills: 0, certifications: 0 }
 };
 
 const nonstandardHeadings = {
   name: 'non-standard section labels',
-  text: `CAREER JOURNEY\nLumen Studio — Designer\nCreated product illustrations.\nWHAT I HAVE BUILT\nPortfolio Refresh: Reworked a portfolio using Figma.\nCORE COMPETENCIES\nFigma, prototyping`,
+  text: `CAREER JOURNEY\nLumen Studio ΓÇö Designer\nCreated product illustrations.\nWHAT I HAVE BUILT\nPortfolio Refresh: Reworked a portfolio using Figma.\nCORE COMPETENCIES\nFigma, prototyping`,
   result: {
-    experience: [{ employer: 'Lumen Studio', role: 'Designer', description: 'Created product illustrations.', evidence: 'Lumen Studio — Designer Created product illustrations.', confidence: 0.9 }],
+    experience: [{ employer: 'Lumen Studio', role: 'Designer', description: 'Created product illustrations.', evidence: 'Lumen Studio ΓÇö Designer Created product illustrations.', confidence: 0.9 }],
     projects: [{ title: 'Portfolio Refresh', description: 'Reworked a portfolio using Figma.', technologies: ['Figma'], evidence: 'Portfolio Refresh: Reworked a portfolio using Figma.', confidence: 0.9 }],
     skills: [{ name: 'Figma', category: 'tools', source: 'explicit', evidence: 'Figma, prototyping', confidence: 0.9 }]
   },
@@ -69,10 +69,10 @@ const nonstandardHeadings = {
 
 const wrappedMultipage = {
   name: 'wrapped bullets and repeated page headers',
-  text: `Taylor Quinn | taylor@example.test\nEXPERIENCE\nPine Works — Analyst\nImproved the reporting process by consolidating weekly reports\ninto one documented workflow.\nTaylor Quinn | taylor@example.test\nPage 2\nPROJECTS\nTransit Review: Analyzed regional transit schedules.`,
+  text: `Taylor Quinn | taylor@example.test\nEXPERIENCE\nPine Works ΓÇö Analyst\nImproved the reporting process by consolidating weekly reports\ninto one documented workflow.\nTaylor Quinn | taylor@example.test\nPage 2\nPROJECTS\nTransit Review: Analyzed regional transit schedules.`,
   result: {
     contact: { name: 'Taylor Quinn', email: 'taylor@example.test', evidence: 'Taylor Quinn taylor@example.test', confidence: 0.9 },
-    experience: [{ employer: 'Pine Works', role: 'Analyst', description: 'Improved the reporting process by consolidating weekly reports into one documented workflow.', evidence: 'Pine Works — Analyst Improved the reporting process by consolidating weekly reports into one documented workflow.', confidence: 0.91 }],
+    experience: [{ employer: 'Pine Works', role: 'Analyst', description: 'Improved the reporting process by consolidating weekly reports into one documented workflow.', evidence: 'Pine Works ΓÇö Analyst Improved the reporting process by consolidating weekly reports into one documented workflow.', confidence: 0.91 }],
     projects: [{ title: 'Transit Review', description: 'Analyzed regional transit schedules.', evidence: 'Transit Review: Analyzed regional transit schedules.', confidence: 0.88 }]
   },
   expected: { projects: 1, experience: 1, education: 0, skills: 0 }
@@ -95,23 +95,23 @@ const unusualLayout = {
 
 const duplicateSkillsAndArtifacts = {
   name: 'duplicate skills and broken extraction artifacts',
-  text: `SKILLS\nJavaScript, JavaScript, React.js\nEXPERIENCE\nBrightline — Developer\nMaintained a React.js interface.\n--- ---`,
+  text: `SKILLS\nJavaScript, JavaScript, React.js\nEXPERIENCE\nBrightline ΓÇö Developer\nMaintained a React.js interface.\n--- ---`,
   result: {
     skills: [
       { name: 'JavaScript', category: 'technical', source: 'explicit', evidence: 'JavaScript, JavaScript, React.js', confidence: 0.95 },
       { name: 'JavaScript', category: 'technical', source: 'explicit', evidence: 'JavaScript, JavaScript, React.js', confidence: 0.95 },
       { name: 'React.js', category: 'framework', source: 'explicit', evidence: 'JavaScript, JavaScript, React.js', confidence: 0.9 }
     ],
-    experience: [{ employer: 'Brightline', role: 'Developer', description: 'Maintained a React.js interface.', evidence: 'Brightline — Developer Maintained a React.js interface.', confidence: 0.89 }]
+    experience: [{ employer: 'Brightline', role: 'Developer', description: 'Maintained a React.js interface.', evidence: 'Brightline ΓÇö Developer Maintained a React.js interface.', confidence: 0.89 }]
   },
   expected: { projects: 0, experience: 1, education: 0, skills: 2 }
 };
 
 const incompleteDates = {
   name: 'incomplete dates and missing details',
-  text: `EXPERIENCE\nMaple Lab — Intern\nPrepared weekly sample summaries.\nEDUCATION\nDiploma in Design, Central School`,
+  text: `EXPERIENCE\nMaple Lab ΓÇö Intern\nPrepared weekly sample summaries.\nEDUCATION\nDiploma in Design, Central School`,
   result: {
-    experience: [{ employer: 'Maple Lab', role: 'Intern', description: 'Prepared weekly sample summaries.', evidence: 'Maple Lab — Intern Prepared weekly sample summaries.', confidence: 0.9 }],
+    experience: [{ employer: 'Maple Lab', role: 'Intern', description: 'Prepared weekly sample summaries.', evidence: 'Maple Lab ΓÇö Intern Prepared weekly sample summaries.', confidence: 0.9 }],
     education: [{ institution: 'Central School', degree: 'Diploma', field: 'Design', evidence: 'Diploma in Design, Central School', confidence: 0.88 }]
   },
   expected: { projects: 0, experience: 1, education: 1, skills: 0 }

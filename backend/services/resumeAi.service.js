@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = 'gemini-3.8-flash';
+﻿const DEFAULT_MODEL = 'gemini-3.8-flash';
 const MAX_SOURCE_CHARS = 30000;
 const REQUEST_TIMEOUT_MS = 35000;
 

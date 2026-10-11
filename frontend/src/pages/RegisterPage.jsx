@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, Mail, Lock, Eye, EyeOff, ArrowRight, User,
-  GraduationCap, Briefcase, Building2, Check, ChevronLeft
+  GraduationCap, Building2, Check, ChevronLeft
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../store/authStore';
@@ -12,8 +12,7 @@ const RegisterPage = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '', email: '', password: '', confirmPassword: '',
-    role: 'student', institution: '', department: '', graduationYear: '',
-    company: '', designation: ''
+    role: 'student', institution: '', department: '', graduationYear: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,9 +20,7 @@ const RegisterPage = () => {
   const { register } = useAuthStore();
 
   const roles = [
-    { id: 'student', icon: GraduationCap, title: 'Student', description: 'Looking for skill development and job opportunities' },
-    { id: 'recruiter', icon: Briefcase, title: 'Recruiter', description: 'Hiring talent for your organization' },
-    { id: 'college', icon: Building2, title: 'College Admin', description: 'Managing placement activities for your institution' }
+    { id: 'student', icon: GraduationCap, title: 'Student', description: 'Looking for skill development and job opportunities' }
   ];
 
   const features = [
@@ -141,7 +138,7 @@ const RegisterPage = () => {
               {step === 1 && (
                 <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                   <h1 style={styles.title}>Join SkillForge</h1>
-                  <p style={styles.subtitle}>Select your role to get started</p>
+                  <p style={styles.subtitle}>Create a student account to get started</p>
                   
                   {roles.map((role) => (
                     <motion.button
@@ -212,35 +209,6 @@ const RegisterPage = () => {
                         </div>
                       </div>
                     </>
-                  )}
-
-                  {formData.role === 'recruiter' && (
-                    <>
-                      <div style={styles.inputGroup}>
-                        <label style={styles.label}>Company</label>
-                        <div style={styles.inputWrapper}>
-                          <Briefcase size={20} style={styles.inputIcon} />
-                          <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Your Company" style={styles.input} />
-                        </div>
-                      </div>
-                      <div style={styles.inputGroup}>
-                        <label style={styles.label}>Designation</label>
-                        <div style={styles.inputWrapper}>
-                          <User size={20} style={styles.inputIcon} />
-                          <input type="text" name="designation" value={formData.designation} onChange={handleChange} placeholder="HR Manager" style={styles.input} />
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {formData.role === 'college' && (
-                    <div style={styles.inputGroup}>
-                      <label style={styles.label}>Institution Name</label>
-                      <div style={styles.inputWrapper}>
-                        <Building2 size={20} style={styles.inputIcon} />
-                        <input type="text" name="institution" value={formData.institution} onChange={handleChange} placeholder="College/University Name" style={styles.input} />
-                      </div>
-                    </div>
                   )}
 
                   <div style={styles.buttonRow}>
