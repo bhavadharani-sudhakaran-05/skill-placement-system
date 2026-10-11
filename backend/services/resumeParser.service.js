@@ -6,9 +6,72 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+const { execFile } = require('child_process');
+const { promisify } = require('util');
 const pdfParse = require('pdf-parse');
+const mammoth = require('mammoth');
 const natural = require('natural');
 const Skill = require('../models/Skill');
+
+const execFileAsync = promisify(execFile);
+const MAX_RESUME_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_OCR_PAGES = 25;
+
+function parserError(message, code, status = 422) {
+  return Object.assign(new Error(message), { code, status });
+}
+
+function hasReadableText(value) {
+  return Boolean(String(value || '').replace(/[\s\u200b\ufeff]/g, ''));
+}
+
+async function extractScannedPdfText(filePath, pageCount) {
+  if (Number(pageCount) > MAX_OCR_PAGES) {
+    throw parserError(`Scanned PDFs over ${MAX_OCR_PAGES} pages cannot be OCR processed.`, 'DOCUMENT_TOO_LARGE', 413);
+  }
+
+  let temporaryDirectory;
+  try {
+    temporaryDirectory = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'skillforge-resume-ocr-'));
+    const imagePrefix = path.join(temporaryDirectory, 'page');
+    try {
+      await execFileAsync('pdftoppm', ['-f', '1', '-l', String(MAX_OCR_PAGES), '-r', '200', '-png', filePath, imagePrefix], {
+        timeout: 30000,
+        maxBuffer: 1024 * 1024
+      });
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        throw parserError('OCR is unavailable because the PDF rendering tools are not installed.', 'OCR_UNAVAILABLE', 503);
+      }
+      throw parserError('The scanned PDF could not be prepared for OCR.', 'OCR_FAILED', 422);
+    }
+
+    const pageImages = (await fs.promises.readdir(temporaryDirectory))
+      .filter(name => /^page-\d+\.png$/i.test(name))
+      .sort((left, right) => Number(left.match(/\d+/)[0]) - Number(right.match(/\d+/)[0]));
+    if (!pageImages.length) throw parserError('The scanned PDF contains no readable pages.', 'INSUFFICIENT_TEXT', 422);
+
+    const pageText = [];
+    for (const imageName of pageImages) {
+      try {
+        const { stdout } = await execFileAsync('tesseract', [path.join(temporaryDirectory, imageName), 'stdout', '--psm', '6'], {
+          timeout: 30000,
+          maxBuffer: 2 * 1024 * 1024
+        });
+        if (hasReadableText(stdout)) pageText.push(stdout);
+      } catch (error) {
+        if (error.code === 'ENOENT') {
+          throw parserError('OCR is unavailable because Tesseract is not installed.', 'OCR_UNAVAILABLE', 503);
+        }
+        throw parserError('The scanned PDF could not be read by OCR.', 'OCR_FAILED', 422);
+      }
+    }
+    return pageText.join('\n\n');
+  } finally {
+    if (temporaryDirectory) await fs.promises.rm(temporaryDirectory, { recursive: true, force: true });
+  }
+}
 
 class ResumeParserService {
   // Common skill keywords database
@@ -54,6 +117,79 @@ class ResumeParserService {
     'implemented', 'increased', 'decreased', 'reduced', 'led', 'coordinated',
     'launched', 'built', 'delivered', 'optimized', 'streamlined'
   ];
+
+  /** Normalize extracted document text without flattening paragraphs or lists. */
+  static normalizeResumeText(value) {
+    return String(value || '')
+      .replace(/\r\n?/g, '\n')
+      .replace(/[\u00ad\u200b\ufeff]/g, '')
+      .replace(/([A-Za-z])-[ \t]*\n[ \t]*([a-z])/g, '$1$2')
+      .replace(/^[ \t]*(?:page\s+)?\d+(?:\s+of\s+\d+)?[ \t]*$/gim, '')
+      .split('\n')
+      .map(line => line.replace(/[ \t]+$/g, '').trim())
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  /** Extract text from supported document formats, using OCR for image-only PDFs. */
+  static async extractDocument(filePath, originalName = filePath) {
+    const extension = path.extname(String(originalName || filePath || '')).toLowerCase();
+    if (!['.pdf', '.docx'].includes(extension)) {
+      throw parserError('Unsupported resume format. Upload a PDF or DOCX file.', 'UNSUPPORTED_FORMAT', 415);
+    }
+
+    let stat;
+    try {
+      stat = await fs.promises.stat(filePath);
+    } catch (error) {
+      throw parserError('The uploaded resume file could not be read.', 'INVALID_DOCUMENT', 422);
+    }
+    if (!stat.isFile() || stat.size === 0) {
+      throw parserError('The uploaded resume file is empty or invalid.', 'INVALID_DOCUMENT', 422);
+    }
+    if (stat.size > MAX_RESUME_FILE_SIZE) {
+      throw parserError('The uploaded resume exceeds the 5 MB file limit.', 'FILE_TOO_LARGE', 413);
+    }
+
+    let extractedText = '';
+    let extractionSource = extension.slice(1);
+    let confidence = 0.98;
+    if (extension === '.pdf') {
+      const pdfBuffer = await fs.promises.readFile(filePath);
+      let pdfData;
+      try {
+        pdfData = await pdfParse(pdfBuffer);
+      } catch (error) {
+        const appearsImageOnly = /\/Subtype\s*\/Image\b/i.test(pdfBuffer.toString('latin1'));
+        if (!appearsImageOnly) {
+          throw parserError('The PDF could not be parsed. Please upload a valid PDF.', 'PDF_PARSE_FAILED', 422);
+        }
+        extractedText = await extractScannedPdfText(filePath);
+        extractionSource = 'ocr';
+        confidence = 0.65;
+      }
+      if (pdfData) extractedText = pdfData.text || '';
+      if (pdfData && !hasReadableText(this.normalizeResumeText(extractedText))) {
+        extractedText = await extractScannedPdfText(filePath, pdfData.numpages);
+        extractionSource = 'ocr';
+        confidence = 0.65;
+      }
+    } else {
+      try {
+        const document = await mammoth.extractRawText({ path: filePath });
+        extractedText = document.value || '';
+      } catch (error) {
+        throw parserError('The DOCX document could not be parsed. Please upload a valid DOCX file.', 'DOCX_PARSE_FAILED', 422);
+      }
+    }
+
+    const normalizedText = this.normalizeResumeText(extractedText);
+    if (!hasReadableText(normalizedText)) {
+      throw parserError('No readable resume text was found in the document.', 'INSUFFICIENT_TEXT', 422);
+    }
+    return { text: normalizedText, source: extractionSource, confidence };
+  }
 
   /**
    * Parse resume from PDF file

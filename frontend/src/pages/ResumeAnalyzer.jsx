@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
@@ -16,14 +16,19 @@ const ResumeAnalyzer = () => {
   const [analysisResults, setAnalysisResults] = useState(null);
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
+  const requestSequence = useRef(0);
   const navigate = useNavigate();
+  let progressInterval;
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const uploadedFile = acceptedFiles[0];
     if (!uploadedFile) return;
+    const requestId = ++requestSequence.current;
 
     setFile(uploadedFile);
     setAnalyzing(true);
+    setAnalyzed(false);
+    setAnalysisResults(null);
     setError('');
     setProgress(0);
 
@@ -42,12 +47,17 @@ const ResumeAnalyzer = () => {
         timeout: 30000
       });
 
+      if (requestId !== requestSequence.current) {
+        clearInterval(progressInterval);
+        return;
+      }
       clearInterval(progressInterval);
       setProgress(100);
 
       if (response.data.success) {
         setAnalysisResults(response.data.data);
         setTimeout(() => {
+          if (requestId !== requestSequence.current) return;
           setAnalyzing(false);
           setAnalyzed(true);
         }, 500);
@@ -55,11 +65,15 @@ const ResumeAnalyzer = () => {
         throw new Error(response.data.message || 'Analysis failed');
       }
     } catch (err) {
+      if (requestId !== requestSequence.current) {
+        clearInterval(progressInterval);
+        return;
+      }
       console.error('Resume analysis error:', err);
       setError(err.response?.data?.message || err.message || 'Failed to analyze resume. Please try again.');
       setAnalyzing(false);
     }
-  }, []);
+  }, [progressInterval]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

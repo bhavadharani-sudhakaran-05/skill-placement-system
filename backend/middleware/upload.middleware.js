@@ -19,18 +19,24 @@ const storage = multer.diskStorage({
   }
 });
 
-// File filter for PDFs and DOCs
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-  ];
+const supportedResumeTypes = new Map([
+  ['.pdf', 'application/pdf'],
+  ['.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+]);
 
-  if (allowedTypes.includes(file.mimetype)) {
+function isSupportedResumeFile(originalName, mimeType) {
+  const extension = path.extname(String(originalName || '')).toLowerCase();
+  const expectedMimeType = supportedResumeTypes.get(extension);
+  return Boolean(expectedMimeType && String(mimeType || '').toLowerCase() === expectedMimeType);
+}
+
+// Require the extension and MIME type to agree; Multer's generated filename
+// keeps the upload outside any path supplied in originalName.
+const fileFilter = (req, file, cb) => {
+  if (isSupportedResumeFile(file.originalname, file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only PDF and DOC files are allowed.'), false);
+    cb(new Error('Invalid file type. Only PDF and DOCX files with matching extensions and MIME types are allowed.'), false);
   }
 };
 
@@ -42,5 +48,7 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024 // 5MB limit
   }
 });
+
+upload.isSupportedResumeFile = isSupportedResumeFile;
 
 module.exports = upload;
