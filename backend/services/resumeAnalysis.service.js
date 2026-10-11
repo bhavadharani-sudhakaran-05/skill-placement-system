@@ -1,4 +1,4 @@
-const ResumeAiService = require('./resumeAi.service');
+﻿const ResumeAiService = require('./resumeAi.service');
 
 const arrayFields = ['education', 'experience', 'projects', 'skills', 'certifications', 'awards', 'achievements', 'publications', 'additionalSections', 'recommendations'];
 const stopWords = new Set(['and', 'the', 'for', 'with', 'from', 'into', 'that', 'this', 'your', 'you', 'our', 'are', 'will', 'have', 'has', 'not', 'all', 'can', 'who', 'what', 'their', 'they', 'about', 'work', 'role', 'team', 'job', 'must', 'should', 'using', 'use', 'years', 'year', 'experience', 'ability', 'skills', 'skill', 'including', 'such', 'strong', 'good', 'also', 'within', 'across', 'required', 'preferred']);
@@ -66,7 +66,106 @@ function cleanRecord(record, source, fields) {
 
 function records(raw, source, fields) {
   if (!Array.isArray(raw)) return [];
-  return raw.slice(0, 200).map(record => cleanRecord(record, source, fields)).filter(Boolean);
+  return raw.map(record => cleanRecord(record, source, fields)).filter(Boolean);
+}
+
+function adaptRequestedSchema(raw) {
+  const categories = raw.skills && !Array.isArray(raw.skills) && typeof raw.skills === 'object' ? raw.skills : null;
+  if (!categories) return raw;
+
+  const skillCategories = {
+    languages: 'technical', frameworks: 'framework', databases: 'technical', tools: 'tools',
+    core_subjects: 'domain', concepts: 'domain', soft_skills: 'soft'
+  };
+  const skills = Object.entries(skillCategories).flatMap(([key, category]) =>
+    (Array.isArray(categories[key]) ? categories[key] : []).map(item => {
+      const name = typeof item === 'string' ? item : text(item?.name, 100);
+      return { name, category, source: 'explicit', evidence: typeof item === 'object' ? item.evidence : name, confidence: typeof item === 'object' ? item.confidence : 0.8 };
+    })
+  );
+
+  const contact = raw.contact && typeof raw.contact === 'object' ? raw.contact : {};
+  const links = Array.isArray(contact.links) ? contact.links.map(value => text(value, 300)).filter(Boolean) : [];
+  const linkedin = links.find(link => /linkedin\\.com/i.test(link)) || '';
+  const github = links.find(link => /github\\.com/i.test(link)) || '';
+  const experience = Array.isArray(raw.experience) ? raw.experience.map(item => ({
+    ...item,
+    employer: item?.company || '',
+    duration: item?.duration || '',
+    description: Array.isArray(item?.responsibilities) ? item.responsibilities.join(' ') : '',
+    responsibilities: Array.isArray(item?.responsibilities) ? item.responsibilities : []
+  })) : [];
+  const education = Array.isArray(raw.education) ? raw.education.map(item => ({
+    ...item, grade: item?.score || item?.grade || '', duration: item?.duration || ''
+  })) : [];
+  const projects = Array.isArray(raw.projects) ? raw.projects.map(item => ({
+    ...item,
+    technologies: Array.isArray(item?.tech_stack) ? item.tech_stack : (Array.isArray(item?.technologies) ? item.technologies : [])
+  })) : [];
+
+  return {
+    ...raw,
+    contact: {
+      ...contact,
+      name: raw.name || contact.name || '',
+      linkedin,
+      github,
+      evidence: contact.evidence || raw.name_evidence || ''
+    },
+    education,
+    experience,
+    projects,
+    skills,
+    certifications: Array.isArray(raw.certifications) ? raw.certifications : [],
+    achievements: Array.isArray(raw.achievements) ? raw.achievements.map(item => typeof item === 'string'
+      ? { title: item, evidence: item }
+      : item) : [],
+    recommendations: Array.isArray(raw.suggestions) ? raw.suggestions : (Array.isArray(raw.recommendations) ? raw.recommendations : [])
+  };
+}
+
+function classifyHeading(value) {
+  const heading = normalized(value).replace(/\\s+/g, ' ');
+  if (/^(professional )?(work )?experience$|^(employment|work) history$|^internships?$/.test(heading)) return 'experience';
+  if (/^(academic )?projects?$|^(personal|selected) projects?$/.test(heading)) return 'projects';
+  if (/^(education|qualifications|academic background)$/.test(heading)) return 'education';
+  if (/^(certifications?|licenses?)$/.test(heading)) return 'certifications';
+  if (/^(technical )?skills$|^core competencies$/.test(heading)) return 'skills';
+  return '';
+}
+
+function sectionForEvidence(source, evidence) {
+  const body = normalized(source);
+  const quote = normalized(evidence);
+  const evidenceOffset = quote ? body.indexOf(quote) : -1;
+  if (evidenceOffset < 0) return '';
+  let offset = 0;
+  let section = '';
+  for (const line of String(source || '').split(/\\r?\\n/)) {
+    const kind = classifyHeading(line.replace(/[:|]+/g, ' ').trim());
+    if (kind) section = kind;
+    const lineLength = normalized(line).length;
+    if (evidenceOffset <= offset + lineLength) return section;
+    offset += lineLength + 1;
+  }
+  return section;
+}
+
+function sentenceLikeProjectTitle(value) {
+  const title = text(value, 500).trim();
+  return !title || title.length > 100 || title.split(/\\s+/).length > 12 || /[.!?]$/.test(title) ||
+    /^(built|created|developed|implemented|designed|improved|used|worked|led|managed|worked on|utilized|leveraged)\\b/i.test(title);
+}
+
+function supportsRSkill(source) {
+  const lines = String(source || '').split(/\\r?\\n/);
+  let inSkills = false;
+  for (const line of lines) {
+    const kind = classifyHeading(line.replace(/[:|]+/g, ' ').trim());
+    if (kind) inSkills = kind === 'skills';
+    if (inSkills && /(?:^|[,;|/\\s])R(?:$|[,;|/\\s])/i.test(line) && /\\bR\\s+(?:programming|language)\\b|\\bRStudio\\b/i.test(source)) return true;
+  }
+  return false;
 }
 
 function canonicalSkillName(value) {
@@ -82,8 +181,22 @@ function canonicalSkillName(value) {
   return text(value, 80).replace(/\s+/g, ' ').replace(/\b[a-z]/g, letter => letter.toUpperCase());
 }
 
+const genericSkillWords = new Set([
+  ...stopWords,
+  'team', 'teams', 'work', 'professional', 'proficient', 'proficiency', 'knowledge',
+  'familiar', 'various', 'using', 'used', 'development', 'responsibilities', 'duties'
+]);
+
+function isSupportedSkillName(name, evidence, source) {
+  const key = normalized(name);
+  if (!key || genericSkillWords.has(key)) return false;
+  if (key !== 'r') return key.length >= 2;
+  return /\bR\s+(?:programming|language|statistical|data analysis)\b|\bRStudio\b|\b(?:ggplot2|dplyr|tidyverse)\b/i.test(`${evidence}\n${source}`);
+}
+
 function validateStructuredResult(raw, source) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw Object.assign(new Error('The AI response did not match the expected resume data shape.'), { code: 'AI_SCHEMA_INVALID', status: 502 });
+  raw = adaptRequestedSchema(raw);
   const contact = {};
   const rawContact = raw.contact && typeof raw.contact === 'object' ? raw.contact : {};
   const contactEvidence = text(rawContact.evidence, 600);
@@ -101,22 +214,24 @@ function validateStructuredResult(raw, source) {
     ? { text: summaryText, evidence: text(summaryRaw.evidence, 600), confidence: Math.max(0, Math.min(1, Number(summaryRaw.confidence) || 0)) }
     : null;
 
-  const education = records(raw.education, source, ['institution', 'degree', 'field', 'startDate', 'endDate', 'grade', 'description']);
-  const experience = records(raw.experience, source, ['employer', 'role', 'location', 'startDate', 'endDate', 'description', 'responsibilities[]', 'accomplishments[]']);
+  const education = records(raw.education, source, ['institution', 'degree', 'field', 'startDate', 'endDate', 'duration', 'grade', 'description']);
+  const experience = records(raw.experience, source, ['employer', 'role', 'location', 'startDate', 'endDate', 'duration', 'description', 'responsibilities[]', 'accomplishments[]'])
+    .filter(item => sectionForEvidence(source, item.evidence) !== 'projects');
   experience.forEach(item => {
     item.current = /present|current|now/i.test(item.endDate || '');
   });
-  const projects = records(raw.projects, source, ['title', 'description', 'technologies[]', 'startDate', 'endDate']);
+  const projects = records(raw.projects, source, ['title', 'description', 'technologies[]', 'startDate', 'endDate', 'link']);
   const validProjects = projects.filter(project => {
     const title = normalized(project.title);
-    if (!title || /^(?:project|projects|technical skills|skills|technology|technologies|tools|frameworks?|tech stack|technology stack|stack|languages|database|databases)$/i.test(title)) return false;
+    if (!title || sentenceLikeProjectTitle(project.title) || /^(?:project|projects|technical skills|skills|technology|technologies|tools|frameworks?|tech stack|technology stack|stack|languages|database|databases)$/i.test(title)) return false;
+    if (sectionForEvidence(source, project.evidence) === 'experience') return false;
     const titleTokens = title.split(' ').filter(Boolean);
     const technologyTokens = new Set((project.technologies || []).flatMap(name => normalized(name).split(' ')));
     const titleIsOnlyTechnologies = titleTokens.length > 0 && titleTokens.every(token => technologyTokens.has(token));
     if (titleIsOnlyTechnologies) return false;
     return Boolean(project.description || project.technologies?.length);
   });
-  const certifications = records(raw.certifications, source, ['name', 'issuer', 'date']);
+  const certifications = records(raw.certifications, source, ['name', 'issuer', 'date']).filter(item => item.name);
   const simpleRecordFields = ['title', 'description', 'date'];
   const awards = records(raw.awards, source, simpleRecordFields);
   const achievements = records(raw.achievements, source, simpleRecordFields);
@@ -133,7 +248,7 @@ function validateStructuredResult(raw, source) {
     .map(skill => ({ ...skill, name: canonicalSkillName(skill.name), source: skill.source === 'inferred' ? 'inferred' : 'explicit' }))
     .filter(skill => {
       const key = normalized(skill.name);
-      if (!key || key.length < 2 || seenSkills.has(key)) return false;
+      if (!isSupportedSkillName(skill.name, skill.evidence, source) || seenSkills.has(key)) return false;
       if (!supportedBySource(skill.evidence, source)) return false;
       seenSkills.add(key);
       return true;
@@ -178,9 +293,9 @@ function makeScores(source, data, jobDescription) {
   const readableRatio = source.replace(/[^\x09\x0a\x0d\x20-\x7e]/g, '').length / Math.max(source.length, 1);
   const reasonableLineRatio = lines.filter(line => line.length <= 180).length / Math.max(lines.length, 1);
   const recognizedHeading = /^(professional\s+)?(summary|profile|experience|employment history|work history|projects?|academic projects|education|qualifications|skills|technical skills|achievements|awards|certifications|publications)\s*:??$/im.test(source);
-  const listLines = lines.filter(line => /^\s*(?:[-*•▪◦]|\d+[.)])\s+/.test(line));
+  const listLines = lines.filter(line => /^\s*(?:[-*ΓÇóΓû¬Γùª]|\d+[.)])\s+/.test(line));
   const listConsistency = listLines.length < 2 ? 1 : (() => {
-    const markers = listLines.map(line => line.trim().match(/^([-*•▪◦]|\d+[.)])/)[0]);
+    const markers = listLines.map(line => line.trim().match(/^([-*ΓÇóΓû¬Γùª]|\d+[.)])/)[0]);
     const common = Math.max(...[...new Set(markers)].map(marker => markers.filter(value => value === marker).length));
     return common / markers.length;
   })();
@@ -262,6 +377,10 @@ class ResumeAnalysisService {
 
   static validateStructuredResult(raw, source) {
     return validateStructuredResult(raw, source);
+  }
+
+  static adaptRequestedSchema(raw) {
+    return adaptRequestedSchema(raw);
   }
 }
 

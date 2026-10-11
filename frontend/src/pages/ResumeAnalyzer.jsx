@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
@@ -16,17 +16,21 @@ const ResumeAnalyzer = () => {
   const [analysisResults, setAnalysisResults] = useState(null);
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
+  const requestSequence = useRef(0);
   const navigate = useNavigate();
+  let progressInterval;
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const uploadedFile = acceptedFiles[0];
     if (!uploadedFile) return;
+    const requestId = ++requestSequence.current;
 
     setFile(uploadedFile);
     setAnalyzing(true);
+    setAnalyzed(false);
+    setAnalysisResults(null);
     setError('');
     setProgress(0);
-    let progressInterval;
 
     try {
       const formData = new FormData();
@@ -34,21 +38,26 @@ const ResumeAnalyzer = () => {
 
       // Simulate progress stages
       setProgress(20);
-      progressInterval = setInterval(() => {
+      const progressInterval = setInterval(() => {
         setProgress(prev => Math.min(prev + 10, 85));
       }, 500);
 
       const response = await api.post('/resume/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        timeout: 120000
+        timeout: 30000
       });
 
+      if (requestId !== requestSequence.current) {
+        clearInterval(progressInterval);
+        return;
+      }
       clearInterval(progressInterval);
       setProgress(100);
 
       if (response.data.success) {
         setAnalysisResults(response.data.data);
         setTimeout(() => {
+          if (requestId !== requestSequence.current) return;
           setAnalyzing(false);
           setAnalyzed(true);
         }, 500);
@@ -56,17 +65,21 @@ const ResumeAnalyzer = () => {
         throw new Error(response.data.message || 'Analysis failed');
       }
     } catch (err) {
-      clearInterval(progressInterval);
+      if (requestId !== requestSequence.current) {
+        clearInterval(progressInterval);
+        return;
+      }
       console.error('Resume analysis error:', err);
       setError(err.response?.data?.message || err.message || 'Failed to analyze resume. Please try again.');
       setAnalyzing(false);
     }
-  }, []);
+  }, [progressInterval]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'application/pdf': ['.pdf'],
+      'application/msword': ['.doc'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
     },
     maxFiles: 1,
@@ -104,8 +117,8 @@ const ResumeAnalyzer = () => {
     scoreCard: { background: 'white', borderRadius: '14px', padding: '0.85rem', boxShadow: '0 3px 15px rgba(139,92,246,0.08)', textAlign: 'center', border: '1px solid #ede9fe' },
     scoreCircle: (score) => ({
       width: '80px', height: '80px', borderRadius: '50%', margin: '0 auto 0.75rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      background: !Number.isFinite(score) ? '#f3f4f6' : score >= 80 ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : score >= 60 ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: Number.isFinite(score) ? 'white' : '#6b7280',
-      boxShadow: Number.isFinite(score) ? (score >= 80 ? '0 6px 15px rgba(16,185,129,0.3)' : score >= 60 ? '0 6px 15px rgba(139,92,246,0.3)' : '0 6px 15px rgba(245,158,11,0.3)') : 'none'
+      background: score >= 80 ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : score >= 60 ? 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: 'white',
+      boxShadow: score >= 80 ? '0 6px 15px rgba(16,185,129,0.3)' : score >= 60 ? '0 6px 15px rgba(139,92,246,0.3)' : '0 6px 15px rgba(245,158,11,0.3)'
     }),
     scoreValue: { fontSize: '1.4rem', fontWeight: 700 },
     scoreLabel: { fontSize: '0.6rem', opacity: 0.9 },
@@ -164,7 +177,7 @@ const ResumeAnalyzer = () => {
               <input {...getInputProps()} />
               <div style={styles.uploadIcon}><Upload size={36} /></div>
               <h3 style={styles.uploadTitle}>{isDragActive ? 'Drop your resume here' : 'Upload Your Resume'}</h3>
-              <p style={styles.uploadSubtitle}>Drag & drop your resume or click to browse. PDF and DOCX supported. Max 5MB.</p>
+              <p style={styles.uploadSubtitle}>Drag & drop your resume or click to browse. PDF format supported. Max 5MB.</p>
               <button style={styles.uploadButton}><Upload size={18} /> Select File</button>
               {file && (
                 <div style={styles.fileInfo}>
@@ -190,15 +203,15 @@ const ResumeAnalyzer = () => {
           {/* Score Cards */}
           <div style={styles.resultsGrid}>
             {[
-              { score: analysisResults.atsScore, label: 'ATS Parsing Checks', subtitle: analysisResults.scoreDetails?.[0]?.explanation || 'Document parsing checks' },
-              { score: analysisResults.skillMatchScore, label: 'Skill Match', subtitle: analysisResults.scoreDetails?.[2]?.explanation || 'Provide a job description for a job-specific score.' },
-              { score: analysisResults.formattingScore, label: 'Formatting', subtitle: analysisResults.scoreDetails?.[1]?.explanation || 'Measurable text layout checks' },
-              { score: analysisResults.keywordScore, label: 'Keywords', subtitle: analysisResults.scoreDetails?.[3]?.explanation || 'Provide a job description for keyword coverage.' }
+              { score: analysisResults.atsScore || 0, label: 'ATS Score', subtitle: 'Overall compatibility' },
+              { score: analysisResults.skillMatchScore || 0, label: 'Skill Match', subtitle: `${analysisResults.parsedSkills?.length || 0} skills found` },
+              { score: analysisResults.formattingScore || 0, label: 'Formatting', subtitle: 'Layout quality' },
+              { score: analysisResults.keywordScore || 0, label: 'Keywords', subtitle: 'Industry terms' }
             ].map((item, index) => (
               <motion.div key={item.label} style={styles.scoreCard} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
                 <div style={styles.scoreCircle(item.score)}>
-                  <span style={styles.scoreValue}>{Number.isFinite(item.score) ? item.score : '—'}</span>
-                  <span style={styles.scoreLabel}>{Number.isFinite(item.score) ? '/ 100' : 'Unavailable'}</span>
+                  <span style={styles.scoreValue}>{item.score}</span>
+                  <span style={styles.scoreLabel}>/ 100</span>
                 </div>
                 <h4 style={styles.cardTitle}>{item.label}</h4>
                 <p style={styles.cardSubtitle}>{item.subtitle}</p>
@@ -206,42 +219,15 @@ const ResumeAnalyzer = () => {
             ))}
           </div>
 
-          {analysisResults.extractionConfidence === 'review-recommended' && (
-            <motion.div style={{ ...styles.section, background: '#fffbeb', color: '#92400e' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              OCR was used to read this scanned document. Please review the extracted details for recognition errors.
-            </motion.div>
-          )}
-
-          {(analysisResults.structuredData?.contact || analysisResults.structuredData?.summary) && (
-            <motion.div style={styles.section} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <h3 style={styles.sectionTitle}><FileText size={22} color="#2E073F" /> Contact & Summary</h3>
-              {analysisResults.structuredData.contact && (
-                <div style={{ fontSize: '0.8rem', color: '#4b5563', marginBottom: '0.5rem' }}>
-                  {['name', 'email', 'phone', 'location', 'linkedin', 'github'].filter(key => analysisResults.structuredData.contact[key]).map(key => analysisResults.structuredData.contact[key]).join(' · ')}
-                </div>
-              )}
-              {analysisResults.structuredData.summary?.text && <p style={{ fontSize: '0.8rem', lineHeight: 1.5, color: '#4b5563' }}>{analysisResults.structuredData.summary.text}</p>}
-            </motion.div>
-          )}
-
           {/* Skills Found */}
-          {analysisResults.structuredData?.skills?.length > 0 ? (
+          {analysisResults.parsedSkills && analysisResults.parsedSkills.length > 0 && (
             <motion.div style={styles.section} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <h3 style={styles.sectionTitle}><Code size={22} color="#2E073F" /> Skills Extracted ({analysisResults.structuredData.skills.length})</h3>
-              {['explicit', 'inferred'].map(source => {
-                const skills = analysisResults.structuredData.skills.filter(skill => skill.source === source);
-                return skills.length ? <div key={source} style={{ marginBottom: '0.5rem' }}>
-                  <div style={styles.skillsLabel}>{source === 'explicit' ? 'Stated in resume' : 'Inferred from supported context'}</div>
-                  <div style={styles.skillsList}>{skills.map(skill => <span key={`${source}-${skill.name}`} style={styles.skillTag('found')} title={skill.evidence}>{skill.name}</span>)}</div>
-                </div> : null;
-              })}
-            </motion.div>
-          ) : analysisResults.parsedSkills?.length > 0 ? (
-            <motion.div style={styles.section} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <h3 style={styles.sectionTitle}><Code size={22} color="#2E073F" /> Skills Extracted ({analysisResults.parsedSkills.length})</h3>
-              <div style={styles.skillsList}>{analysisResults.parsedSkills.map(skill => <span key={skill} style={styles.skillTag('found')}>{skill}</span>)}</div>
+              <div style={styles.skillsList}>
+                {analysisResults.parsedSkills.map(skill => <span key={skill} style={styles.skillTag('found')}>{skill}</span>)}
+              </div>
             </motion.div>
-          ) : null}
+          )}
 
           {/* Education */}
           {analysisResults.parsedEducation && analysisResults.parsedEducation.length > 0 && (
@@ -249,9 +235,8 @@ const ResumeAnalyzer = () => {
               <h3 style={styles.sectionTitle}><GraduationCap size={22} color="#2E073F" /> Education</h3>
               {analysisResults.parsedEducation.map((edu, i) => (
                 <div key={i} style={{ padding: '0.5rem 0', borderBottom: i < analysisResults.parsedEducation.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-                  <div title={edu.evidence || ''} style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{edu.degree || 'Education record'} {edu.field ? `in ${edu.field}` : ''}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{edu.institution} {([edu.startDate, edu.endDate].filter(Boolean).join(' – ') || edu.year) ? `(${[edu.startDate, edu.endDate].filter(Boolean).join(' – ') || edu.year})` : ''} {edu.grade ? `• ${edu.grade}` : ''}</div>
-                  {edu.description && <p style={{ fontSize: '0.75rem', color: '#4b5563', whiteSpace: 'pre-wrap', margin: '0.25rem 0' }}>{edu.description}</p>}
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{edu.degree || 'Degree'} {edu.field ? `in ${edu.field}` : ''}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{edu.institution} {edu.year ? `(${edu.year})` : ''} {edu.grade ? `ΓÇó ${edu.grade}` : ''}</div>
                 </div>
               ))}
             </motion.div>
@@ -263,10 +248,8 @@ const ResumeAnalyzer = () => {
               <h3 style={styles.sectionTitle}><Briefcase size={22} color="#2E073F" /> Experience</h3>
               {analysisResults.parsedExperience.map((exp, i) => (
                 <div key={i} style={{ padding: '0.5rem 0', borderBottom: i < analysisResults.parsedExperience.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-                  <div title={exp.evidence || ''} style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{exp.role || exp.employer || exp.company || 'Experience record'}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{exp.employer || exp.company} {[exp.startDate, exp.endDate].filter(Boolean).join(' – ') || exp.duration ? `• ${[exp.startDate, exp.endDate].filter(Boolean).join(' – ') || exp.duration}` : ''} {exp.location ? `• ${exp.location}` : ''}</div>
-                  {exp.description && <p style={{ fontSize: '0.78rem', lineHeight: 1.5, color: '#4b5563', whiteSpace: 'pre-wrap', margin: '0.35rem 0' }}>{exp.description}</p>}
-                  {[...(exp.responsibilities || []), ...(exp.accomplishments || [])].map((detail, index) => <div key={index} style={{ fontSize: '0.75rem', color: '#4b5563', marginTop: '0.2rem' }}>• {detail}</div>)}
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{exp.role || exp.company || 'Role'}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{exp.company} {exp.duration ? `ΓÇó ${exp.duration}` : ''}</div>
                 </div>
               ))}
             </motion.div>
@@ -278,9 +261,7 @@ const ResumeAnalyzer = () => {
               <h3 style={styles.sectionTitle}><BookOpen size={22} color="#2E073F" /> Projects ({analysisResults.parsedProjects.length})</h3>
               {analysisResults.parsedProjects.map((proj, i) => (
                 <div key={i} style={{ padding: '0.5rem 0', borderBottom: i < analysisResults.parsedProjects.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-                  <div title={proj.evidence || ''} style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{proj.title || proj.name}</div>
-                  {proj.description && <p style={{ fontSize: '0.78rem', lineHeight: 1.5, color: '#4b5563', whiteSpace: 'pre-wrap', margin: '0.35rem 0' }}>{proj.description}</p>}
-                  {(proj.startDate || proj.endDate) && <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>{[proj.startDate, proj.endDate].filter(Boolean).join(' – ')}</div>}
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{proj.name}</div>
                   {proj.technologies && proj.technologies.length > 0 && (
                     <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
                       {proj.technologies.map(t => <span key={t} style={{ padding: '0.15rem 0.4rem', background: '#f5f3ff', borderRadius: '10px', fontSize: '0.65rem', color: '#2E073F' }}>{t}</span>)}
@@ -297,29 +278,12 @@ const ResumeAnalyzer = () => {
               <h3 style={styles.sectionTitle}><Award size={22} color="#2E073F" /> Certifications ({analysisResults.parsedCertifications.length})</h3>
               {analysisResults.parsedCertifications.map((cert, i) => (
                 <div key={i} style={{ padding: '0.5rem 0' }}>
-                  <div title={cert.evidence || ''} style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{cert.name}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{cert.issuer} {cert.date ? `• ${cert.date}` : ''}</div>
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{cert.name}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{cert.issuer} {cert.date ? `ΓÇó ${cert.date}` : ''}</div>
                 </div>
               ))}
             </motion.div>
           )}
-
-          {[
-            { title: 'Awards', icon: Award, entries: analysisResults.structuredData?.awards },
-            { title: 'Achievements', icon: Award, entries: analysisResults.structuredData?.achievements },
-            { title: 'Publications', icon: BookOpen, entries: analysisResults.structuredData?.publications },
-            ...(analysisResults.structuredData?.additionalSections || []).map(section => ({ title: section.heading, icon: FileText, entries: section.entries }))
-          ].filter(section => section.entries?.length).map((section, sectionIndex) => {
-            const SectionIcon = section.icon;
-            return <motion.div key={`${section.title}-${sectionIndex}`} style={styles.section} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <h3 style={styles.sectionTitle}><SectionIcon size={22} color="#2E073F" /> {section.title}</h3>
-              {section.entries.map((entry, entryIndex) => <div key={entryIndex} title={entry.evidence || ''} style={{ padding: '0.45rem 0', borderBottom: entryIndex < section.entries.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-                <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1f2937' }}>{entry.title || entry.name || entry.description}</div>
-                {entry.description && entry.title && <div style={{ fontSize: '0.75rem', color: '#4b5563', whiteSpace: 'pre-wrap' }}>{entry.description}</div>}
-                {(entry.date || Number.isFinite(entry.confidence)) && <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>{entry.date || ''} {Number.isFinite(entry.confidence) ? `• ${Math.round(entry.confidence * 100)}% extraction confidence` : ''}</div>}
-              </div>)}
-            </motion.div>;
-          })}
 
           {/* Improvement Suggestions */}
           {analysisResults.improvementSuggestions && analysisResults.improvementSuggestions.length > 0 && (
@@ -335,7 +299,7 @@ const ResumeAnalyzer = () => {
                       </div>
                       <div>
                         <div style={styles.suggestionTitle}>{suggestion.type?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Suggestion'}</div>
-                        <div style={styles.suggestionDesc}>{suggestion.message} {suggestion.requiresUserEvidence ? 'Add only if you can support it with real evidence.' : ''}</div>
+                        <div style={styles.suggestionDesc}>{suggestion.message}</div>
                       </div>
                     </div>
                   );
