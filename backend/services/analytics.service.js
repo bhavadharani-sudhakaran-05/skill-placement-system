@@ -1,7 +1,4 @@
-/**
- * ⭐ UNIQUE FEATURE 6: College & Recruiter Analytics Dashboard
- * Skill trends, placement probability, course effectiveness
- */
+
 
 const User = require('../models/User');
 const Job = require('../models/Job');
@@ -258,9 +255,7 @@ class AnalyticsService {
     }));
   }
 
-  /**
-   * Get monthly progress data
-   */
+  
   static async getMonthlyProgress(studentIds) {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);

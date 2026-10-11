@@ -1,8 +1,4 @@
-/**
- * ⭐ UNIQUE FEATURE 7: Feedback Loop Learning Model
- * Placement results feed back into system
- * Recommendation accuracy improves over time
- */
+
 
 const Feedback = require('../models/Feedback');
 const User = require('../models/User');
