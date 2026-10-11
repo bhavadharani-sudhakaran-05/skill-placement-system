@@ -6,6 +6,12 @@ SkillForge is a MERN stack web application designed to help students develop tec
 
 The main goal of SkillForge is to help students understand their skills, identify areas for improvement, explore learning opportunities, and discover relevant job openings.
 
+🚀 Live Demo
+
+Live Application: https://skill-placement-system-1.onrender.com/
+Backend Service: https://skill-placement-system.onrender.com
+GitHub Repository: https://github.com/bhavadharani-sudhakaran-05/skill-placement-system
+
 2. Key Features
 
 -> Resume Analyzer: Upload and analyze resumes to extract relevant information, including skills and project details.
