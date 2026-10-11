@@ -67,7 +67,7 @@ test('synthetic resume cases preserve variable record counts and source evidence
         ['Applied Analytics', 'South Institute', '2022']
       ]);
       assert.equal(data.projects[0].title, 'Orchard');
-      assert.equal(data.projects[0].technologies[0], 'Python');
+      assert.equal(data.projects[0].tech_stack[0], 'Python');
       assert.match(data.projects[0].description, /crop tracker.*seasonal reports/i);
     }
     for (const record of [...data.projects, ...data.experience, ...data.education, ...data.certifications]) {
@@ -102,6 +102,37 @@ test('duplicate skill variants are normalized and unsupported facts are discarde
   assert.equal(data.projects[0].description, 'Built a shipping dashboard in React.');
 });
 
+test('valid projects survive PDF extraction separating the title and Tech Stack lines', () => {
+  const source = `PROJECTS
+Harbor Dashboard
+PDF extracted description continuation
+Tech Stack: React, JavaScript
+Built a shipping dashboard for regional delivery status.`;
+  const result = {
+    projects: [{
+      title: 'Harbor Dashboard',
+      tech_stack: ['React', 'JavaScript'],
+      description: 'Built a shipping dashboard for regional delivery status.',
+      link: '',
+      evidence: 'Harbor Dashboard PDF extracted description continuation Tech Stack: React, JavaScript Built a shipping dashboard for regional delivery status.',
+      confidence: 0.9
+    }]
+  };
+
+  const data = ResumeAnalysisService.validateStructuredResult(result, source);
+  assert.equal(data.projects.length, 1);
+  assert.deepEqual(data.projects[0], {
+    title: 'Harbor Dashboard',
+    tech_stack: ['React', 'JavaScript'],
+    description: 'Built a shipping dashboard for regional delivery status.',
+    link: '',
+    evidence: 'Harbor Dashboard PDF extracted description continuation Tech Stack: React, JavaScript Built a shipping dashboard for regional delivery status.',
+    confidence: 0.9,
+    startDate: '',
+    endDate: ''
+  });
+});
+
 test('single-letter and generic English words are not accepted as skills', () => {
   const source = 'SKILLS\nR, Team, Python';
   const result = {
@@ -121,22 +152,34 @@ test('single-letter and generic English words are not accepted as skills', () =>
   assert.deepEqual(rLanguage.skills.map(skill => skill.name), ['R']);
 });
 
-test('scores are measurable and job-specific scores stay unavailable without a job description', async () => {
+test('Skill Match counts distinct technical skills independently from job description coverage', async () => {
   const fixture = validCases[0];
   await withAiResult({ ...fixture.result, atsScore: 100, formattingScore: 100, skillMatchScore: 100, keywordScore: 100 }, async () => {
     const generic = await ResumeAnalysisService.analyzeResumeText(fixture.text);
     assert.equal(typeof generic.atsScore, 'number');
     assert.equal(typeof generic.formattingScore, 'number');
-    assert.equal(generic.skillMatchScore, null);
+    assert.equal(generic.skillMatchScore, 15);
     assert.equal(generic.keywordScore, null);
     assert.match(generic.scoreDetails[0].explanation, /not an ATS compatibility guarantee/i);
     assert.match(generic.scoreDetails[0].explanation, /40%.*30%.*20%.*10%/);
     assert.match(generic.scoreDetails[1].explanation, /35%.*25%.*20%.*20%/);
 
     const targeted = await ResumeAnalysisService.analyzeResumeText(fixture.text, 'React JavaScript engineering role');
-    assert.equal(typeof targeted.skillMatchScore, 'number');
+    assert.equal(targeted.skillMatchScore, generic.skillMatchScore);
     assert.equal(typeof targeted.keywordScore, 'number');
   });
+});
+
+test('Skill Match excludes soft skills and duplicate technical skills and caps at 100', async () => {
+  const source = `Avery Stone\nSKILLS\n${Array.from({ length: 22 }, (_, index) => `Technology${index}`).join(', ')}, JavaScript, JS, collaboration`;
+  const skills = Array.from({ length: 22 }, (_, index) => ({ name: `Technology${index}`, category: 'technical', evidence: `Technology${index}` }));
+  skills.push(
+    { name: 'JavaScript', category: 'technical', evidence: 'JavaScript' },
+    { name: 'JS', category: 'technical', evidence: 'JavaScript' },
+    { name: 'Collaboration', category: 'soft', evidence: 'collaboration' }
+  );
+  const result = await withAiResult({ skills }, () => ResumeAnalysisService.analyzeResumeText(source));
+  assert.equal(result.skillMatchScore, 100);
 });
 
 test('AI prompt injects each uploaded resume dynamically and forbids model-generated scores', async () => {
@@ -163,7 +206,8 @@ test('AI prompt injects each uploaded resume dynamically and forbids model-gener
     assert.ok(!prompts[0].includes(secondResume));
     assert.ok(!prompts[1].includes(firstResume));
     assert.match(prompts[0], /Return only one valid JSON object/i);
-    assert.match(prompts[0], /Tech Stack.*one project/i);
+    assert.match(prompts[0], /standalone line directly above its Tech Stack\/TechStack/i);
+    assert.match(prompts[0], /technologies only in tech_stack/i);
     assert.match(prompts[0], /full name, issuer, and date/i);
     assert.match(prompts[0], /Never return ATS.*scores/i);
     for (const scoreField of ['atsScore', 'formattingScore', 'skillMatchScore', 'keywordScore']) {
@@ -356,7 +400,7 @@ test('Gemini provider errors distinguish model, authentication, quota, and rate 
 
 test('requested AI schema keeps projects, internship, certifications, and backend scores grounded', async () => {
   const source = `PROJECTS
-Orchard
+Orchard GitHub
 Tech Stack: Python
 - Built a crop tracker for local growers and documented seasonal harvest notes.
 Harbor
@@ -379,7 +423,7 @@ Accessibility Essentials`;
     skills: { languages: ['Python', 'JavaScript'], frameworks: ['React'], databases: [], tools: ['r'], core_subjects: [], concepts: [], soft_skills: [] },
     experience: [{ company: 'Maple Lab', role: 'Intern', duration: 'Summer 2024', responsibilities: ['Prepared weekly sample summaries for the research team.'], evidence: 'Maple Lab ΓÇö Intern, Summer 2024 Prepared weekly sample summaries for the research team.', confidence: 0.9 }],
     projects: [
-      { title: 'Orchard', tech_stack: ['Python'], description: 'Built a crop tracker for local growers and documented seasonal harvest notes.', evidence: 'Orchard Tech Stack: Python Built a crop tracker for local growers and documented seasonal harvest notes.', confidence: 0.9 },
+      { title: 'Orchard GitHub', tech_stack: ['Python'], description: 'Built a crop tracker for local growers and documented seasonal harvest notes.', link: 'GitHub', evidence: 'Orchard GitHub Tech Stack: Python Built a crop tracker for local growers and documented seasonal harvest notes.', confidence: 0.9 },
       { title: 'Harbor', tech_stack: ['React', 'JavaScript'], description: 'Created a shipping dashboard for viewing regional delivery status.', evidence: 'Harbor Tech Stack: React, JavaScript Created a shipping dashboard for viewing regional delivery status.', confidence: 0.9 },
       { title: 'Beacon', tech_stack: ['Node.js'], description: 'Developed a status monitor that summarizes service health reports.', evidence: 'Beacon Tech Stack: Node.js Developed a status monitor that summarizes service health reports.', confidence: 0.9 }
     ],
@@ -397,6 +441,9 @@ Accessibility Essentials`;
   assert.deepEqual(result.parsedProjects.map(project => project.title), ['Orchard', 'Harbor', 'Beacon']);
   assert.equal(result.parsedProjects.length, 3);
   assert.match(result.parsedProjects[0].description, /documented seasonal harvest notes/);
+  assert.deepEqual(result.parsedProjects[0].tech_stack, ['Python']);
+  assert.equal(result.parsedProjects[0].title, 'Orchard');
+  assert.equal(result.parsedProjects[0].link, '');
   assert.equal(result.parsedExperience.length, 1);
   assert.equal(result.parsedExperience[0].employer, 'Maple Lab');
   assert.equal(result.parsedCertifications.length, 3);

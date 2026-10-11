@@ -71,7 +71,7 @@ const seedDatabase = async () => {
     const jobsData = [
       {
         title: 'Software Engineer',
-        company: { name: 'TCS', website: 'https://ibegin.tcs.com/iBegin/', industry: 'IT Services', size: '10000+' },
+        company: { name: 'TCS', website: 'https://ibegin.tcsapps.com/candidate/next/', industry: 'IT Services', size: '10000+' },
         location: { city: 'Chennai', state: 'Tamil Nadu', country: 'India', remote: false },
         type: 'full-time',
         mode: 'hybrid',

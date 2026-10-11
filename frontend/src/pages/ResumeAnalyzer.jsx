@@ -44,7 +44,7 @@ const ResumeAnalyzer = () => {
 
       const response = await api.post('/resume/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        timeout: 30000
+        timeout: 90000
       });
 
       if (requestId !== requestSequence.current) {
@@ -261,10 +261,10 @@ const ResumeAnalyzer = () => {
               <h3 style={styles.sectionTitle}><BookOpen size={22} color="#2E073F" /> Projects ({analysisResults.parsedProjects.length})</h3>
               {analysisResults.parsedProjects.map((proj, i) => (
                 <div key={i} style={{ padding: '0.5rem 0', borderBottom: i < analysisResults.parsedProjects.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{proj.name}</div>
-                  {proj.technologies && proj.technologies.length > 0 && (
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#1f2937' }}>{proj.title || proj.name}</div>
+                  {(proj.tech_stack || proj.technologies)?.length > 0 && (
                     <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
-                      {proj.technologies.map(t => <span key={t} style={{ padding: '0.15rem 0.4rem', background: '#f5f3ff', borderRadius: '10px', fontSize: '0.65rem', color: '#2E073F' }}>{t}</span>)}
+                      {(proj.tech_stack || proj.technologies).map(t => <span key={t} style={{ padding: '0.15rem 0.4rem', background: '#f5f3ff', borderRadius: '10px', fontSize: '0.65rem', color: '#2E073F' }}>{t}</span>)}
                     </div>
                   )}
                 </div>

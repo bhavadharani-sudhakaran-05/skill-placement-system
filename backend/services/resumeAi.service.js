@@ -88,8 +88,8 @@ const approvedOutputContract = `You are an expert resume parser and ATS analyst.
 STRICT RULES:
 1. Extract only facts explicitly written in the current resume. Never invent skills, qualifications, employers, dates, certifications, achievements, or metrics.
 2. Detect standard and non-standard headings, including EDUCATION, SKILLS, INTERNSHIP, EXPERIENCE, PROJECTS, ACHIEVEMENTS, and CERTIFICATIONS. Keep every entry in its correct section.
-3. A project's Tech Stack line and every associated description bullet belong to one project object with its title. Keep them together; never split wrapped lines, sentences, or fragments into extra projects.
-4. Do not infer project titles from ordinary sentences. A Tech Stack line, technology, or bullet is not a project.
+3. A project title is the standalone line directly above its Tech Stack/TechStack line. Remove a trailing "GitHub" label. Put technologies only in tech_stack, combine following bullets into description, and use link only for a real project-specific URL (otherwise "").
+4. Return one object per actual project with a non-empty title, including projects outside a dedicated Projects section. Do not infer titles from ordinary sentences.
 5. Include actual employment and internships only in experience. Never move project descriptions into experience.
 6. Include every education entry, including college and school. Extract degree, institution, score, location, and duration; missing values are empty strings.
 7. Include every listed certification. Preserve its full name, issuer, and date when available. Do not omit a certification because issuer or date is missing.

@@ -29,12 +29,12 @@ const experiencedProfessional = {
 
 const manyProjectsAndCertifications = {
   name: 'many projects and certifications',
-  text: `PROJECTS\nOrchard\nTech Stack: Python\n- Built a crop tracker.\n- Added seasonal reports.\nHarbor: Built a shipping dashboard in React.\nBeacon: Created a status monitor with Node.js.\nCERTIFICATIONS\nCloud Basics, North Institute, 2024\nData Foundations, West Academy, 2023\nApplied Analytics, South Institute, 2022`,
+  text: `PROJECTS\nOrchard\nTech Stack: Python\n- Built a crop tracker.\n- Added seasonal reports.\nHarbor\nTechStack: React\n- Built a shipping dashboard in React.\nBeacon\nTech Stack: Node.js\n- Created a status monitor with Node.js.\nCERTIFICATIONS\nCloud Basics, North Institute, 2024\nData Foundations, West Academy, 2023\nApplied Analytics, South Institute, 2022`,
   result: {
     projects: [
-      { title: 'Orchard', description: 'Built a crop tracker. Added seasonal reports.', technologies: ['Python'], evidence: 'Orchard Tech Stack: Python Built a crop tracker. Added seasonal reports.', confidence: 0.92 },
-      { title: 'Harbor', description: 'Built a shipping dashboard in React.', technologies: ['React'], evidence: 'Harbor: Built a shipping dashboard in React.', confidence: 0.91 },
-      { title: 'Beacon', description: 'Created a status monitor with Node.js.', technologies: ['Node.js'], evidence: 'Beacon: Created a status monitor with Node.js.', confidence: 0.9 },
+      { title: 'Orchard', description: 'Built a crop tracker. Added seasonal reports.', tech_stack: ['Python'], evidence: 'Orchard Tech Stack: Python Built a crop tracker. Added seasonal reports.', confidence: 0.92 },
+      { title: 'Harbor', description: 'Built a shipping dashboard in React.', tech_stack: ['React'], evidence: 'Harbor TechStack: React Built a shipping dashboard in React.', confidence: 0.91 },
+      { title: 'Beacon', description: 'Created a status monitor with Node.js.', tech_stack: ['Node.js'], evidence: 'Beacon Tech Stack: Node.js Created a status monitor with Node.js.', confidence: 0.9 },
       { title: 'Cedar Planner', description: 'Designed a garden planning interface with Vue.js.', technologies: ['Vue.js'], evidence: 'Cedar Planner: Designed a garden planning interface with Vue.js.', confidence: 0.9 }
     ],
     certifications: [
