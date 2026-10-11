@@ -1,8 +1,4 @@
-﻿/**
- * Γ¡É UNIQUE FEATURE 4: AI-Powered Resume Parsing & Optimization
- * Extracts skills, projects, certifications from resume
- * Provides ATS score and improvement suggestions
- */
+﻿
 
 const fs = require('fs');
 const path = require('path');
@@ -74,7 +70,7 @@ async function extractScannedPdfText(filePath, pageCount) {
 }
 
 class ResumeParserService {
-  // Common skill keywords database
+ 
   static skillKeywords = {
     'programming-language': [
       'javascript', 'python', 'java', 'c++', 'c#', 'ruby', 'go', 'golang', 'rust',
@@ -111,14 +107,14 @@ class ResumeParserService {
     ]
   };
 
-  // ATS keywords that improve score
+
   static atsKeywords = [
     'achieved', 'improved', 'developed', 'managed', 'created', 'designed',
     'implemented', 'increased', 'decreased', 'reduced', 'led', 'coordinated',
     'launched', 'built', 'delivered', 'optimized', 'streamlined'
   ];
 
-  /** Normalize extracted document text without flattening paragraphs or lists. */
+ 
   static normalizeResumeText(value) {
     return String(value || '')
       .replace(/\r\n?/g, '\n')
@@ -132,7 +128,7 @@ class ResumeParserService {
       .trim();
   }
 
-  /** Extract text from supported document formats, using OCR for image-only PDFs. */
+ 
   static async extractDocument(filePath, originalName = filePath) {
     const extension = path.extname(String(originalName || filePath || '')).toLowerCase();
     if (!['.pdf', '.docx'].includes(extension)) {
@@ -191,9 +187,7 @@ class ResumeParserService {
     return { text: normalizedText, source: extractionSource, confidence };
   }
 
-  /**
-   * Parse resume from PDF file
-   */
+  
   static async parseResume(filePath) {
     try {
       const dataBuffer = fs.readFileSync(filePath);
@@ -207,9 +201,7 @@ class ResumeParserService {
     }
   }
 
-  /**
-   * Analyze resume text and extract information
-   */
+  
   static async analyzeResumeText(text) {
     const normalizedText = text.toLowerCase();
     
@@ -223,22 +215,20 @@ class ResumeParserService {
       improvementSuggestions: []
     };
 
-    // Calculate ATS score
+  
     result.atsScore = this.calculateATSScore(text, result);
     
-    // Generate improvement suggestions
+   
     result.improvementSuggestions = this.generateSuggestions(text, result);
 
     return result;
   }
 
-  /**
-   * Extract skills from resume text
-   */
+  
   static extractSkills(text) {
     const foundSkills = new Set();
     
-    // Check each skill category
+    
     for (const [category, skills] of Object.entries(this.skillKeywords)) {
       for (const skill of skills) {
         if (text.includes(skill.toLowerCase())) {
@@ -247,11 +237,11 @@ class ResumeParserService {
       }
     }
 
-    // Also use NLP tokenizer to find potential skills
+
     const tokenizer = new natural.WordTokenizer();
     const tokens = tokenizer.tokenize(text);
     
-    // Look for capitalized technology names
+   
     const techPattern = /\b[A-Z][a-zA-Z]*(?:\.[jJ][sS]|JS|DB)?\b/g;
     const matches = text.match(techPattern) || [];
     matches.forEach(match => {
@@ -260,7 +250,7 @@ class ResumeParserService {
       }
     });
 
-    return Array.from(foundSkills).slice(0, 30); // Limit to 30 skills
+    return Array.from(foundSkills).slice(0, 30);  
   }
 
   /**
@@ -269,7 +259,7 @@ class ResumeParserService {
   static extractProjects(text) {
     const projects = [];
     
-    // Look for project section
+    
     const projectPatterns = [
       /projects?\s*:?\s*([\s\S]*?)(?=education|experience|skills|certifications|$)/i,
       /personal\s+projects?\s*:?\s*([\s\S]*?)(?=education|experience|skills|$)/i
@@ -280,7 +270,7 @@ class ResumeParserService {
       if (match && match[1]) {
         const projectText = match[1];
         
-        // Split by bullet points or newlines
+        
         const projectItems = projectText.split(/[ΓÇó\-\n]/).filter(p => p.trim().length > 20);
         
         for (let i = 0; i < Math.min(projectItems.length, 5); i++) {
@@ -302,9 +292,7 @@ class ResumeParserService {
     return projects;
   }
 
-  /**
-   * Extract certifications
-   */
+  
   static extractCertifications(text) {
     const certifications = [];
     
@@ -341,9 +329,7 @@ class ResumeParserService {
     return certifications;
   }
 
-  /**
-   * Extract education details
-   */
+ 
   static extractEducation(text) {
     const education = [];
     
@@ -353,7 +339,7 @@ class ResumeParserService {
     if (match && match[1]) {
       const eduText = match[1];
       
-      // Look for degree patterns
+     
       const degreePatterns = [
         /\b(B\.?Tech|B\.?E\.?|B\.?Sc|M\.?Tech|M\.?E\.?|M\.?Sc|MBA|PhD|Bachelor|Master|Diploma)\b/gi
       ];
@@ -379,9 +365,7 @@ class ResumeParserService {
     return education;
   }
 
-  /**
-   * Extract work experience
-   */
+ 
   static extractExperience(text) {
     const experience = [];
     
@@ -405,36 +389,32 @@ class ResumeParserService {
     return experience;
   }
 
-  /**
-   * Calculate ATS (Applicant Tracking System) Score
-   */
+  
   static calculateATSScore(text, parsedData) {
     let score = 0;
     const normalizedText = text.toLowerCase();
 
-    // Skills score (30 points)
     const skillCount = parsedData.parsedSkills.length;
     score += Math.min(30, skillCount * 3);
 
-    // Action verbs score (20 points)
     let actionVerbCount = 0;
     this.atsKeywords.forEach(verb => {
       if (normalizedText.includes(verb)) actionVerbCount++;
     });
     score += Math.min(20, actionVerbCount * 2);
 
-    // Quantified achievements (15 points)
+   
     const numberPattern = /\b\d+%|\$\d+|\d+\s*(users|customers|projects|team|members)/gi;
     const quantifiedAchievements = (text.match(numberPattern) || []).length;
     score += Math.min(15, quantifiedAchievements * 3);
 
-    // Sections present (15 points)
+   
     const sections = ['education', 'experience', 'skills', 'projects'];
     sections.forEach(section => {
       if (normalizedText.includes(section)) score += 3.75;
     });
 
-    // Length score (10 points) - ideal 400-800 words
+    
     const wordCount = text.split(/\s+/).length;
     if (wordCount >= 400 && wordCount <= 800) {
       score += 10;
@@ -444,27 +424,25 @@ class ResumeParserService {
       score += 7;
     }
 
-    // Contact info (5 points)
+   
     const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
     const phonePattern = /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/;
     if (emailPattern.test(text)) score += 2.5;
     if (phonePattern.test(text)) score += 2.5;
 
-    // LinkedIn/GitHub (5 points)
+   
     if (normalizedText.includes('linkedin')) score += 2.5;
     if (normalizedText.includes('github')) score += 2.5;
 
     return Math.round(Math.min(100, score));
   }
 
-  /**
-   * Generate improvement suggestions
-   */
+ 
   static generateSuggestions(text, parsedData) {
     const suggestions = [];
     const normalizedText = text.toLowerCase();
 
-    // Check for action verbs
+   
     const usedActionVerbs = this.atsKeywords.filter(v => normalizedText.includes(v));
     if (usedActionVerbs.length < 5) {
       suggestions.push({
@@ -474,7 +452,7 @@ class ResumeParserService {
       });
     }
 
-    // Check for quantified achievements
+   
     const numberPattern = /\b\d+%|\$\d+|\d+\s*(users|customers|projects)/gi;
     if (!(text.match(numberPattern) || []).length) {
       suggestions.push({
@@ -484,7 +462,6 @@ class ResumeParserService {
       });
     }
 
-    // Check for skills count
     if (parsedData.parsedSkills.length < 8) {
       suggestions.push({
         type: 'skills',
@@ -493,7 +470,7 @@ class ResumeParserService {
       });
     }
 
-    // Check for projects
+   
     if (parsedData.parsedProjects.length < 2) {
       suggestions.push({
         type: 'projects',
@@ -502,7 +479,6 @@ class ResumeParserService {
       });
     }
 
-    // Check for certifications
     if (parsedData.parsedCertifications.length === 0) {
       suggestions.push({
         type: 'certifications',
@@ -511,7 +487,6 @@ class ResumeParserService {
       });
     }
 
-    // Check for LinkedIn/GitHub
     if (!normalizedText.includes('linkedin')) {
       suggestions.push({
         type: 'linkedin',
@@ -527,7 +502,7 @@ class ResumeParserService {
       });
     }
 
-    // Length check
+
     const wordCount = text.split(/\s+/).length;
     if (wordCount < 300) {
       suggestions.push({
@@ -549,7 +524,7 @@ class ResumeParserService {
     });
   }
 
-  // Helper functions
+ 
   static extractIssuer(text) {
     const issuers = ['aws', 'google', 'microsoft', 'oracle', 'cisco', 'coursera', 'udemy'];
     for (const issuer of issuers) {
@@ -584,53 +559,49 @@ class ResumeParserService {
     return match ? match[0] : '';
   }
 
-  /**
-   * Calculate formatting score (0-100)
-   */
+  
   static calculateFormattingScore(text) {
     let score = 0;
 
-    // Check for section headers
+   
     const sections = ['education', 'experience', 'skills', 'projects', 'certifications', 'summary', 'objective'];
     let sectionsFound = 0;
     sections.forEach(s => { if (text.toLowerCase().includes(s)) sectionsFound++; });
     score += Math.min(30, sectionsFound * 6);
 
-    // Check for consistent bullet points
+   
     const bullets = (text.match(/[ΓÇó\-\*]/g) || []).length;
     score += Math.min(20, bullets * 2);
 
-    // Word count in ideal range (300-800)
+  
     const wordCount = text.split(/\s+/).length;
     if (wordCount >= 300 && wordCount <= 800) score += 20;
     else if (wordCount >= 200 && wordCount <= 1200) score += 10;
 
-    // Contact info present
+    
     const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(text);
     const hasPhone = /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/.test(text);
     if (hasEmail) score += 10;
     if (hasPhone) score += 10;
 
-    // LinkedIn / GitHub
+  
     if (text.toLowerCase().includes('linkedin')) score += 5;
     if (text.toLowerCase().includes('github')) score += 5;
 
     return Math.round(Math.min(100, score));
   }
 
-  /**
-   * Calculate keyword density score (0-100)
-   */
+ 
   static calculateKeywordScore(text) {
     let score = 0;
     const lower = text.toLowerCase();
 
-    // Action verbs
+  
     let actionCount = 0;
     this.atsKeywords.forEach(v => { if (lower.includes(v)) actionCount++; });
     score += Math.min(35, actionCount * 4);
 
-    // Technical keywords from all categories
+    
     let techCount = 0;
     for (const skills of Object.values(this.skillKeywords)) {
       for (const skill of skills) {
@@ -639,7 +610,7 @@ class ResumeParserService {
     }
     score += Math.min(40, techCount * 3);
 
-    // Quantified results
+  
     const quantified = (text.match(/\b\d+%|\$\d+|\d+\s*(users|customers|projects|team|members|clients)/gi) || []).length;
     score += Math.min(25, quantified * 5);
 

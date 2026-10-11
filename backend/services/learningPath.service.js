@@ -1,8 +1,3 @@
-/**
- * ⭐ UNIQUE FEATURE 5: Adaptive Learning Path Generator
- * Creates personalized learning paths based on skill gaps
- * Orders topics from beginner to advanced
- */
 
 const User = require('../models/User');
 const Skill = require('../models/Skill');
@@ -12,33 +7,31 @@ const SkillGapService = require('./skillGap.service');
 const RecommendationService = require('./recommendation.service');
 
 class LearningPathService {
-  /**
-   * Generate personalized learning path for a user
-   */
+  
   static async generatePersonalizedPath(userId, targetRole) {
     const user = await User.findById(userId);
     if (!user) throw new Error('User not found');
 
-    // Get user's current skills
+   
     const currentSkills = user.skills.map(s => ({
       name: s.name,
       level: s.proficiencyLevel,
       score: s.proficiencyScore
     }));
 
-    // Get required skills for target role
+    
     const targetSkills = await this.getSkillsForRole(targetRole);
 
-    // Analyze skill gap
+  
     const skillGap = this.analyzeSkillGap(currentSkills, targetSkills);
 
-    // Get relevant courses
+ 
     const courses = await Course.find({ isActive: true });
 
-    // Build learning stages
+   
     const stages = await this.buildLearningStages(skillGap, courses, currentSkills);
 
-    // Create learning path
+    
     const learningPath = new LearningPath({
       title: `${targetRole} Learning Path for ${user.name}`,
       description: `Personalized learning path to become a ${targetRole}`,
@@ -74,7 +67,7 @@ class LearningPathService {
 
     await learningPath.save();
 
-    // Update user's active learning path
+    
     user.activeLearningPath = {
       pathId: learningPath._id,
       startedAt: new Date(),
@@ -87,11 +80,9 @@ class LearningPathService {
     return learningPath;
   }
 
-  /**
-   * Get skills required for a specific role
-   */
+ 
   static async getSkillsForRole(role) {
-    // Role to skills mapping
+   
     const roleSkillsMap = {
       'frontend-developer': [
         { name: 'HTML', requiredLevel: 'advanced', importance: 'must-have' },
@@ -141,9 +132,7 @@ class LearningPathService {
     return roleSkillsMap[role.toLowerCase()] || roleSkillsMap['full-stack-developer'];
   }
 
-  /**
-   * Analyze skill gap between current and target skills
-   */
+  
   static analyzeSkillGap(currentSkills, targetSkills) {
     const levels = { beginner: 1, intermediate: 2, advanced: 3, expert: 4 };
     
@@ -190,13 +179,11 @@ class LearningPathService {
     return result;
   }
 
-  /**
-   * Build learning stages from beginner to advanced
-   */
+ 
   static async buildLearningStages(skillGap, courses, currentSkills) {
     const stages = [];
 
-    // Stage 1: Foundation (Beginner)
+    
     const beginnerSkills = [
       ...skillGap.missing.filter(s => s.importance === 'must-have'),
       ...skillGap.partial.filter(s => s.gapLevels >= 2)
@@ -212,7 +199,7 @@ class LearningPathService {
       ));
     }
 
-    // Stage 2: Core Skills (Intermediate)
+   
     const intermediateSkills = [
       ...skillGap.missing.filter(s => s.importance === 'nice-to-have'),
       ...skillGap.partial.filter(s => s.gapLevels === 1)
@@ -228,7 +215,7 @@ class LearningPathService {
       ));
     }
 
-    // Stage 3: Advanced (Advanced)
+   
     const advancedSkills = skillGap.partial.filter(s => 
       s.requiredLevel === 'advanced' || s.requiredLevel === 'expert'
     ).slice(0, 3);
@@ -246,15 +233,13 @@ class LearningPathService {
     return stages;
   }
 
-  /**
-   * Create a learning stage with modules
-   */
+ 
   static async createStage(order, title, difficulty, skills, courses) {
     const modules = [];
     let totalDuration = 0;
 
     for (const skill of skills) {
-      // Find matching course
+    
       const matchingCourse = courses.find(c => 
         (c.skills || c.skillsTaught || []).some(s => 
           s.name.toLowerCase().includes(skill.name.toLowerCase()) ||
@@ -284,7 +269,7 @@ class LearningPathService {
         totalDuration += matchingCourse.duration?.total || 10;
       }
 
-      // Add practice project
+    
       modules.push({
         order: modules.length + 1,
         type: 'project',
@@ -314,9 +299,7 @@ class LearningPathService {
     };
   }
 
-  /**
-   * Generate adaptive rules for the learning path
-   */
+  
   static generateAdaptiveRules(stages) {
     return [
       {
@@ -338,9 +321,7 @@ class LearningPathService {
     ];
   }
 
-  /**
-   * Update progress on learning path
-   */
+  
   static async updateProgress(userId, moduleId, score) {
     const user = await User.findById(userId);
     if (!user?.activeLearningPath?.pathId) {
@@ -350,23 +331,23 @@ class LearningPathService {
     const path = await LearningPath.findById(user.activeLearningPath.pathId);
     if (!path) throw new Error('Learning path not found');
 
-    // Add to completed modules
+    
     if (!user.activeLearningPath.completedModules.includes(moduleId)) {
       user.activeLearningPath.completedModules.push(moduleId);
     }
 
-    // Check if current stage is complete
+   
     const currentStage = path.stages[user.activeLearningPath.currentStage];
     const stageModuleIds = currentStage.modules.map(m => m._id?.toString());
     const completedInStage = user.activeLearningPath.completedModules
       .filter(m => stageModuleIds.includes(m.toString())).length;
 
     if (completedInStage >= currentStage.modules.length) {
-      // Move to next stage
+    
       user.activeLearningPath.currentStage++;
     }
 
-    // Update skill readiness score
+   
     await user.updateSkillReadinessScore();
     await user.save();
 
@@ -378,9 +359,7 @@ class LearningPathService {
     };
   }
 
-  /**
-   * Get available learning path templates
-   */
+ 
   static async getTemplates() {
     const templates = await LearningPath.find({ isPublic: true, isActive: true })
       .select('title targetRole description totalDuration totalModules difficulty successMetrics')
