@@ -66,7 +66,7 @@ function cleanRecord(record, source, fields) {
 
 function records(raw, source, fields) {
   if (!Array.isArray(raw)) return [];
-  return raw.map(record => cleanRecord(record, source, fields)).filter(Boolean);
+  return raw.slice(0, 200).map(record => cleanRecord(record, source, fields)).filter(Boolean);
 }
 
 function adaptRequestedSchema(raw) {
@@ -100,7 +100,8 @@ function adaptRequestedSchema(raw) {
   })) : [];
   const projects = Array.isArray(raw.projects) ? raw.projects.map(item => ({
     ...item,
-    technologies: Array.isArray(item?.tech_stack) ? item.tech_stack : (Array.isArray(item?.technologies) ? item.technologies : [])
+    title: text(item?.title, 500).replace(/\s+GitHub\s*$/i, '').trim(),
+    tech_stack: Array.isArray(item?.tech_stack) ? item.tech_stack : (Array.isArray(item?.technologies) ? item.technologies : [])
   })) : [];
 
   return {
@@ -220,16 +221,20 @@ function validateStructuredResult(raw, source) {
   experience.forEach(item => {
     item.current = /present|current|now/i.test(item.endDate || '');
   });
-  const projects = records(raw.projects, source, ['title', 'description', 'technologies[]', 'startDate', 'endDate', 'link']);
+  const projects = records(Array.isArray(raw.projects) ? raw.projects.map(item => ({
+    ...item,
+    title: text(item?.title, 500).replace(/\s+GitHub\s*$/i, '').trim(),
+    tech_stack: Array.isArray(item?.tech_stack) ? item.tech_stack : (Array.isArray(item?.technologies) ? item.technologies : [])
+  })) : [], source, ['title', 'description', 'tech_stack[]', 'startDate', 'endDate', 'link']);
   const validProjects = projects.filter(project => {
     const title = normalized(project.title);
     if (!title || sentenceLikeProjectTitle(project.title) || /^(?:project|projects|technical skills|skills|technology|technologies|tools|frameworks?|tech stack|technology stack|stack|languages|database|databases)$/i.test(title)) return false;
-    if (sectionForEvidence(source, project.evidence) === 'experience') return false;
     const titleTokens = title.split(' ').filter(Boolean);
-    const technologyTokens = new Set((project.technologies || []).flatMap(name => normalized(name).split(' ')));
+    const technologyTokens = new Set((project.tech_stack || []).flatMap(name => normalized(name).split(' ')));
     const titleIsOnlyTechnologies = titleTokens.length > 0 && titleTokens.every(token => technologyTokens.has(token));
     if (titleIsOnlyTechnologies) return false;
-    return Boolean(project.description || project.technologies?.length);
+    project.link = /^https?:\/\//i.test(project.link) && supportedContent(project.link, project.evidence) ? project.link : '';
+    return Boolean(project.description || project.tech_stack?.length);
   });
   const certifications = records(raw.certifications, source, ['name', 'issuer', 'date']).filter(item => item.name);
   const simpleRecordFields = ['title', 'description', 'date'];
@@ -289,7 +294,12 @@ function validateStructuredResult(raw, source) {
 function makeScores(source, data, jobDescription) {
   const words = source.split(/\s+/).filter(Boolean).length;
   const lines = source.split('\n').filter(line => line.trim());
-  if (words < 25) return { ats: null, formatting: null, skillMatch: null, keywords: null, criteria: [] };
+  const distinctTechnicalSkills = new Set(data.skills
+    .filter(skill => !/^soft(?:[ _-]?skills?)?$/i.test(skill.category || ''))
+    .map(skill => normalized(canonicalSkillName(skill.name)))
+    .filter(Boolean));
+  const skillMatch = Math.min(100, Math.round((distinctTechnicalSkills.size / 20) * 100));
+  if (words < 25) return { ats: null, formatting: null, skillMatch, keywords: null, criteria: [] };
   const readableRatio = source.replace(/[^\x09\x0a\x0d\x20-\x7e]/g, '').length / Math.max(source.length, 1);
   const reasonableLineRatio = lines.filter(line => line.length <= 180).length / Math.max(lines.length, 1);
   const recognizedHeading = /^(professional\s+)?(summary|profile|experience|employment history|work history|projects?|academic projects|education|qualifications|skills|technical skills|achievements|awards|certifications|publications)\s*:??$/im.test(source);
@@ -303,16 +313,12 @@ function makeScores(source, data, jobDescription) {
   const extractionScore = Math.round(100 * (0.4 * readableRatio + 0.3 * reasonableLineRatio + 0.2 * (recognizedHeading ? 1 : 0.5) + 0.1 * artifactRatio));
   const formattingScore = Math.round(100 * (0.35 * reasonableLineRatio + 0.25 * (recognizedHeading ? 1 : 0.5) + 0.2 * listConsistency + 0.2 * artifactRatio));
 
-  let skillMatch = null;
   let keywordScore = null;
   if (typeof jobDescription === 'string' && jobDescription.trim()) {
     const jobTerms = [...new Set(normalized(jobDescription).split(' ').filter(word => word.length > 2 && !stopWords.has(word)))];
     if (jobTerms.length) {
-      const resumeSkillText = normalized(data.skills.map(skill => skill.name).join(' '));
       const resumeText = normalized(source);
-      const skillTerms = jobTerms.filter(term => resumeSkillText.includes(term));
       const matchedTerms = jobTerms.filter(term => resumeText.includes(term));
-      skillMatch = Math.round(100 * skillTerms.length / jobTerms.length);
       keywordScore = Math.round(100 * matchedTerms.length / jobTerms.length);
     }
   }
@@ -320,7 +326,7 @@ function makeScores(source, data, jobDescription) {
   const criteria = [
     { score: extractionScore, label: 'ATS parsing checks', explanation: '40% readable extracted text, 30% lines at or below 180 characters, 20% recognizable section heading, and 10% low extraction-artifact rate. This is not an ATS compatibility guarantee.' },
     { score: formattingScore, label: 'Formatting checks', explanation: '35% line length readability, 25% recognizable section separation, 20% consistent list markers, and 20% low extraction-artifact rate.' },
-    { score: skillMatch, label: 'Job skill coverage', explanation: jobTermsExplanation(jobDescription, 'Coverage is explicit skills found in the supplied job description.') },
+    { score: skillMatch, label: 'Technical skills count', explanation: `Distinct technical skills: ${distinctTechnicalSkills.size}; score is min(100, round(count / 20 * 100)).` },
     { score: keywordScore, label: 'Job keyword coverage', explanation: jobTermsExplanation(jobDescription, 'Coverage is distinct non-generic terms from the supplied job description found in extracted resume text.') }
   ];
   return { ats: extractionScore, formatting: formattingScore, skillMatch, keywords: keywordScore, criteria };
