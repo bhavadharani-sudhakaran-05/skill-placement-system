@@ -1,5 +1,4 @@
 
-
 const User = require('../models/User');
 const Job = require('../models/Job');
 const Course = require('../models/Course');
