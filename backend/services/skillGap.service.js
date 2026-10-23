@@ -1,9 +1,13 @@
+
+
 const User = require('../models/User');
 const Skill = require('../models/Skill');
 const Job = require('../models/Job');
 
 class SkillGapService {
-
+  /**
+   * Analyze skill gap between user skills and job requirements
+   */
   static async analyzeGap(userId, jobId) {
     const user = await User.findById(userId);
     const job = await Job.findById(jobId);
@@ -25,6 +29,7 @@ class SkillGapService {
       weight: s.weight
     }));
 
+    // Analyze matching and missing skills
     const analysis = {
       matchingSkills: [],
       partialMatchSkills: [],
@@ -76,15 +81,18 @@ class SkillGapService {
       }
     }
 
- 
+    // Calculate overall match score
     analysis.overallMatchScore = totalWeight > 0 ? Math.round((matchedWeight / totalWeight) * 100) : 0;
 
+    // Generate recommendations
     analysis.recommendations = this.generateRecommendations(analysis);
 
     return analysis;
   }
 
-
+  /**
+   * Compare proficiency levels
+   */
   static compareProficiency(userLevel, requiredLevel) {
     const levels = {
       'beginner': 1,
@@ -100,10 +108,13 @@ class SkillGapService {
     return (userScore / requiredScore) * 100;
   }
 
+  /**
+   * Generate learning recommendations based on skill gap
+   */
   static generateRecommendations(analysis) {
     const recommendations = [];
 
-
+    // Prioritize must-have missing skills
     const mustHaveSkills = analysis.missingSkills
       .filter(s => s.importance === 'must-have')
       .map(s => ({
@@ -113,7 +124,7 @@ class SkillGapService {
         priority: 1
       }));
 
- 
+    // Partial match improvements
     const partialImprovements = analysis.partialMatchSkills
       .sort((a, b) => b.gapPercentage - a.gapPercentage)
       .map(s => ({
@@ -123,7 +134,7 @@ class SkillGapService {
         priority: 2
       }));
 
-
+    // Nice-to-have skills
     const niceToHaveSkills = analysis.missingSkills
       .filter(s => s.importance === 'nice-to-have')
       .map(s => ({
@@ -136,6 +147,9 @@ class SkillGapService {
     return [...mustHaveSkills, ...partialImprovements, ...niceToHaveSkills];
   }
 
+  /**
+   * ⭐ UNIQUE FEATURE 3: Calculate Skill Readiness Score (0-100)
+   */
   static async calculateReadinessScore(user) {
     const scores = {
       technical: 0,
@@ -146,7 +160,7 @@ class SkillGapService {
       overall: 0
     };
 
-   
+    // Technical skills score (based on skill count and proficiency)
     const technicalSkills = user.skills.filter(s => 
       ['programming-language', 'framework', 'database', 'cloud', 'devops'].includes(s.category)
     );
@@ -155,32 +169,36 @@ class SkillGapService {
       scores.technical = Math.min(100, avgTechScore + (technicalSkills.length * 2));
     }
 
-   
+    // Soft skills score
     const softSkills = user.skills.filter(s => s.category === 'soft-skills');
     scores.softSkills = Math.min(100, softSkills.length * 15 + 
       softSkills.reduce((sum, s) => sum + s.proficiencyScore, 0) / Math.max(1, softSkills.length));
 
+    // Domain knowledge score
     const domainSkills = user.skills.filter(s => s.category === 'domain-knowledge');
     scores.domainKnowledge = Math.min(100, domainSkills.length * 20 + 
       domainSkills.reduce((sum, s) => sum + s.proficiencyScore, 0) / Math.max(1, domainSkills.length));
 
-   
+    // Project experience score
     const projects = user.resumeData?.parsedProjects || [];
     scores.projectExperience = Math.min(100, projects.length * 15 + 
       (user.studentProfile?.cgpa || 0) * 5);
 
+    // Certifications score
     const certifications = user.resumeData?.parsedCertifications || [];
     scores.certifications = Math.min(100, certifications.length * 20);
 
+    // Assessment bonus
     const assessments = user.assessmentHistory || [];
     const avgAssessmentScore = assessments.length > 0 
       ? assessments.reduce((sum, a) => sum + (a.score || 0), 0) / assessments.length 
       : 0;
 
-    
+    // Course completion bonus
     const completedCourses = (user.courseProgress || []).filter(c => c.progress === 100);
     const courseBonus = completedCourses.length * 5;
 
+    // Calculate overall score
     scores.overall = Math.round(
       (scores.technical * 0.35) +
       (scores.softSkills * 0.15) +
@@ -196,7 +214,9 @@ class SkillGapService {
     return scores;
   }
 
-
+  /**
+   * Bulk analyze skill gaps for multiple jobs
+   */
   static async analyzeMultipleJobs(userId, jobIds) {
     const analyses = await Promise.all(
       jobIds.map(jobId => this.analyzeGap(userId, jobId).catch(e => null))
@@ -205,7 +225,9 @@ class SkillGapService {
     return analyses.filter(a => a !== null);
   }
 
- 
+  /**
+   * Get industry skill trends
+   */
   static async getSkillTrends() {
     const skills = await Skill.find({ isActive: true })
       .sort({ 'industryDemand.score': -1 })
