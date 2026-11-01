@@ -21,7 +21,6 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminJobs from './pages/admin/AdminJobs';
-import AdminColleges from './pages/admin/AdminColleges';
 import AdminAssessments from './pages/admin/AdminAssessments';
 import AdminSettings from './pages/admin/AdminSettings';
 
@@ -83,7 +82,6 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/jobs" element={<AdminJobs />} />
-          <Route path="/admin/colleges" element={<AdminColleges />} />
           <Route path="/admin/assessments" element={<AdminAssessments />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>

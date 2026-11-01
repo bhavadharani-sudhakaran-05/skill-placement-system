@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from '../lib/motion';
 import {
   Sparkles, Mail, Lock, Eye, EyeOff, ArrowRight, Check,
-  GraduationCap, Shield
+  GraduationCap
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../store/authStore';
@@ -34,12 +34,6 @@ const LoginPage = () => {
     'Real-Time Job Placement Matching',
     'AI-Proctored Skill Assessments & Badges'
   ];
-
-  const handleDemoFill = () => {
-    setEmail('student@skillforge.com');
-    setPassword('student123');
-    toast.success('Filled with Student demo credentials');
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -220,28 +214,6 @@ const LoginPage = () => {
       marginBottom: '1.5rem',
       fontSize: isMobile ? '0.875rem' : '1rem'
     },
-    demoPill: {
-      background: '#faf5ff',
-      border: '1px dashed #d8b4fe',
-      borderRadius: '12px',
-      padding: '0.65rem 0.85rem',
-      marginBottom: '1.5rem',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      gap: '0.5rem',
-      fontSize: '0.78rem'
-    },
-    demoButton: {
-      background: '#2E073F',
-      color: 'white',
-      border: 'none',
-      padding: '0.35rem 0.75rem',
-      borderRadius: '8px',
-      fontWeight: 600,
-      fontSize: '0.74rem',
-      cursor: 'pointer'
-    },
     inputGroup: {
       marginBottom: '1.25rem'
     },
@@ -405,25 +377,15 @@ const LoginPage = () => {
           <h2 style={styles.title}>Student Sign In</h2>
           <p style={styles.subtitle}>Enter your student credentials to access your dashboard</p>
 
-          {/* Quick Demo Fill Banner */}
-          <div style={styles.demoPill}>
-            <div>
-              <div style={{ fontWeight: 600, color: '#2E073F' }}>Demo Student Access</div>
-              <div style={{ color: '#6b7280' }}>student@skillforge.com</div>
-            </div>
-            <button type="button" onClick={handleDemoFill} style={styles.demoButton}>
-              Auto-Fill
-            </button>
-          </div>
+          
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <div style={styles.inputGroup}>
               <label style={styles.label}>Student Email</label>
               <div style={styles.inputWrapper}>
                 <Mail size={20} style={styles.inputIcon} />
                 <input
-                  type="email"
-                  value={email}
+                  type="email" autoComplete="off" value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="student@example.com"
                   style={styles.input}
@@ -437,8 +399,7 @@ const LoginPage = () => {
               <div style={styles.inputWrapper}>
                 <Lock size={20} style={styles.inputIcon} />
                 <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
+                  type={showPassword ? "text" : "password"} autoComplete="new-password" value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   style={styles.input}
@@ -470,22 +431,6 @@ const LoginPage = () => {
           <p style={styles.signUpText}>
             New Student? <Link to="/register" style={styles.signUpLink}>Register your account</Link>
           </p>
-
-          <div style={styles.divider}>
-            <div style={styles.dividerLine} />
-            <span style={styles.dividerText}>Administrative Access</span>
-            <div style={styles.dividerLine} />
-          </div>
-
-          <div style={styles.portalSwitchers}>
-            <Link to="/admin/login" style={styles.switcherBtn}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                <Shield size={15} color="#2E073F" />
-                Placement Officer / Admin? Admin Portal
-              </span>
-              <ArrowRight size={14} color="#94a3b8" />
-            </Link>
-          </div>
         </motion.div>
       </div>
     </div>

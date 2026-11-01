@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  Shield, LayoutDashboard, Users, Briefcase, GraduationCap,
+  Shield, LayoutDashboard, Users, Briefcase,
   ClipboardCheck, Settings, ExternalLink, RefreshCw
 } from 'lucide-react';
 
@@ -12,7 +12,6 @@ const AdminHeaderNav = ({ activeKey, onRefresh, refreshing, subtitle }) => {
     { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/admin/users', label: 'Users', icon: Users },
     { to: '/admin/jobs', label: 'Jobs & Placements', icon: Briefcase },
-    { to: '/admin/colleges', label: 'Colleges & Cells', icon: GraduationCap },
     { to: '/admin/assessments', label: 'Skills & Assessments', icon: ClipboardCheck },
     { to: '/admin/settings', label: 'System & Health', icon: Settings }
   ];
@@ -52,7 +51,7 @@ const AdminHeaderNav = ({ activeKey, onRefresh, refreshing, subtitle }) => {
             SkillForge Admin Module
           </h1>
           <p style={{ margin: 0, opacity: 0.9, fontSize: '0.9rem', maxWidth: '650px' }}>
-            {subtitle || 'Manage users, placement opportunities, affiliated colleges, assessments, and platform health.'}
+            {subtitle || 'Manage college student profiles, corporate job postings, skill tests, and placement operations.'}
           </p>
         </div>
 

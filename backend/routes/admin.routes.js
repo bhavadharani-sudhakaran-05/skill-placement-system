@@ -20,22 +20,21 @@ router.get('/overview', async (req, res) => {
   try {
     const [
       totalStudents,
-      totalRecruiters,
-      totalCollegeAdmins,
       totalAdmins,
       totalJobs,
       activeJobs,
       totalCourses,
+          totalAssessments,
+totalAssessments,
       recentUsers,
       recentJobs
     ] = await Promise.all([
       User.countDocuments({ role: 'student' }),
-      User.countDocuments({ role: 'recruiter' }),
-      User.countDocuments({ role: 'college_admin' }),
       User.countDocuments({ role: 'admin' }),
       Job.countDocuments(),
       Job.countDocuments({ status: 'active' }),
       Course.countDocuments({ isActive: true }),
+      Assessment.countDocuments(),
       User.find()
         .select('name email role createdAt metrics.skillReadinessScore')
         .sort({ createdAt: -1 })
@@ -46,7 +45,7 @@ router.get('/overview', async (req, res) => {
         .limit(6)
     ]);
 
-    const totalUsers = totalStudents + totalRecruiters + totalCollegeAdmins + totalAdmins;
+    const totalUsers = totalStudents + totalAdmins;
 
     res.json({
       success: true,
@@ -54,13 +53,12 @@ router.get('/overview', async (req, res) => {
         stats: {
           totalUsers,
           totalStudents,
-          totalRecruiters,
-          totalCollegeAdmins,
           totalAdmins,
           totalJobs,
           activeJobs,
-          totalCourses
-        },
+          totalCourses,
+          totalAssessments,
+},
         recentUsers,
         recentJobs: recentJobs.map(j => ({
           _id: j._id,
@@ -200,7 +198,7 @@ router.post('/users', async (req, res) => {
 router.put('/users/:id/role', async (req, res) => {
   try {
     const { role } = req.body;
-    const allowedRoles = ['student', 'recruiter', 'college_admin', 'admin'];
+    const allowedRoles = ['student', 'admin'];
 
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({

@@ -35,12 +35,6 @@ const AdminLoginPage = () => {
     'Infrastructure Health & Real-Time System Monitoring'
   ];
 
-  const handleDemoFill = () => {
-    setEmail('admin@skillforge.com');
-    setPassword('admin123');
-    toast.success('Filled with Administrator demo credentials');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -245,28 +239,6 @@ const AdminLoginPage = () => {
       marginBottom: '1.5rem',
       fontSize: isMobile ? '0.85rem' : '0.92rem'
     },
-    demoPill: {
-      background: '#faf5ff',
-      border: '1px dashed #d8b4fe',
-      borderRadius: '12px',
-      padding: '0.65rem 0.85rem',
-      marginBottom: '1.5rem',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      gap: '0.5rem',
-      fontSize: '0.78rem'
-    },
-    demoButton: {
-      background: '#2E073F',
-      color: 'white',
-      border: 'none',
-      padding: '0.35rem 0.75rem',
-      borderRadius: '8px',
-      fontWeight: 600,
-      fontSize: '0.74rem',
-      cursor: 'pointer'
-    },
     inputGroup: {
       marginBottom: '1.25rem'
     },
@@ -419,25 +391,15 @@ const AdminLoginPage = () => {
           <h2 style={styles.title}>Administrator Sign In</h2>
           <p style={styles.subtitle}>Enter authorized administrative credentials to manage platform operations</p>
 
-          {/* Quick Demo Fill Banner */}
-          <div style={styles.demoPill}>
-            <div>
-              <div style={{ fontWeight: 600, color: '#991b1b' }}>Admin Demo Credentials</div>
-              <div style={{ color: '#64748b' }}>admin@skillforge.com</div>
-            </div>
-            <button type="button" onClick={handleDemoFill} style={styles.demoButton}>
-              Auto-Fill
-            </button>
-          </div>
+          
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <div style={styles.inputGroup}>
               <label style={styles.label}>Admin Email</label>
               <div style={styles.inputWrapper}>
                 <Mail size={18} style={styles.inputIcon} />
                 <input
-                  type="email"
-                  value={email}
+                  type="email" autoComplete="off" value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@skillforge.com"
                   style={styles.input}
@@ -451,8 +413,7 @@ const AdminLoginPage = () => {
               <div style={styles.inputWrapper}>
                 <Lock size={18} style={styles.inputIcon} />
                 <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
+                  type={showPassword ? "text" : "password"} autoComplete="new-password" value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   style={styles.input}

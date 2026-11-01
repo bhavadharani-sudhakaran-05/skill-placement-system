@@ -52,7 +52,6 @@ const Layout = () => {
     { icon: LayoutDashboard, label: 'Admin Overview', path: '/admin' },
     { icon: Users, label: 'User Accounts', path: '/admin/users' },
     { icon: Briefcase, label: 'Job Postings', path: '/admin/jobs' },
-    { icon: GraduationCap, label: 'Colleges & Cells', path: '/admin/colleges' },
     { icon: ClipboardCheck, label: 'Skills & Tests', path: '/admin/assessments' },
     { icon: Settings, label: 'System Health', path: '/admin/settings' },
   ];

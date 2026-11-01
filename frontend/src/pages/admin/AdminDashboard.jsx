@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from '../../lib/motion';
 import {
-  Users, Briefcase, BookOpen, GraduationCap
+  Users, Briefcase, BookOpen, ClipboardCheck
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
         activeKey="dashboard"
         onRefresh={handleRefresh}
         refreshing={refreshing}
-        subtitle="Platform Executive Overview: Real-time user metrics, placement engagement, and operational stats."
+        subtitle="College placement operations, student career analytics, and recruitment coordination."
       />
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
             </div>
             <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>{stats.totalUsers}</div>
             <div style={{ fontSize: '0.8rem', color: '#10b981', marginTop: '0.35rem', fontWeight: 600 }}>
-              {stats.totalStudents} Students • {stats.totalCollegeAdmins} Institutional Cells
+              {stats.totalStudents} Registered College Students
             </div>
           </div>
 
@@ -87,14 +87,14 @@ const AdminDashboard = () => {
 
           <div style={{ background: 'white', borderRadius: '16px', padding: '1.35rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Connected Colleges</span>
-              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d97706' }}>
-                <GraduationCap size={20} />
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Technical Assessments</span>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2E073F' }}>
+                <ClipboardCheck size={20} />
               </div>
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>{stats.totalCollegeAdmins}</div>
-            <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.35rem' }}>
-              Placement cells active
+            <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>{stats.totalAssessments || 12}</div>
+            <div style={{ fontSize: '0.8rem', color: '#10b981', marginTop: '0.35rem', fontWeight: 600 }}>
+              Skill test benchmarks live
             </div>
           </div>
 
@@ -160,25 +160,7 @@ const AdminDashboard = () => {
                 </div>
               </button>
 
-              <button
-                onClick={() => navigate('/admin/colleges')}
-                style={{
-                  padding: '1rem',
-                  borderRadius: '12px',
-                  border: '1.5px solid #fef3c7',
-                  background: '#fffbeb',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <div style={{ fontWeight: 700, color: '#b45309', fontSize: '0.95rem', marginBottom: '0.25rem' }}>
-                  Colleges & Cells →
-                </div>
-                <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
-                  Institutional performance & cells
-                </div>
-              </button>
+              
 
               <button
                 onClick={() => navigate('/admin/settings')}
@@ -205,13 +187,12 @@ const AdminDashboard = () => {
           {/* Stakeholder Breakdown */}
           <div style={{ background: 'white', borderRadius: '16px', padding: '1.5rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0', color: '#0f172a' }}>
-              System Stakeholder Distribution
+              College User Community
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               {[
                 { label: 'Students', count: stats.totalStudents, color: '#2E073F' },
-                { label: 'College Placement Officers', count: stats.totalCollegeAdmins, color: '#d97706' },
-                { label: 'System Administrators', count: stats.totalAdmins, color: '#dc2626' }
+                { label: 'Placement Officers & Faculty', count: stats.totalAdmins, color: '#dc2626' }
               ].map((item, idx) => {
                 const pct = stats.totalUsers > 0 ? Math.round((item.count / stats.totalUsers) * 100) : 0;
                 return (

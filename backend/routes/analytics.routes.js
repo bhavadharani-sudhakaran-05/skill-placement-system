@@ -4,51 +4,7 @@ const AnalyticsService = require('../services/analytics.service');
 
 const router = express.Router();
 
-/**
- * @route   GET /api/analytics/college
- * @desc    Get college analytics dashboard
- * @access  Private (College Admin)
- */
-router.get('/college', protect, authorize('college', 'college_admin', 'admin'), async (req, res) => {
-  try {
-    const collegeId = req.user.collegeProfile?.collegeName || req.query.collegeId;
-
-    if (!collegeId) {
-      return res.status(400).json({
-        success: false,
-        message: 'College ID is required'
-      });
-    }
-
-    const analytics = await AnalyticsService.getCollegeDashboard(collegeId);
-
-    res.json({
-      success: true,
-      data: analytics
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch college analytics',
-      error: error.message
-    });
-  }
-});
-
-/**
- * @route   GET /api/analytics/recruiter
- * @desc    Get recruiter analytics dashboard
- * @access  Private (Recruiter)
- */
-router.get('/recruiter', protect, authorize('recruiter', 'admin'), async (req, res) => {
-  try {
-    const analytics = await AnalyticsService.getRecruiterDashboard(req.user.id);
-
-    res.json({
-      success: true,
-      data: analytics
-    });
-  } catch (error) {
+} catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to fetch recruiter analytics',

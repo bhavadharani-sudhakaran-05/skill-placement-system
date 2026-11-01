@@ -9,30 +9,18 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sps';
 
 const accounts = [
   {
-    name: 'Platform Administrator',
+    name: 'College Placement Administrator',
     email: 'admin@skillforge.com',
     password: 'admin123',
     role: 'admin',
     metrics: { skillReadinessScore: 100 }
   },
   {
-    name: 'Apex Institute Placement Cell',
-    email: 'college@skillforge.com',
-    password: 'college123',
-    role: 'college_admin',
-    college: {
-      name: 'Apex Institute of Technology',
-      location: 'Coimbatore, Tamil Nadu',
-      website: 'https://apex-tech.edu',
-      placementCell: 'Directorate of Corporate Relations & Placements'
-    }
-  },
-  {
-    name: 'Demo Student',
+    name: 'Demo College Student',
     email: 'student@skillforge.com',
     password: 'student123',
     role: 'student',
-    education: [{ institution: 'Apex Institute of Technology', degree: 'B.Tech IT', year: '2026' }],
+    education: [{ institution: 'College of Engineering & Technology', degree: 'B.Tech IT', year: '2026' }],
     skills: [
       { name: 'JavaScript', level: 85, category: 'technical' },
       { name: 'React', level: 80, category: 'technical' },
@@ -50,6 +38,21 @@ async function ensureAccounts(options = {}) {
       console.log(`Connected to MongoDB at ${MONGODB_URI}`);
     }
 
+    // Clean up any remaining recruiter or legacy accounts
+    try {
+      const removed = await User.deleteMany({
+        $or: [
+          { role: 'recruiter' },
+          { email: /recruiter/i }
+        ]
+      });
+      if (removed.deletedCount > 0) {
+        console.log(`[CLEANED] Purged ${removed.deletedCount} recruiter accounts from database`);
+      }
+    } catch (cleanErr) {
+      console.warn('Note: Recruiter cleanup skipped:', cleanErr.message);
+    }
+
     for (const acc of accounts) {
       const existing = await User.findOne({ email: acc.email });
       if (!existing) {
@@ -61,12 +64,8 @@ async function ensureAccounts(options = {}) {
           existing.role = acc.role;
           changed = true;
         }
-        if (acc.company && !existing.company?.name) {
-          existing.company = acc.company;
-          changed = true;
-        }
-        if (acc.college && !existing.college?.name) {
-          existing.college = acc.college;
+        if (acc.name && existing.name !== acc.name) {
+          existing.name = acc.name;
           changed = true;
         }
         if (changed) {
@@ -76,14 +75,10 @@ async function ensureAccounts(options = {}) {
       }
     }
 
-    if (isCli) {
-      const allUsers = await User.find({}).select('email role name');
-      console.log('\n--- Current Registered Users in DB ---');
-      console.table(allUsers.map(u => ({ id: u._id.toString(), email: u.email, role: u.role, name: u.name })));
-      process.exit(0);
-    }
-  } catch (err) {
-    console.error('Error ensuring accounts:', err);
+    console.log('✅ College placement accounts verification complete');
+    if (isCli) process.exit(0);
+  } catch (error) {
+    console.error('Error ensuring accounts:', error.message);
     if (isCli) process.exit(1);
   }
 }
@@ -92,4 +87,4 @@ if (require.main === module) {
   ensureAccounts({ isCli: true });
 }
 
-module.exports = { ensureAccounts, accounts };
+module.exports = { ensureAccounts };
