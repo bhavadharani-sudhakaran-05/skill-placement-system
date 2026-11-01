@@ -18,7 +18,6 @@ const Admin = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalStudents: 0,
-    totalRecruiters: 0,
     totalCollegeAdmins: 0,
     totalAdmins: 0,
     totalJobs: 0,
@@ -386,14 +385,14 @@ const Admin = () => {
               </div>
               <div style={{ fontSize: '1.85rem', fontWeight: 800, color: '#1e293b' }}>{stats.totalUsers}</div>
               <div style={{ fontSize: '0.78rem', color: '#10b981', marginTop: '0.35rem', fontWeight: 500 }}>
-                {stats.totalStudents} Students • {stats.totalRecruiters} Recruiters
+                {stats.totalStudents} Students 
               </div>
             </div>
 
             <div style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                 <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Active Jobs</span>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2E073F' }}>
                   <Briefcase size={20} />
                 </div>
               </div>
@@ -468,7 +467,7 @@ const Admin = () => {
                     borderRadius: '12px',
                     cursor: 'pointer',
                     fontWeight: 600,
-                    color: '#2563eb',
+                    color: '#2E073F',
                     fontSize: '0.88rem'
                   }}
                 >
@@ -503,7 +502,6 @@ const Admin = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {[
                   { label: 'Students', count: stats.totalStudents, color: '#2E073F', icon: GraduationCap },
-                  { label: 'Recruiters / Corporate', count: stats.totalRecruiters, color: '#2563eb', icon: Building2 },
                   { label: 'College Placement Admins', count: stats.totalCollegeAdmins, color: '#d97706', icon: Shield },
                   { label: 'System Administrators', count: stats.totalAdmins, color: '#dc2626', icon: Shield }
                 ].map((item, idx) => {
@@ -565,11 +563,9 @@ const Admin = () => {
                           textTransform: 'uppercase',
                           background:
                             u.role === 'admin' ? '#fee2e2' :
-                            u.role === 'recruiter' ? '#dbeafe' :
                             u.role === 'college_admin' ? '#fef3c7' : '#ede9fe',
                           color:
                             u.role === 'admin' ? '#b91c1c' :
-                            u.role === 'recruiter' ? '#1d4ed8' :
                             u.role === 'college_admin' ? '#b45309' : '#2E073F'
                         }}>
                           {u.role}
@@ -646,7 +642,7 @@ const Admin = () => {
               >
                 <option value="all">All Roles</option>
                 <option value="student">Students</option>
-                <option value="recruiter">Recruiters</option>
+                
                 <option value="college_admin">College Admins</option>
                 <option value="admin">Administrators</option>
               </select>
@@ -705,23 +701,20 @@ const Admin = () => {
                           cursor: 'pointer',
                           background:
                             u.role === 'admin' ? '#fee2e2' :
-                            u.role === 'recruiter' ? '#dbeafe' :
                             u.role === 'college_admin' ? '#fef3c7' : '#ede9fe',
                           color:
                             u.role === 'admin' ? '#b91c1c' :
-                            u.role === 'recruiter' ? '#1d4ed8' :
                             u.role === 'college_admin' ? '#b45309' : '#2E073F'
                         }}
                       >
                         <option value="student">Student</option>
-                        <option value="recruiter">Recruiter</option>
+                        
                         <option value="college_admin">College Admin</option>
                         <option value="admin">Administrator</option>
                       </select>
                     </td>
                     <td style={{ padding: '0.75rem', color: '#475569', fontSize: '0.82rem' }}>
-                      {u.role === 'recruiter' ? (u.company?.name || 'Recruiter') :
-                       u.role === 'college_admin' ? (u.college?.name || 'Institution') :
+                      {u.role === 'college_admin' ? (u.college?.name || 'Institution') :
                        (u.education?.[0]?.institution || 'Individual')}
                     </td>
                     <td style={{ padding: '0.75rem', color: '#64748b', fontSize: '0.8rem' }}>
@@ -792,7 +785,7 @@ const Admin = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                background: '#2563eb',
+                background: '#2E073F',
                 color: 'white',
                 border: 'none',
                 padding: '0.65rem 1.25rem',
@@ -971,17 +964,10 @@ const Admin = () => {
                   <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>Assigned Role</label>
                   <select value={newUserData.role} onChange={e => setNewUserData({ ...newUserData, role: e.target.value })} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }}>
                     <option value="student">Student</option>
-                    <option value="recruiter">Recruiter</option>
                     <option value="college_admin">College Admin</option>
                     <option value="admin">Administrator</option>
                   </select>
                 </div>
-                {newUserData.role === 'recruiter' && (
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>Company Name</label>
-                    <input type="text" value={newUserData.companyName} onChange={e => setNewUserData({ ...newUserData, companyName: e.target.value })} placeholder="TechCorp Solutions" style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} />
-                  </div>
-                )}
                 {newUserData.role === 'college_admin' && (
                   <div>
                     <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>College / Institute Name</label>
@@ -1050,7 +1036,7 @@ const Admin = () => {
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                   <button type="button" onClick={() => setShowCreateJobModal(false)} style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', border: '1px solid #cbd5e1', background: 'white', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
-                  <button type="submit" style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', border: 'none', background: '#2563eb', color: 'white', fontWeight: 600, cursor: 'pointer' }}>Post Opportunity</button>
+                  <button type="submit" style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', border: 'none', background: '#2E073F', color: 'white', fontWeight: 600, cursor: 'pointer' }}>Post Opportunity</button>
                 </div>
               </form>
             </motion.div>

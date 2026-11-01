@@ -361,7 +361,6 @@ On initial connection to MongoDB, the backend automatically ensures the followin
 | Role | Email | Password | Access Portal |
 |---|---|---|---|
 | **Admin** | `admin@skillforge.com` | `admin123` | `/admin/login` & `/admin/*` |
-| **Recruiter** | `recruiter@skillforge.com` | `recruiter123` | `/recruiter/login` & `/recruiter/*` |
 | **College Admin** | `college@skillforge.com` | `college123` | `/login` |
 | **Student** | `student@skillforge.com` | `student123` | `/login` & Student Dashboard |
 

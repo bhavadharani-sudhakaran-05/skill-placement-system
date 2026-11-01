@@ -20,7 +20,6 @@ const assessmentRoutes = require('./routes/assessment.routes');
 const learningPathRoutes = require('./routes/learningPath.routes');
 const feedbackRoutes = require('./routes/feedback.routes');
 const adminRoutes = require('./routes/admin.routes');
-const recruiterRoutes = require('./routes/recruiter.routes');
 const { ensureAccounts } = require('./scripts/ensureRoleAccounts');
 
 // Initialize app
@@ -95,7 +94,6 @@ app.use('/api/assessments', assessmentRoutes);
 app.use('/api/learning-paths', learningPathRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/recruiter', recruiterRoutes);
 
 // Detailed Health check
 app.get('/api/health', (req, res) => {

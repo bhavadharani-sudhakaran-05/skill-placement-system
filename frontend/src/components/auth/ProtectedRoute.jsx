@@ -11,19 +11,12 @@ const ProtectedRoute = ({ children }) => {
     if (location.pathname.startsWith('/admin')) {
       return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
-    if (location.pathname.startsWith('/recruiter')) {
-      return <Navigate to="/recruiter/login" state={{ from: location }} replace />;
-    }
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Role-based path protection
+  // Role-based path protection (Admin and Student only)
   const path = location.pathname;
   if (path.startsWith('/admin') && user?.role !== 'admin' && user?.role !== 'college_admin') {
-    return <Navigate to={user?.role === 'recruiter' ? '/recruiter' : '/dashboard'} replace />;
-  }
-
-  if (path.startsWith('/recruiter') && user?.role !== 'recruiter' && user?.role !== 'admin') {
     return <Navigate to="/dashboard" replace />;
   }
 

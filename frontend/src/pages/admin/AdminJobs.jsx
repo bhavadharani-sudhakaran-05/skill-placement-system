@@ -171,7 +171,7 @@ const AdminJobs = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              background: '#2563eb',
+              background: '#2E073F',
               color: 'white',
               border: 'none',
               padding: '0.65rem 1.25rem',
@@ -203,7 +203,7 @@ const AdminJobs = () => {
                 <tr key={j._id} style={{ borderBottom: '1px solid #f8fafc' }}>
                   <td style={{ padding: '0.75rem' }}>
                     <div style={{ fontWeight: 600, color: '#0f172a' }}>{j.title}</div>
-                    <div style={{ fontSize: '0.76rem', color: '#64748b' }}>Posted by {j.postedBy?.name || 'Recruiter'}</div>
+                    <div style={{ fontSize: '0.76rem', color: '#64748b' }}>Posted by {j.postedBy?.name || 'Administrator'}</div>
                   </td>
                   <td style={{ padding: '0.75rem' }}>
                     <div style={{ fontWeight: 600, color: '#334155' }}>{j.company?.name || 'Company'}</div>
@@ -322,7 +322,7 @@ const AdminJobs = () => {
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                   <button type="button" onClick={() => setShowCreateModal(false)} style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', border: '1px solid #cbd5e1', background: 'white', fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
-                  <button type="submit" style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', border: 'none', background: '#2563eb', color: 'white', fontWeight: 600, cursor: 'pointer' }}>Publish Job</button>
+                  <button type="submit" style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', border: 'none', background: '#2E073F', color: 'white', fontWeight: 600, cursor: 'pointer' }}>Publish Job</button>
                 </div>
               </form>
             </motion.div>

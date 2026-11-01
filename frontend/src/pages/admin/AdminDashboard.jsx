@@ -13,7 +13,6 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalStudents: 0,
-    totalRecruiters: 0,
     totalCollegeAdmins: 0,
     totalAdmins: 0,
     totalJobs: 0,
@@ -69,14 +68,14 @@ const AdminDashboard = () => {
             </div>
             <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>{stats.totalUsers}</div>
             <div style={{ fontSize: '0.8rem', color: '#10b981', marginTop: '0.35rem', fontWeight: 600 }}>
-              {stats.totalStudents} Students • {stats.totalRecruiters} Recruiters
+              {stats.totalStudents} Students • {stats.totalCollegeAdmins} Institutional Cells
             </div>
           </div>
 
           <div style={{ background: 'white', borderRadius: '16px', padding: '1.35rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
               <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Active Placement Jobs</span>
-              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ede9fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2E073F' }}>
                 <Briefcase size={20} />
               </div>
             </div>
@@ -146,14 +145,14 @@ const AdminDashboard = () => {
                 style={{
                   padding: '1rem',
                   borderRadius: '12px',
-                  border: '1.5px solid #dbeafe',
-                  background: '#eff6ff',
+                  border: '1.5px solid #ede9fe',
+                  background: '#faf5ff',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.2s'
                 }}
               >
-                <div style={{ fontWeight: 700, color: '#1d4ed8', fontSize: '0.95rem', marginBottom: '0.25rem' }}>
+                <div style={{ fontWeight: 700, color: '#2E073F', fontSize: '0.95rem', marginBottom: '0.25rem' }}>
                   Jobs & Placements →
                 </div>
                 <div style={{ fontSize: '0.78rem', color: '#64748b' }}>
@@ -211,7 +210,6 @@ const AdminDashboard = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               {[
                 { label: 'Students', count: stats.totalStudents, color: '#2E073F' },
-                { label: 'Recruiter Accounts', count: stats.totalRecruiters, color: '#2563eb' },
                 { label: 'College Placement Officers', count: stats.totalCollegeAdmins, color: '#d97706' },
                 { label: 'System Administrators', count: stats.totalAdmins, color: '#dc2626' }
               ].map((item, idx) => {
@@ -259,11 +257,9 @@ const AdminDashboard = () => {
                     textTransform: 'uppercase',
                     background:
                       u.role === 'admin' ? '#fee2e2' :
-                      u.role === 'recruiter' ? '#dbeafe' :
                       u.role === 'college_admin' ? '#fef3c7' : '#ede9fe',
                     color:
                       u.role === 'admin' ? '#b91c1c' :
-                      u.role === 'recruiter' ? '#1d4ed8' :
                       u.role === 'college_admin' ? '#b45309' : '#2E073F'
                   }}>
                     {u.role}
@@ -279,7 +275,7 @@ const AdminDashboard = () => {
               <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
                 Recent Job Postings
               </h3>
-              <Link to="/admin/jobs" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600, fontSize: '0.82rem' }}>
+              <Link to="/admin/jobs" style={{ color: '#2E073F', textDecoration: 'none', fontWeight: 600, fontSize: '0.82rem' }}>
                 All Jobs →
               </Link>
             </div>

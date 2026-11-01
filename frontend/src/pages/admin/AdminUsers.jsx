@@ -150,7 +150,6 @@ const AdminUsers = () => {
             >
               <option value="all">All Roles</option>
               <option value="student">Students</option>
-              <option value="recruiter">Recruiters</option>
               <option value="college_admin">College Admins</option>
               <option value="admin">Administrators</option>
             </select>
@@ -209,23 +208,19 @@ const AdminUsers = () => {
                         cursor: 'pointer',
                         background:
                           u.role === 'admin' ? '#fee2e2' :
-                          u.role === 'recruiter' ? '#dbeafe' :
                           u.role === 'college_admin' ? '#fef3c7' : '#ede9fe',
                         color:
                           u.role === 'admin' ? '#b91c1c' :
-                          u.role === 'recruiter' ? '#1d4ed8' :
                           u.role === 'college_admin' ? '#b45309' : '#2E073F'
                       }}
                     >
                       <option value="student">Student</option>
-                      <option value="recruiter">Recruiter</option>
                       <option value="college_admin">College Admin</option>
                       <option value="admin">Administrator</option>
                     </select>
                   </td>
                   <td style={{ padding: '0.75rem', color: '#475569', fontSize: '0.82rem' }}>
-                    {u.role === 'recruiter' ? (u.company?.name || 'Recruiter') :
-                     u.role === 'college_admin' ? (u.college?.name || 'Institution') :
+                    {u.role === 'college_admin' ? (u.college?.name || 'Institution') :
                      (u.education?.[0]?.institution || 'Individual Student')}
                   </td>
                   <td style={{ padding: '0.75rem', color: '#64748b', fontSize: '0.8rem' }}>
@@ -288,17 +283,10 @@ const AdminUsers = () => {
                   <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>Role</label>
                   <select value={newUserData.role} onChange={e => setNewUserData({ ...newUserData, role: e.target.value })} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }}>
                     <option value="student">Student</option>
-                    <option value="recruiter">Recruiter</option>
                     <option value="college_admin">College Admin</option>
                     <option value="admin">Administrator</option>
                   </select>
                 </div>
-                {newUserData.role === 'recruiter' && (
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>Company Name</label>
-                    <input type="text" value={newUserData.companyName} onChange={e => setNewUserData({ ...newUserData, companyName: e.target.value })} placeholder="TechCorp Solutions" style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} />
-                  </div>
-                )}
                 {newUserData.role === 'college_admin' && (
                   <div>
                     <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.35rem' }}>College Name</label>

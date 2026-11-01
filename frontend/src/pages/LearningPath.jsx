@@ -144,7 +144,7 @@ const courses = [
     tags: ['Docker', 'Kubernetes', 'Containers', 'DevOps'],
     category: 'Cloud',
     image: '🐳',
-    color: '#2496ed',
+    color: '#2E073F',
     description: 'Master containerization and orchestration.',
     skills: ['Containers', 'Docker Compose', 'K8s Deployments', 'Helm'],
     videos: 5

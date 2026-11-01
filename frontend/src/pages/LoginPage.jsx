@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from '../lib/motion';
 import {
   Sparkles, Mail, Lock, Eye, EyeOff, ArrowRight, Check,
-  GraduationCap, Building2, Shield
+  GraduationCap, Shield
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../store/authStore';
@@ -47,11 +47,7 @@ const LoginPage = () => {
     const result = await login(email, password);
     if (result.success) {
       toast.success('Welcome back!');
-      if (result.user?.role === 'admin') {
-        navigate('/admin');
-      } else if (result.user?.role === 'recruiter') {
-        navigate('/recruiter');
-      } else if (result.user?.role === 'college_admin') {
+      if (result.user?.role === 'admin' || result.user?.role === 'college_admin') {
         navigate('/admin');
       } else {
         navigate('/dashboard');
@@ -266,6 +262,8 @@ const LoginPage = () => {
       border: '2px solid #ede9fe',
       fontSize: '1rem',
       outline: 'none',
+      background: '#ffffff',
+      color: '#1f2937',
       transition: 'border-color 0.2s',
       boxSizing: 'border-box'
     },
@@ -475,22 +473,14 @@ const LoginPage = () => {
 
           <div style={styles.divider}>
             <div style={styles.dividerLine} />
-            <span style={styles.dividerText}>Other Portals</span>
+            <span style={styles.dividerText}>Administrative Access</span>
             <div style={styles.dividerLine} />
           </div>
 
           <div style={styles.portalSwitchers}>
-            <Link to="/recruiter/login" style={styles.switcherBtn}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                <Building2 size={15} color="#0284c7" />
-                Corporate Recruiter? Recruiter Portal
-              </span>
-              <ArrowRight size={14} color="#94a3b8" />
-            </Link>
-
             <Link to="/admin/login" style={styles.switcherBtn}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                <Shield size={15} color="#b91c1c" />
+                <Shield size={15} color="#2E073F" />
                 Placement Officer / Admin? Admin Portal
               </span>
               <ArrowRight size={14} color="#94a3b8" />

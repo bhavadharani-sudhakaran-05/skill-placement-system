@@ -161,8 +161,8 @@ const AdminColleges = () => {
                     borderRadius: '50px',
                     fontSize: '0.75rem',
                     fontWeight: 700,
-                    background: '#dbeafe',
-                    color: '#1d4ed8'
+                    background: '#ede9fe',
+                    color: '#2E073F'
                   }}>
                     {c.placementRate || 80}% Placement Rate
                   </span>
@@ -182,7 +182,7 @@ const AdminColleges = () => {
                   {c.website && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <Globe size={14} color="#94a3b8" />
-                      <a href={c.website} target="_blank" rel="noreferrer" style={{ color: '#2563eb', textDecoration: 'none' }}>
+                      <a href={c.website} target="_blank" rel="noreferrer" style={{ color: '#2E073F', textDecoration: 'none' }}>
                         {c.website}
                       </a>
                     </div>

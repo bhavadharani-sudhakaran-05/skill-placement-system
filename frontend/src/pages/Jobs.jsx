@@ -161,7 +161,7 @@ const Jobs = () => {
   };
 
   const getCompanyColor = (index) => {
-    const colors = ['#0052cc', '#007cc3', '#5a287d', '#c4161c', '#0073b1', '#0f4c81', '#0033a0', '#0070ad', '#a100ff', '#dc4b3e'];
+    const colors = ['#2E073F', '#4a1259', '#581c87', '#6b21a8', '#7c3aed', '#9333ea', '#9c27b0', '#c084fc', '#2E073F', '#5a287d'];
     return colors[index % colors.length];
   };
 

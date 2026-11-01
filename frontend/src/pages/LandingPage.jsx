@@ -19,13 +19,13 @@ import {
 
 const LandingPage = () => {
   const features = [
-    { icon: Brain, title: 'AI Skill Gap Analyzer', description: 'Advanced AI identifies gaps between your current skills and job requirements.', gradient: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)' },
+    { icon: Brain, title: 'AI Skill Gap Analyzer', description: 'Advanced AI identifies gaps between your current skills and job requirements.', gradient: 'linear-gradient(135deg, #2E073F 0%, #7c3aed 100%)' },
     { icon: Target, title: 'Smart Placement Engine', description: 'Personalized job recommendations based on your unique skill profile.', gradient: 'linear-gradient(135deg, #2E073F 0%, #ec4899 100%)' },
     { icon: Zap, title: 'Real-Time Readiness Score', description: 'Dynamic 0-100 score showing your preparation level for target roles.', gradient: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)' },
     { icon: FileSearch, title: 'AI Resume Optimizer', description: 'Parse and optimize your resume with ATS scoring and suggestions.', gradient: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)' },
     { icon: Route, title: 'Adaptive Learning Paths', description: 'Personalized learning journeys that adapt based on your progress.', gradient: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)' },
-    { icon: BarChart3, title: 'Analytics Dashboard', description: 'Comprehensive insights for students, colleges, and recruiters.', gradient: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)' },
-    { icon: RefreshCw, title: 'Feedback Loop Learning', description: 'Continuous improvement through placement outcomes and feedback.', gradient: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)' }
+    { icon: BarChart3, title: 'Analytics Dashboard', description: 'Comprehensive insights for students, colleges, and placement officers.', gradient: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)' },
+    { icon: RefreshCw, title: 'Feedback Loop Learning', description: 'Continuous improvement through placement outcomes and feedback.', gradient: 'linear-gradient(135deg, #7c3aed 0%, #2E073F 100%)' }
   ];
 
   const stats = [
@@ -51,7 +51,7 @@ const LandingPage = () => {
         <div style={{ display: 'flex', gap: 'clamp(0.6rem, 2vw, 1.75rem)', alignItems: 'center' }}>
           <a href="#features" className="hide-on-mobile" style={{ color: '#374151', textDecoration: 'none', fontWeight: 500, fontSize: '0.9rem' }}>Features</a>
           <a href="#stats" className="hide-on-mobile" style={{ color: '#374151', textDecoration: 'none', fontWeight: 500, fontSize: '0.9rem' }}>Stats</a>
-          <Link to="/recruiter/login" className="hide-on-mobile" style={{ color: '#4338ca', textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem' }}>Recruiters</Link>
+          <Link to="/admin/login" className="hide-on-mobile" style={{ color: "#2E073F", textDecoration: "none", fontWeight: 600, fontSize: "0.9rem" }}>Admin Portal</Link>
           <Link to="/login" style={{ color: '#374151', textDecoration: 'none', fontWeight: 500 }}>Login</Link>
           <Link to="/register" style={{
             background: 'linear-gradient(135deg, #2E073F 0%, #2E073F 100%)', color: 'white',
@@ -302,8 +302,7 @@ const LandingPage = () => {
         <p>© 2026 SkillForge. Built for Smart India Hackathon.</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap', margin: '1rem 0', fontSize: '0.88rem' }}>
           <Link to="/login" style={{ color: '#c4b5fd', textDecoration: 'none' }}>Student Portal</Link>
-          <span style={{ color: '#4b5563' }}>•</span>
-          <Link to="/recruiter/login" style={{ color: '#38bdf8', textDecoration: 'none', fontWeight: 600 }}>Recruiter Portal</Link>
+          
           <span style={{ color: '#4b5563' }}>•</span>
           <Link to="/admin/login" style={{ color: '#f87171', textDecoration: 'none', fontWeight: 600 }}>Admin Portal</Link>
         </div>

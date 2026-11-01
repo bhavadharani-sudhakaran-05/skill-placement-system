@@ -16,19 +16,6 @@ const accounts = [
     metrics: { skillReadinessScore: 100 }
   },
   {
-    name: 'TechCorp Recruiter',
-    email: 'recruiter@skillforge.com',
-    password: 'recruiter123',
-    role: 'recruiter',
-    company: {
-      name: 'TechCorp Solutions',
-      website: 'https://techcorp.example.com',
-      industry: 'Software & Technology',
-      size: '500-1000',
-      description: 'Global provider of enterprise cloud and AI solutions'
-    }
-  },
-  {
     name: 'Apex Institute Placement Cell',
     email: 'college@skillforge.com',
     password: 'college123',

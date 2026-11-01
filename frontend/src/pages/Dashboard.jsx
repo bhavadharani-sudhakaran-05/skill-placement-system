@@ -152,7 +152,7 @@ const Dashboard = () => {
     { name: 'ML Pioneer', icon: '🤖', course: 'Machine Learning A-Z', earned: mlProgress.progress === 100, color: '#8b5cf6' },
     { name: 'React Pro', icon: '⚛️', course: 'Complete React Developer', earned: reactProgress.progress === 100, color: '#06b6d4' },
     { name: 'Cloud Architect', icon: '☁️', course: 'AWS Solutions Architect', earned: awsProgress.progress === 100, color: '#f59e0b' },
-    { name: 'Python Guru', icon: '🐍', course: 'Python for Data Science', earned: pythonProgress.progress === 100, color: '#3b82f6' },
+    { name: 'Python Guru', icon: '🐍', course: 'Python for Data Science', earned: pythonProgress.progress === 100, color: '#2E073F' },
     { name: 'DevOps Engineer', icon: '🚀', course: 'DevOps Engineer', earned: devopsProgress.progress === 100, color: '#ec4899' }
   ];
 
@@ -171,8 +171,8 @@ const Dashboard = () => {
   })) : [{ skill: 'Complete assessments', current: 0, required: 80, priority: 'high', icon: '📊' }];
 
   const recommendedJobs = [
-    { title: 'Software Engineer', company: 'Google', location: 'Bangalore', match: 92, salary: '25-35 LPA', logo: 'G', color: '#4285f4' },
-    { title: 'Full Stack Developer', company: 'Microsoft', location: 'Hyderabad', match: 88, salary: '20-30 LPA', logo: 'M', color: '#00a4ef' },
+    { title: 'Software Engineer', company: 'Google', location: 'Bangalore', match: 92, salary: '25-35 LPA', logo: 'G', color: '#2E073F' },
+    { title: 'Full Stack Developer', company: 'Microsoft', location: 'Hyderabad', match: 88, salary: '20-30 LPA', logo: 'M', color: '#4a1259' },
     { title: 'Frontend Developer', company: 'Amazon', location: 'Chennai', match: 85, salary: '18-28 LPA', logo: 'A', color: '#ff9900' }
   ];
 

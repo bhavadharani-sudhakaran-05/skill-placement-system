@@ -307,7 +307,7 @@ const Courses = () => {
       tags: ['Docker', 'Kubernetes', 'Containers', 'DevOps'],
       category: 'Cloud',
       image: '🐳',
-      color: '#2496ed',
+      color: '#2E073F',
       description: 'Master containerization with Docker and orchestration with Kubernetes. Deploy scalable applications in production.',
       videos: [
         { id: 1, title: 'Docker Fundamentals', duration: '35:00', completed: false, youtubeId: 'pTFZFxd4hOI' },

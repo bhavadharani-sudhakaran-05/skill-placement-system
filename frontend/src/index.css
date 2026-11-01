@@ -41,12 +41,12 @@
   --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
 
   /* Shadows - Violet Theme */
-  --shadow-sm: 0 1px 2px 0 rgb(139 92 246 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(139 92 246 / 0.1), 0 2px 4px -2px rgb(139 92 246 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(139 92 246 / 0.1), 0 4px 6px -4px rgb(139 92 246 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(139 92 246 / 0.1), 0 8px 10px -6px rgb(139 92 246 / 0.1);
-  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.3);
-  --shadow-glow-lg: 0 0 60px rgba(139, 92, 246, 0.4);
+  --shadow-sm: 0 1px 2px 0 rgba(46, 7, 63, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(46, 7, 63, 0.1), 0 2px 4px -2px rgba(46, 7, 63, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(46, 7, 63, 0.1), 0 4px 6px -4px rgba(46, 7, 63, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(46, 7, 63, 0.1), 0 8px 10px -6px rgba(46, 7, 63, 0.1);
+  --shadow-glow: 0 0 40px rgba(46, 7, 63, 0.3);
+  --shadow-glow-lg: 0 0 60px rgba(46, 7, 63, 0.4);
 
   /* Animations */
   --transition-fast: 150ms ease;
@@ -190,10 +190,10 @@ input, textarea, select {
 /* Pulse Animation */
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 20px rgba(46, 7, 63, 0.4);
   }
   50% {
-    box-shadow: 0 0 40px rgba(99, 102, 241, 0.8);
+    box-shadow: 0 0 40px rgba(46, 7, 63, 0.8);
   }
 }
 
@@ -251,13 +251,13 @@ input, textarea, select {
 /* Background Patterns */
 .bg-grid {
   background-image: 
-    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(46, 7, 63, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 7, 63, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
 .bg-dots {
-  background-image: radial-gradient(circle, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(46, 7, 63, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
@@ -455,4 +455,26 @@ img, video, iframe, canvas {
 }
 .touch-tabs-bar::-webkit-scrollbar {
   display: none;
+}
+
+
+/* Chrome/Safari input autofill override (prevents browser from turning inputs blue) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  caret-color: #2E073F !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #2E073F !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(46, 7, 63, 0.15) !important;
 }

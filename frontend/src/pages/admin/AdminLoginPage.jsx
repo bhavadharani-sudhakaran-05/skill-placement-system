@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from '../../lib/motion';
 import {
   Shield, Mail, Lock, Eye, EyeOff, ArrowRight,
-  Check, Building2, GraduationCap, KeyRound
+  Check, GraduationCap, KeyRound
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '../../store/authStore';
@@ -51,16 +51,6 @@ const AdminLoginPage = () => {
         if (userRole === 'admin' || userRole === 'college_admin') {
           toast.success(`Authenticated: Welcome Administrator ${result.user?.name || ''}`);
           navigate('/admin');
-        } else if (userRole === 'recruiter') {
-          toast((t) => (
-            <div>
-              <b>Recruiter Account Detected</b>
-              <div style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>
-                Redirecting you to the Recruiter Talent Hub...
-              </div>
-            </div>
-          ), { icon: '💼', duration: 4000 });
-          navigate('/recruiter');
         } else {
           toast((t) => (
             <div>
@@ -91,7 +81,7 @@ const AdminLoginPage = () => {
     },
     leftPanel: {
       flex: 1,
-      background: 'linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%)',
+      background: 'linear-gradient(135deg, #2E073F 0%, #4a1259 50%, #2E073F 100%)',
       display: (isMobile || isTablet) ? 'none' : 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -216,25 +206,25 @@ const AdminLoginPage = () => {
       width: '46px',
       height: '46px',
       borderRadius: '12px',
-      background: 'linear-gradient(135deg, #09090b 0%, #27272a 100%)',
+      background: 'linear-gradient(135deg, #2E073F 0%, #4a1259 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       color: 'white',
-      boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
+      boxShadow: '0 4px 14px rgba(46,7,63,0.35)'
     },
     logoText: {
       fontWeight: 800,
       fontSize: '1.45rem',
-      color: '#09090b',
+      color: '#2E073F',
       letterSpacing: '-0.02em'
     },
     portalTag: {
       display: 'inline-block',
       padding: '0.2rem 0.55rem',
       borderRadius: '6px',
-      background: '#fee2e2',
-      color: '#b91c1c',
+      background: '#f3e8ff',
+      color: '#2E073F',
       fontSize: '0.72rem',
       fontWeight: 700,
       textTransform: 'uppercase',
@@ -256,8 +246,8 @@ const AdminLoginPage = () => {
       fontSize: isMobile ? '0.85rem' : '0.92rem'
     },
     demoPill: {
-      background: '#fef2f2',
-      border: '1px dashed #fca5a5',
+      background: '#faf5ff',
+      border: '1px dashed #d8b4fe',
       borderRadius: '12px',
       padding: '0.65rem 0.85rem',
       marginBottom: '1.5rem',
@@ -268,7 +258,7 @@ const AdminLoginPage = () => {
       fontSize: '0.78rem'
     },
     demoButton: {
-      background: '#991b1b',
+      background: '#2E073F',
       color: 'white',
       border: 'none',
       padding: '0.35rem 0.75rem',
@@ -294,19 +284,20 @@ const AdminLoginPage = () => {
       width: '100%',
       padding: '0.85rem 1rem 0.85rem 3rem',
       borderRadius: '12px',
-      border: '2px solid #e2e8f0',
+      border: '2px solid #ede9fe',
       fontSize: '0.95rem',
       outline: 'none',
       transition: 'border-color 0.2s',
       boxSizing: 'border-box',
-      background: '#f8fafc'
+      background: '#ffffff',
+      color: '#1f2937'
     },
     inputIcon: {
       position: 'absolute',
       left: '1rem',
       top: '50%',
       transform: 'translateY(-50%)',
-      color: '#64748b'
+      color: '#a78bfa'
     },
     eyeButton: {
       position: 'absolute',
@@ -316,14 +307,14 @@ const AdminLoginPage = () => {
       background: 'none',
       border: 'none',
       cursor: 'pointer',
-      color: '#94a3b8'
+      color: '#a78bfa'
     },
     submitButton: {
       width: '100%',
       padding: '0.95rem',
       borderRadius: '12px',
       border: 'none',
-      background: 'linear-gradient(135deg, #09090b 0%, #27272a 100%)',
+      background: 'linear-gradient(135deg, #2E073F 0%, #4a1259 100%)',
       color: 'white',
       fontWeight: 700,
       cursor: 'pointer',
@@ -332,7 +323,7 @@ const AdminLoginPage = () => {
       justifyContent: 'center',
       gap: '0.5rem',
       fontSize: '0.95rem',
-      boxShadow: '0 4px 15px rgba(0,0,0,0.35)'
+      boxShadow: '0 4px 15px rgba(46,7,63,0.35)'
     },
     divider: {
       display: 'flex',
@@ -499,16 +490,8 @@ const AdminLoginPage = () => {
           <div style={styles.portalSwitchers}>
             <Link to="/login" style={styles.switcherBtn}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                <GraduationCap size={15} color="#4f46e5" />
+                <GraduationCap size={15} color="#2E073F" />
                 Student Learning Portal
-              </span>
-              <ArrowRight size={14} color="#94a3b8" />
-            </Link>
-
-            <Link to="/recruiter/login" style={styles.switcherBtn}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                <Building2 size={15} color="#0284c7" />
-                Corporate Recruiter Portal
               </span>
               <ArrowRight size={14} color="#94a3b8" />
             </Link>

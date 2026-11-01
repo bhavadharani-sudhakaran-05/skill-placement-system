@@ -4,7 +4,7 @@ import { motion } from '../../lib/motion';
 import {
   LayoutDashboard, Briefcase, BookOpen, Route, FileText,
   ClipboardCheck, BarChart3, User, LogOut, Menu, X, Sparkles, Search, ChevronDown, Shield,
-  Users, GraduationCap, Settings, ExternalLink, Building2
+  Users, GraduationCap, Settings, ExternalLink
 } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 
@@ -47,7 +47,6 @@ const Layout = () => {
   }, [location.pathname]);
 
   const isAdminPath = location.pathname.startsWith('/admin');
-  const isRecruiterPath = location.pathname.startsWith('/recruiter');
 
   const adminMenuItems = [
     { icon: LayoutDashboard, label: 'Admin Overview', path: '/admin' },
@@ -56,14 +55,6 @@ const Layout = () => {
     { icon: GraduationCap, label: 'Colleges & Cells', path: '/admin/colleges' },
     { icon: ClipboardCheck, label: 'Skills & Tests', path: '/admin/assessments' },
     { icon: Settings, label: 'System Health', path: '/admin/settings' },
-  ];
-
-  const recruiterMenuItems = [
-    { icon: LayoutDashboard, label: 'Recruiter Hub', path: '/recruiter' },
-    { icon: Briefcase, label: 'My Postings', path: '/recruiter/jobs' },
-    { icon: Users, label: 'Applicant Pipeline', path: '/recruiter/applicants' },
-    { icon: Search, label: 'Talent Pool', path: '/recruiter/candidates' },
-    { icon: Building2, label: 'Company Profile', path: '/recruiter/profile' },
   ];
 
   const studentMenuItems = [
@@ -78,16 +69,12 @@ const Layout = () => {
   ];
 
   let menuItems;
-  if (user?.role === 'admin') {
+  if (user?.role === 'admin' || user?.role === 'college_admin') {
     if (isAdminPath) {
       menuItems = adminMenuItems;
-    } else if (isRecruiterPath) {
-      menuItems = recruiterMenuItems;
     } else {
       menuItems = [...studentMenuItems, { icon: Shield, label: 'Admin Module', path: '/admin' }];
     }
-  } else if (user?.role === 'recruiter') {
-    menuItems = recruiterMenuItems;
   } else {
     menuItems = studentMenuItems;
   }
@@ -275,34 +262,6 @@ const Layout = () => {
               {(isMobile || sidebarOpen) && (
                 <span style={{ fontWeight: 600, fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
                   {isAdminPath ? 'Student Portal' : 'Admin Control'}
-                </span>
-              )}
-            </button>
-          )}
-
-          {user?.role === 'recruiter' && (
-            <button
-              onClick={() => navigate(isRecruiterPath ? '/jobs' : '/recruiter')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.85rem',
-                width: '100%',
-                padding: (isMobile || sidebarOpen) ? '0.7rem 0.9rem' : '0.7rem',
-                borderRadius: '10px',
-                background: isRecruiterPath ? 'rgba(56, 189, 248, 0.15)' : 'rgba(167, 139, 250, 0.15)',
-                border: 'none',
-                color: isRecruiterPath ? '#38bdf8' : '#c4b5fd',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                justifyContent: (isMobile || sidebarOpen) ? 'flex-start' : 'center',
-                marginBottom: '0.5rem'
-              }}
-            >
-              {isRecruiterPath ? <ExternalLink size={17} style={{ flexShrink: 0 }} /> : <Building2 size={17} style={{ flexShrink: 0 }} />}
-              {(isMobile || sidebarOpen) && (
-                <span style={{ fontWeight: 600, fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
-                  {isRecruiterPath ? 'Student Jobs View' : 'Recruiter Hub'}
                 </span>
               )}
             </button>
@@ -518,7 +477,7 @@ const Layout = () => {
                   animate={{ opacity: 1, y: 0 }}
                 >
                   <Link
-                    to={user?.role === 'recruiter' ? '/recruiter/profile' : '/profile'}
+                    to="/profile"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -535,7 +494,7 @@ const Layout = () => {
                   >
                     <User size={16} color="#2E073F" /> Profile
                   </Link>
-                  {user?.role === 'admin' && (
+                  {(user?.role === 'admin' || user?.role === 'college_admin') && (
                     <>
                       <Link
                         to="/admin"
@@ -545,31 +504,14 @@ const Layout = () => {
                           gap: '0.75rem',
                           padding: '0.65rem 1rem',
                           textDecoration: 'none',
-                          color: '#b91c1c',
+                          color: '#2E073F',
                           fontSize: '0.82rem',
-                          fontWeight: 600,
+                          fontWeight: 700,
                           borderBottom: '1px solid #f3f4f6'
                         }}
                         onClick={() => setProfileMenuOpen(false)}
                       >
-                        <Shield size={15} /> Admin Console
-                      </Link>
-                      <Link
-                        to="/recruiter"
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.75rem',
-                          padding: '0.65rem 1rem',
-                          textDecoration: 'none',
-                          color: '#1d4ed8',
-                          fontSize: '0.82rem',
-                          fontWeight: 600,
-                          borderBottom: '1px solid #f3f4f6'
-                        }}
-                        onClick={() => setProfileMenuOpen(false)}
-                      >
-                        <Building2 size={15} /> Recruiter Hub
+                        <Shield size={15} color="#2E073F" /> Admin Console
                       </Link>
                       <Link
                         to="/dashboard"
@@ -579,35 +521,16 @@ const Layout = () => {
                           gap: '0.75rem',
                           padding: '0.65rem 1rem',
                           textDecoration: 'none',
-                          color: '#6d28d9',
+                          color: '#2E073F',
                           fontSize: '0.82rem',
                           fontWeight: 600,
                           borderBottom: '1px solid #f3f4f6'
                         }}
                         onClick={() => setProfileMenuOpen(false)}
                       >
-                        <GraduationCap size={15} /> Student View
+                        <GraduationCap size={15} color="#2E073F" /> Student View
                       </Link>
                     </>
-                  )}
-                  {user?.role === 'recruiter' && (
-                    <Link
-                      to="/jobs"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        padding: '0.65rem 1rem',
-                        textDecoration: 'none',
-                        color: '#4338ca',
-                        fontSize: '0.82rem',
-                        fontWeight: 600,
-                        borderBottom: '1px solid #f3f4f6'
-                      }}
-                      onClick={() => setProfileMenuOpen(false)}
-                    >
-                      <Briefcase size={15} /> Student Job Board
-                    </Link>
                   )}
                   <div
                     style={{
