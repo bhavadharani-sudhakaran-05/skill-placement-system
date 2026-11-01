@@ -1,0 +1,52 @@
+# =====================
+# Dependencies
+# =====================
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# =====================
+# Environment variables (SECRETS)
+# =====================
+.env
+backend/.env
+frontend/.env
+
+# =====================
+# Build outputs
+# =====================
+dist/
+build/
+frontend/dist/
+frontend/build/
+
+# =====================
+# Logs
+# =====================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =====================
+# Uploads (optional – keep private)
+# =====================
+backend/uploads/
+
+# =====================
+# OS & Editor files
+# =====================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =====================
+# Git internals & Redundant Nested Folders (safety)
+# =====================
+.git/index.lock
+skill-placement-system-main/
+.code0/
+*.log
+
+frontend/.env.development
