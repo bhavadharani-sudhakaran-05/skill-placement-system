@@ -6,6 +6,7 @@ const { protect } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
 const ResumeParserService = require('../services/resumeParser.service');
 const ResumeAnalysisService = require('../services/resumeAnalysis.service');
+const ResumeSkillExtractionService = require('../services/resumeSkillExtraction.service');
 
 const router = express.Router();
 
@@ -68,6 +69,10 @@ router.post('/upload', protect, handleUpload, async (req, res) => {
         throw aiError;
       }
     }
+
+    const skillExtraction =
+      await ResumeSkillExtractionService.extractWithFallback(extracted.text);
+
     const user = await User.findByIdAndUpdate(req.user.id, {
       $set: {
         'resume.url': '',
@@ -79,6 +84,8 @@ router.post('/upload', protect, handleUpload, async (req, res) => {
         'resume.parsedData.education': JSON.stringify(analysis.parsedEducation),
         resumeAnalysis: {
           parsedSkills: analysis.parsedSkills,
+          extractedTechnicalSkills: skillExtraction.skills,
+          skillExtractionSource: skillExtraction.source,
           parsedProjects: analysis.parsedProjects,
           parsedCertifications: analysis.parsedCertifications,
           parsedEducation: analysis.parsedEducation,
@@ -105,6 +112,8 @@ router.post('/upload', protect, handleUpload, async (req, res) => {
         fileName: path.basename(req.file.originalname),
         extractionSource: extracted.source,
         extractionConfidence: extracted.source === 'ocr' ? 'review-recommended' : 'text-extracted',
+        extractedTechnicalSkills: skillExtraction.skills,
+        skillExtractionSource: skillExtraction.source,
         ...analysis
       }
     });
