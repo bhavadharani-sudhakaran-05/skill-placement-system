@@ -24,6 +24,14 @@ import AdminJobs from './pages/admin/AdminJobs';
 import AdminAssessments from './pages/admin/AdminAssessments';
 import AdminSettings from './pages/admin/AdminSettings';
 
+// Dedicated Recruiter Module Pages
+import RecruiterLoginPage from './pages/recruiter/RecruiterLoginPage';
+import RecruiterDashboard from './pages/recruiter/RecruiterDashboard';
+import RecruiterJobs from './pages/recruiter/RecruiterJobs';
+import RecruiterApplicants from './pages/recruiter/RecruiterApplicants';
+import RecruiterCandidates from './pages/recruiter/RecruiterCandidates';
+import RecruiterProfile from './pages/recruiter/RecruiterProfile';
+
 // Layout & Protected Route
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -38,7 +46,7 @@ function App() {
 
   // On app load and when user changes, restore user-specific data
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated && user && user.role !== 'recruiter') {
       const userId = user.id || user._id;
       if (userId) {
         // Reload fresh data from backend for this user
@@ -57,6 +65,8 @@ function App() {
         {/* Dedicated Separate Login Pages */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/student/login" element={<LoginPage />} />
+        <Route path="/recruiter/login" element={<RecruiterLoginPage />} />
+        <Route path="/recruiter-login" element={<Navigate to="/recruiter/login" replace />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin-login" element={<Navigate to="/admin/login" replace />} />
 
@@ -84,6 +94,14 @@ function App() {
           <Route path="/admin/jobs" element={<AdminJobs />} />
           <Route path="/admin/assessments" element={<AdminAssessments />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+
+          {/* Recruiter Module Pages */}
+          <Route path="/recruiter" element={<RecruiterDashboard />} />
+          <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+          <Route path="/recruiter/jobs" element={<RecruiterJobs />} />
+          <Route path="/recruiter/applicants" element={<RecruiterApplicants />} />
+          <Route path="/recruiter/candidates" element={<RecruiterCandidates />} />
+          <Route path="/recruiter/profile" element={<RecruiterProfile />} />
         </Route>
 
         {/* Catch-all Fallback */}

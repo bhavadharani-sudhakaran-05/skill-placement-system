@@ -364,6 +364,8 @@ On initial connection to MongoDB, the backend automatically ensures the followin
 | **College Admin** | `college@skillforge.com` | `college123` | `/login` |
 | **Student** | `student@skillforge.com` | `student123` | `/login` & Student Dashboard |
 
+Recruiter accounts are created by an administrator under **Admin → User Accounts**. Set the account role to **Recruiter**, provide a company name, then sign in at `/recruiter/login`.
+
 ## 🤖 Code0 Development Workflow
 
 Code0 was used during the development of SkillForge as part of an AI-assisted development workflow.

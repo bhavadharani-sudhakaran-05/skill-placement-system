@@ -4,7 +4,7 @@ import { motion } from '../../lib/motion';
 import {
   LayoutDashboard, Briefcase, BookOpen, Route, FileText,
   ClipboardCheck, BarChart3, User, LogOut, Menu, X, Sparkles, Search, ChevronDown, Shield,
-  Users, GraduationCap, Settings, ExternalLink
+  Users, GraduationCap, Settings, ExternalLink, Building2
 } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 
@@ -47,6 +47,7 @@ const Layout = () => {
   }, [location.pathname]);
 
   const isAdminPath = location.pathname.startsWith('/admin');
+  const isRecruiterPath = location.pathname.startsWith('/recruiter');
 
   const adminMenuItems = [
     { icon: LayoutDashboard, label: 'Admin Overview', path: '/admin' },
@@ -54,6 +55,14 @@ const Layout = () => {
     { icon: Briefcase, label: 'Job Postings', path: '/admin/jobs' },
     { icon: ClipboardCheck, label: 'Skills & Tests', path: '/admin/assessments' },
     { icon: Settings, label: 'System Health', path: '/admin/settings' },
+  ];
+
+  const recruiterMenuItems = [
+    { icon: LayoutDashboard, label: 'Recruiter Hub', path: '/recruiter' },
+    { icon: Briefcase, label: 'My Postings', path: '/recruiter/jobs' },
+    { icon: Users, label: 'Applicant Pipeline', path: '/recruiter/applicants' },
+    { icon: Search, label: 'Talent Pool', path: '/recruiter/candidates' },
+    { icon: Building2, label: 'Company Profile', path: '/recruiter/profile' }
   ];
 
   const studentMenuItems = [
@@ -68,12 +77,22 @@ const Layout = () => {
   ];
 
   let menuItems;
-  if (user?.role === 'admin' || user?.role === 'college_admin') {
+  if (user?.role === 'admin') {
+    if (isAdminPath) {
+      menuItems = adminMenuItems;
+    } else if (isRecruiterPath) {
+      menuItems = recruiterMenuItems;
+    } else {
+      menuItems = [...studentMenuItems, { icon: Shield, label: 'Admin Module', path: '/admin' }];
+    }
+  } else if (user?.role === 'college_admin') {
     if (isAdminPath) {
       menuItems = adminMenuItems;
     } else {
       menuItems = [...studentMenuItems, { icon: Shield, label: 'Admin Module', path: '/admin' }];
     }
+  } else if (user?.role === 'recruiter') {
+    menuItems = recruiterMenuItems;
   } else {
     menuItems = studentMenuItems;
   }
@@ -261,6 +280,34 @@ const Layout = () => {
               {(isMobile || sidebarOpen) && (
                 <span style={{ fontWeight: 600, fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
                   {isAdminPath ? 'Student Portal' : 'Admin Control'}
+                </span>
+              )}
+            </button>
+          )}
+
+          {user?.role === 'recruiter' && (
+            <button
+              onClick={() => navigate('/jobs')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.85rem',
+                width: '100%',
+                padding: (isMobile || sidebarOpen) ? '0.7rem 0.9rem' : '0.7rem',
+                borderRadius: '10px',
+                background: 'rgba(167, 139, 250, 0.15)',
+                border: 'none',
+                color: '#c4b5fd',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                justifyContent: (isMobile || sidebarOpen) ? 'flex-start' : 'center',
+                marginBottom: '0.5rem'
+              }}
+            >
+              <Briefcase size={17} style={{ flexShrink: 0 }} />
+              {(isMobile || sidebarOpen) && (
+                <span style={{ fontWeight: 600, fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
+                  Student Jobs
                 </span>
               )}
             </button>
@@ -476,7 +523,7 @@ const Layout = () => {
                   animate={{ opacity: 1, y: 0 }}
                 >
                   <Link
-                    to="/profile"
+                    to={user?.role === 'recruiter' ? '/recruiter/profile' : '/profile'}
                     style={{
                       display: 'flex',
                       alignItems: 'center',

@@ -163,7 +163,7 @@ router.get('/matched', protect, async (req, res) => {
  * @desc    Get jobs posted by recruiter
  * @access  Private (Recruiter)
  */
-router.get('/my/posted', protect, authorize('admin'), async (req, res) => {
+router.get('/my/posted', protect, authorize('recruiter', 'admin'), async (req, res) => {
   try {
     const jobs = await Job.find({ postedBy: req.user.id })
       .sort({ createdAt: -1 });
@@ -242,12 +242,12 @@ router.get('/:id/skill-gap', protect, async (req, res) => {
  * @desc    Create a new job
  * @access  Private (Recruiter)
  */
-router.post('/', protect, authorize('admin'), validateJob, async (req, res) => {
+router.post('/', protect, authorize('recruiter', 'admin'), validateJob, async (req, res) => {
   try {
     const jobData = {
       ...req.body,
       postedBy: req.user.id,
-      company: req.body.company || req.user.recruiterProfile?.company
+      company: req.body.company || req.user.company || req.user.recruiterProfile?.company
     };
 
     const job = await Job.create(jobData);
@@ -271,7 +271,7 @@ router.post('/', protect, authorize('admin'), validateJob, async (req, res) => {
  * @desc    Update a job
  * @access  Private (Recruiter who posted)
  */
-router.put('/:id', protect, authorize('admin'), async (req, res) => {
+router.put('/:id', protect, authorize('recruiter', 'admin'), async (req, res) => {
   try {
     let job = await Job.findById(req.params.id);
 
@@ -386,7 +386,7 @@ router.post('/:id/apply', protect, authorize('student'), async (req, res) => {
  * @desc    Get job applicants
  * @access  Private (Recruiter who posted)
  */
-router.get('/:id/applicants', protect, authorize('admin'), async (req, res) => {
+router.get('/:id/applicants', protect, authorize('recruiter', 'admin'), async (req, res) => {
   try {
     const job = await Job.findById(req.params.id)
       .populate('applicants.userId', 'name email studentProfile skills skillReadinessScore resumeData');
@@ -427,7 +427,7 @@ router.get('/:id/applicants', protect, authorize('admin'), async (req, res) => {
  * @desc    Update applicant status
  * @access  Private (Recruiter)
  */
-router.put('/:id/applicants/:applicantId/status', protect, authorize('admin'), async (req, res) => {
+router.put('/:id/applicants/:applicantId/status', protect, authorize('recruiter', 'admin'), async (req, res) => {
   try {
     const { status, feedback } = req.body;
     

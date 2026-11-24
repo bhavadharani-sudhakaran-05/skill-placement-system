@@ -20,6 +20,8 @@ router.get('/overview', async (req, res) => {
   try {
     const [
       totalStudents,
+      totalRecruiters,
+      totalCollegeAdmins,
       totalAdmins,
       totalJobs,
       activeJobs,
@@ -29,6 +31,8 @@ router.get('/overview', async (req, res) => {
       recentJobs
     ] = await Promise.all([
       User.countDocuments({ role: 'student' }),
+      User.countDocuments({ role: 'recruiter' }),
+      User.countDocuments({ role: 'college_admin' }),
       User.countDocuments({ role: 'admin' }),
       Job.countDocuments(),
       Job.countDocuments({ status: 'active' }),
@@ -44,7 +48,7 @@ router.get('/overview', async (req, res) => {
         .limit(6)
     ]);
 
-    const totalUsers = totalStudents + totalAdmins;
+    const totalUsers = totalStudents + totalRecruiters + totalCollegeAdmins + totalAdmins;
 
     res.json({
       success: true,
@@ -52,6 +56,8 @@ router.get('/overview', async (req, res) => {
         stats: {
           totalUsers,
           totalStudents,
+          totalRecruiters,
+          totalCollegeAdmins,
           totalAdmins,
           totalJobs,
           activeJobs,
@@ -138,11 +144,19 @@ router.get('/users', async (req, res) => {
 router.post('/users', async (req, res) => {
   try {
     const { name, email, password, role, companyName, collegeName } = req.body;
+    const allowedRoles = ['student', 'recruiter', 'college_admin', 'admin'];
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({
         success: false,
         message: 'Name, email, password, and role are required'
+      });
+    }
+
+    if (!allowedRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid role. Must be one of: ${allowedRoles.join(', ')}`
       });
     }
 
@@ -197,7 +211,7 @@ router.post('/users', async (req, res) => {
 router.put('/users/:id/role', async (req, res) => {
   try {
     const { role } = req.body;
-    const allowedRoles = ['student', 'admin'];
+    const allowedRoles = ['student', 'recruiter', 'college_admin', 'admin'];
 
     if (!allowedRoles.includes(role)) {
       return res.status(400).json({
@@ -223,6 +237,12 @@ router.put('/users/:id/role', async (req, res) => {
     }
 
     targetUser.role = role;
+    if (role === 'recruiter' && !targetUser.company?.name) {
+      targetUser.company = { ...(targetUser.company?.toObject?.() || {}), name: 'Company' };
+    }
+    if (role === 'college_admin' && !targetUser.college?.name) {
+      targetUser.college = { ...(targetUser.college?.toObject?.() || {}), name: 'College' };
+    }
     await targetUser.save();
 
     res.json({
