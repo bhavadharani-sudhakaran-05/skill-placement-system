@@ -24,8 +24,7 @@ router.get('/overview', async (req, res) => {
       totalJobs,
       activeJobs,
       totalCourses,
-          totalAssessments,
-totalAssessments,
+      totalAssessments,
       recentUsers,
       recentJobs
     ] = await Promise.all([
@@ -57,8 +56,8 @@ totalAssessments,
           totalJobs,
           activeJobs,
           totalCourses,
-          totalAssessments,
-},
+          totalAssessments
+        },
         recentUsers,
         recentJobs: recentJobs.map(j => ({
           _id: j._id,
