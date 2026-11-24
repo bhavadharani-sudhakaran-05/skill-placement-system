@@ -95,6 +95,8 @@ const userSchema = new mongoose.Schema({
   // Detailed resume analysis from AI parser
   resumeAnalysis: {
     parsedSkills: [String],
+    extractedTechnicalSkills: [String],
+    skillExtractionSource: String,
     parsedProjects: [mongoose.Schema.Types.Mixed],
     parsedCertifications: [mongoose.Schema.Types.Mixed],
     parsedEducation: [mongoose.Schema.Types.Mixed],
