@@ -41,7 +41,9 @@ const LoginPage = () => {
     const result = await login(email, password);
     if (result.success) {
       toast.success('Welcome back!');
-      if (result.user?.role === 'admin' || result.user?.role === 'college_admin') {
+      if (result.user?.role === 'recruiter') {
+        navigate('/recruiter');
+      } else if (result.user?.role === 'admin' || result.user?.role === 'college_admin') {
         navigate('/admin');
       } else {
         navigate('/dashboard');
@@ -430,6 +432,9 @@ const LoginPage = () => {
 
           <p style={styles.signUpText}>
             New Student? <Link to="/register" style={styles.signUpLink}>Register your account</Link>
+          </p>
+          <p style={styles.signUpText}>
+            Recruiter? <Link to="/recruiter/login" style={styles.signUpLink}>Open recruiter portal</Link>
           </p>
         </motion.div>
       </div>
