@@ -4,15 +4,6 @@ const AnalyticsService = require('../services/analytics.service');
 
 const router = express.Router();
 
-} catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch recruiter analytics',
-      error: error.message
-    });
-  }
-});
-
 /**
  * @route   GET /api/analytics/admin
  * @desc    Get admin overview analytics
